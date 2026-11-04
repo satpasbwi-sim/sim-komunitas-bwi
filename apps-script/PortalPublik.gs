@@ -120,7 +120,7 @@ function simpanUsulan_(d) {
     var sekarang = new Date();
     var nomor = 'U' + Utilities.formatDate(sekarang, ZONA, 'yyMMdd') + '-' + ('00' + sh.getLastRow()).slice(-3);
     sh.appendRow([nomor, Utilities.formatDate(sekarang, ZONA, 'dd/MM/yyyy HH:mm'), u.jenis, u.nama, u.kec, u.alamat,
-      u.pj, u.jabatan, u.wa, u.baru, u.perp, u.tgl ? u.tgl.split('-').reverse().join('/') : '', u.catatan, 'Baru', '']);
+      u.pj, u.jabatan, "'" + u.wa, u.baru, u.perp, u.tgl ? u.tgl.split('-').reverse().join('/') : '', u.catatan, 'Baru', '']);
   } finally {
     kunci.releaseLock();
   }
