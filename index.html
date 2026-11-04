@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SIM Komunitas Banyuwangi</title>
+<meta name="description" content="Jadwal, sisa kuota, cek status pendaftaran, cek syarat, dan latihan ujian teori SIM Komunitas Satlantas Polresta Banyuwangi.">
+<meta name="theme-color" content="#1f3864">
+<meta property="og:title" content="SIM Komunitas Banyuwangi">
+<meta property="og:description" content="SIM datang ke pesantren, kampus, sekolah & desa. Cek jadwal, sisa kuota, dan status pendaftaran Anda.">
+<meta property="og:image" content="https://satpasbwi-sim.github.io/bukusimbwi/img/og-sampul.jpg">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://satpasbwi-sim.github.io; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<link rel="icon" href="img/ikon-192.png">
+<link rel="apple-touch-icon" href="img/ikon-apple-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="lewati" href="#jadwal">Langsung ke jadwal</a>
+
+<header class="atas">
+  <div class="wrap atas-isi">
+    <img src="img/logo-lantas-baru.webp" alt="" width="40" height="40">
+    <div><b>SIM Komunitas</b><small>Satlantas Polresta Banyuwangi</small></div>
+    <button type="button" class="tema" id="tombolTema" aria-label="Ganti mode terang/gelap">◐</button>
+  </div>
+  <nav class="wrap menu" aria-label="Menu utama">
+    <a href="#jadwal">Jadwal</a><a href="#syarat">Cek Syarat</a><a href="#status">Cek Status</a><a href="#teori">Latihan Teori</a><a href="#tanya">Tanya Jawab</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="chip emas">GRATIS PENDAFTARAN · TANPA CALO</span>
+      <h1>SIM datang ke lingkungan Anda</h1>
+      <p>Petugas Satpas melayani pembuatan SIM langsung di pesantren, kampus, sekolah, dan desa. Dari registrasi, tes kesehatan &amp; psikologi, ujian, sampai SIM tercetak, semua di lokasi.</p>
+      <div class="aksi-cepat">
+        <a class="kartu-aksi" href="#jadwal"><span>📅</span><b>Jadwal &amp; kuota</b><small>Lokasi terdekat</small></a>
+        <a class="kartu-aksi" href="#syarat"><span>✅</span><b>Cek syarat</b><small>Apakah saya bisa ikut?</small></a>
+        <a class="kartu-aksi" href="#status"><span>🔎</span><b>Cek status</b><small>Sudah terdaftar?</small></a>
+        <a class="kartu-aksi" href="#teori"><span>📝</span><b>Latihan teori</b><small>Soal Buku Digital</small></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JADWAL & KUOTA ============ -->
+  <section id="jadwal" class="bagian">
+    <div class="wrap">
+      <h2>Jadwal &amp; sisa kuota</h2>
+      <p class="sub" id="jadwalInfo">Memuat jadwal…</p>
+      <div class="grid" id="daftarJadwal" aria-live="polite"></div>
+      <p class="kecil redup" id="jadwalHabis" hidden>Jadwal SIM Komunitas periode ini sudah selesai. Info jadwal berikutnya lewat WhatsApp Satpas <a data-wa href="#">0852-3390-0100</a>.</p>
+    </div>
+  </section>
+
+  <!-- ============ ALUR ============ -->
+  <section class="bagian alt">
+    <div class="wrap">
+      <h2>Alurnya cuma 5 langkah</h2>
+      <ol class="alur">
+        <li><b>Daftar online</b><small>Isi formulir sebelum hari layanan. Simpan nomor WhatsApp yang dipakai.</small></li>
+        <li><b>Belajar ujian teori</b><small>SIM Baru: kerjakan ujian teori lewat HP, simpan screenshot hasilnya.</small></li>
+        <li><b>Kirim bukti teori</b><small>Unggah screenshot lewat tombol <i>Kirim bukti</i> atau QR di lokasi.</small></li>
+        <li><b>Datang ke lokasi</b><small>Bawa KTP asli (dan SIM lama untuk perpanjangan). Tes kesehatan &amp; psikologi di tempat.</small></li>
+        <li><b>Ujian praktik &amp; cetak</b><small>Lulus ujian praktik, foto, bayar PNBP di loket resmi, SIM dicetak.</small></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ CEK SYARAT ============ -->
+  <section id="syarat" class="bagian">
+    <div class="wrap sempit">
+      <h2>Cek syarat: apakah saya bisa ikut?</h2>
+      <p class="sub">Jawab 3 pertanyaan, langsung tahu jenis pendaftaran yang tepat, berkas yang dibawa, dan biaya resminya. Data tidak dikirim ke mana pun.</p>
+      <form class="panel" id="formSyarat" novalidate>
+        <fieldset>
+          <legend>1. Mau mengurus apa?</legend>
+          <div class="pilihan">
+            <label><input type="radio" name="permohonan" value="baru" checked><span>SIM Baru<small>Belum pernah punya</small></span></label>
+            <label><input type="radio" name="permohonan" value="perpanjangan"><span>Perpanjangan<small>SIM lama mau habis</small></span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>2. Golongan SIM</legend>
+          <div class="pilihan">
+            <label><input type="radio" name="gol" value="C" checked><span>SIM C<small>Sepeda motor</small></span></label>
+            <label><input type="radio" name="gol" value="A"><span>SIM A<small>Mobil pribadi</small></span></label>
+          </div>
+        </fieldset>
+        <label class="isian">3. Tanggal lahir <input type="date" name="lahir" required></label>
+        <label class="isian" id="isianBerlaku" hidden>Masa berlaku SIM lama sampai <input type="date" name="berlaku"></label>
+        <button class="tombol" type="submit">Cek sekarang</button>
+      </form>
+      <div id="hasilSyarat" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ============ CEK STATUS ============ -->
+  <section id="status" class="bagian alt">
+    <div class="wrap sempit">
+      <h2>Cek status pendaftaran</h2>
+      <p class="sub">Sudah mengisi formulir? Lihat apakah data Anda masuk kuota, dan hasil ujian teori yang sudah dicek petugas.</p>
+      <form class="panel" id="formStatus" novalidate>
+        <label class="isian">NIK (16 angka) <input name="nik" inputmode="numeric" autocomplete="off" maxlength="19" placeholder="3510xxxxxxxxxxxx" required></label>
+        <label class="isian">Tanggal lahir <input type="date" name="lahir" required></label>
+        <button class="tombol" type="submit">Cek status</button>
+        <p class="kecil redup">🔒 NIK hanya dipakai untuk mencocokkan data dan tidak disimpan di halaman ini. Nama ditampilkan tersamar.</p>
+      </form>
+      <div id="hasilStatus" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ============ LATIHAN TEORI ============ -->
+  <section id="teori" class="bagian">
+    <div class="wrap sempit">
+      <h2>Latihan ujian teori</h2>
+      <p class="sub">10 soal acak dari bank soal <b>Buku Digital SIM Satpas Banyuwangi</b> (Persepsi Bahaya, Wawasan, Pengetahuan). Nilai lulus <b>70</b>.</p>
+      <div class="panel" id="kuis">
+        <div class="pilihan" id="kuisGol">
+          <label><input type="radio" name="kgol" value="C" checked><span>Latihan SIM C</span></label>
+          <label><input type="radio" name="kgol" value="A"><span>Latihan SIM A</span></label>
+        </div>
+        <button class="tombol" type="button" id="mulaiKuis">▶ Mulai latihan kilat</button>
+        <p class="kecil redup" id="kuisInfo">Latihan, bukan ujian resmi.</p>
+      </div>
+      <div class="buku">
+        <div><b>📘 Mau latihan lengkap seperti ujian asli?</b><p class="kecil">Simulasi E-AVIS 65 soal dengan hitung mundur, e-book, dan video materi ada di Buku Digital.</p></div>
+        <a class="tombol garis" data-buku-teori href="#" target="_blank" rel="noopener">Buka simulasi E-AVIS</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TANYA JAWAB ============ -->
+  <section id="tanya" class="bagian alt">
+    <div class="wrap sempit">
+      <h2>Tanya jawab</h2>
+      <details><summary>Siapa yang boleh ikut SIM Komunitas?</summary><p>Warga yang berdomisili di Banyuwangi (sesuai KTP), berusia minimal 17 tahun untuk SIM C dan SIM A, dan termasuk komunitas sasaran: santri &amp; pengurus pondok pesantren, mahasiswa &amp; civitas kampus, siswa SMA sederajat yang cukup umur, atau masyarakat desa di lokasi layanan.</p></details>
+      <details><summary>Berapa biayanya?</summary><p>Pendaftaran gratis. Yang dibayar hanya PNBP resmi (PP No. 76 Tahun 2020) di loket resmi/BRIVA: SIM C baru Rp100.000, SIM A baru Rp120.000, perpanjangan SIM C Rp75.000, perpanjangan SIM A Rp80.000. Biaya tes kesehatan dan psikologi mengikuti ketentuan petugas di lokasi. <b>Jangan membayar ke perorangan.</b></p></details>
+      <details><summary>SIM saya sudah lewat masa berlaku. Bisa perpanjangan?</summary><p>Tidak. SIM yang sudah lewat masa berlaku harus diajukan sebagai <b>SIM Baru</b>, termasuk ujian teori dan praktik. Gunakan <a href="#syarat">Cek Syarat</a> untuk memastikan.</p></details>
+      <details><summary>Saya belum lulus ujian teori. Bagaimana?</summary><p>Tetap kirim screenshot hasilnya. Petugas akan menjelaskan jadwal ujian ulang. Setelah ujian ulang, kirim lagi hasil terbaru dengan nomor WhatsApp yang sama; bukti lama otomatis diganti.</p></details>
+      <details><summary>Data saya tidak ditemukan di Cek Status.</summary><p>Data baru tampil sekitar 5 menit setelah formulir dikirim. Pastikan NIK dan tanggal lahir sama persis dengan yang diisi di formulir. Bila masih tidak ada, hubungi WhatsApp Satpas.</p></details>
+      <details><summary>Kuota sudah penuh, apa yang bisa saya lakukan?</summary><p>Pilih lokasi lain yang masih tersedia, atau datang langsung ke Satpas Polresta Banyuwangi pada jam pelayanan. Jadwal SIM Komunitas berikutnya diumumkan lewat halaman ini dan WhatsApp Satpas.</p></details>
+    </div>
+  </section>
+
+  <section class="bagian kontak">
+    <div class="wrap sempit">
+      <div class="panel sejajar">
+        <div><b>Butuh bantuan?</b><p class="kecil">WhatsApp Satpas Polresta Banyuwangi · <span data-wa-teks>0852-3390-0100</span></p></div>
+        <a class="tombol wa" data-wa href="#" target="_blank" rel="noopener">💬 Chat WhatsApp</a>
+      </div>
+      <p class="kecil peringatan">⚠️ Waspada calo. Petugas tidak pernah meminta transfer ke rekening pribadi. Semua informasi resmi ada di halaman ini dan Buku Digital SIM.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Satlantas Polresta Banyuwangi · Satpas SIM</p>
+    <p class="kecil"><a data-buku href="#" target="_blank" rel="noopener">Buku Digital SIM Satpas Banyuwangi</a> · <a data-buku-komunitas href="#" target="_blank" rel="noopener">Halaman B.19 SIM Komunitas</a></p>
+  </div>
+</footer>
+
+<template id="tplJadwal">
+  <article class="kartu-jadwal">
+    <div class="kj-atas"><span class="kj-ikon"></span><div><h3></h3><p class="kj-ket"></p></div><span class="chip kj-status"></span></div>
+    <p class="kj-waktu"></p>
+    <div class="kj-kuota"></div>
+    <div class="kj-aksi"></div>
+  </article>
+</template>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

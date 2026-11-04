@@ -1,0 +1,16 @@
+{
+  "name": "SIM Komunitas Banyuwangi",
+  "short_name": "SIM Komunitas",
+  "description": "Jadwal, sisa kuota, cek status, dan latihan ujian teori SIM Komunitas Satlantas Polresta Banyuwangi.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f6fb",
+  "theme_color": "#1f3864",
+  "lang": "id",
+  "icons": [
+    { "src": "img/ikon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/ikon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "img/ikon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
