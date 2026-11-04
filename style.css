@@ -41,7 +41,7 @@ h2 { font-size: clamp(1.35rem, 4vw, 1.75rem); }
 .atas-isi b { display: block; font-size: 1.05rem; }
 .atas-isi small { opacity: .85; font-size: .78rem; }
 .tema { margin-left: auto; background: rgba(255,255,255,.12); color: #fff; border: 0; border-radius: 999px; width: 38px; height: 38px; font-size: 1.1rem; cursor: pointer; }
-.menu { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; padding-bottom: 10px; }
+.menu { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; padding-bottom: 10px; }
 .menu a { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; color: #fff; text-decoration: none; font-size: .9rem; font-weight: 700; padding: 8px 6px; border-radius: 12px; background: rgba(255,255,255,.1); text-align: center; line-height: 1.15; }
 .menu a span { font-size: 1rem; }
 .menu a.aktif { background: #c9a227; color: #1b1b1b; }
@@ -247,3 +247,30 @@ footer p { margin: 4px 0; }
 }
 .ks-bayang { fill: rgba(16,30,60,.16); }
 .logo { object-fit: contain; }
+
+/* ================= USULKAN LOKASI ================= */
+.usulan { background: linear-gradient(180deg, var(--latar) 0%, color-mix(in srgb, var(--emas) 10%, var(--latar)) 100%); }
+.usulan-isi { display: grid; grid-template-columns: .9fr 1.1fr; gap: 28px; align-items: start; }
+.usulan-teks h2 { margin-top: 10px; }
+.usulan-langkah { list-style: none; counter-reset: u; padding: 0; margin: 0 0 14px; display: grid; gap: 10px; }
+.usulan-langkah li { counter-increment: u; display: grid; grid-template-columns: 36px 1fr; column-gap: 10px; align-items: center; background: var(--kartu); border: 1px solid var(--garis); border-radius: 14px; padding: 10px 12px; }
+.usulan-langkah li::before { content: counter(u); grid-row: span 2; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #1f3864; color: #fff; font-weight: 800; }
+.usulan-langkah small { color: var(--redup); }
+.pilihan.tiga { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pilihan.tiga span { text-align: center; padding: 10px 6px; font-size: .88rem; }
+.pilihan.tiga span b { display: block; font-size: 1.3rem; line-height: 1.2; }
+.dua-kolom { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; }
+.isian select, .isian textarea { display: block; width: 100%; margin-top: 6px; font: inherit; font-weight: 500; padding: 11px 12px; border-radius: 10px; border: 1.5px solid var(--garis); background: var(--latar); color: var(--teks); }
+.isian textarea { resize: vertical; min-height: 80px; }
+.isian select:focus, .isian textarea:focus { outline: 3px solid color-mix(in srgb, var(--biru-2) 35%, transparent); border-color: var(--biru-2); }
+.opsional { font-weight: 500; color: var(--redup); font-size: .85em; }
+.jebakan { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.setuju { display: flex; gap: 10px; align-items: flex-start; margin: 4px 0 14px; font-size: .9rem; cursor: pointer; }
+.setuju input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--hijau); flex: none; }
+.tombol.penuh { width: 100%; }
+.isian.salah input, .isian.salah select { border-color: var(--merah); }
+.ajak-usul { margin: 16px 0 0; text-align: center; font-weight: 600; }
+.ajak-usul a { white-space: nowrap; }
+@media (min-width: 861px) { .usulan-teks { position: sticky; top: 140px; } }
+@media (max-width: 860px) { .usulan-isi { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .dua-kolom { grid-template-columns: 1fr; } }

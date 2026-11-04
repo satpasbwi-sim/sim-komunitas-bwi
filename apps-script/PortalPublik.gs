@@ -2,11 +2,13 @@
  * SIM Komunitas – API Portal Publik
  * ---------------------------------------------------------------------------
  * Project Apps Script mandiri (buat di https://script.new) yang membaca spreadsheet
- * "Formulir Pendaftaran SIM Komunitas (Jawaban)" lewat ID_SPREADSHEET (hanya baca).
+ * "Formulir Pendaftaran SIM Komunitas (Jawaban)" lewat ID_SPREADSHEET.
+ * Data pendaftar hanya DIBACA; satu-satunya yang ditulis adalah sheet "Usulan Lokasi".
  *
  * Melayani dua permintaan dari portal https://satpasbwi-sim.github.io/sim-komunitas-bwi/
  *   ?aksi=jadwal                         → jadwal lokasi + sisa kuota (hanya angka)
  *   ?aksi=status&nik=…&lahir=yyyy-mm-dd  → status pendaftaran 1 orang
+ *   POST {aksi:'usulan', …}               → simpan usulan lokasi ke sheet "Usulan Lokasi"
  *
  * PRINSIP DATA PRIBADI
  *   - Tidak ada NIK, nomor HP, alamat, atau tautan bukti yang dikirim ke portal.
@@ -36,6 +38,9 @@ var JADWAL = [
 var SHEET_BARU = 'SIM Baru';
 var SHEET_PERPANJANGAN = 'SIM Perpanjangan';
 var SHEET_BUKTI = 'Bukti Teori';
+var SHEET_USULAN = 'Usulan Lokasi';
+var BATAS_USULAN_PER_10MENIT = 30;   // pengaman dari kiriman beruntun (spam)
+var BATAS_USULAN_PER_WA = 3;         // maks. usulan per nomor WhatsApp per 6 jam
 var KETERANGAN_TIDAK_DIHITUNG = /luar kuota|cadangan|ditolak|duplikat|batal|tidak memenuhi/i;
 var CACHE_JADWAL_DETIK = 60;          // angka kuota disegarkan paling lama tiap 1 menit
 var BATAS_PER_NIK = 5;                // maks. percobaan cek status per NIK …
@@ -51,13 +56,85 @@ function doGet(e) {
   try {
     if (p.aksi === 'jadwal') hasil = jadwalPublik_();
     else if (p.aksi === 'status') hasil = cekStatus_(p.nik, p.lahir);
-    else hasil = { ok: true, layanan: 'SIM Komunitas – API Portal Publik', aksi: ['jadwal', 'status'] };
+    else hasil = { ok: true, layanan: 'SIM Komunitas – API Portal Publik', aksi: ['jadwal', 'status', 'usulan'] };
   } catch (err) {
     console.error(err);
     hasil = { ok: false, pesan: 'Server sedang sibuk. Coba lagi sebentar lagi.' };
   }
   return ContentService.createTextOutput(JSON.stringify(hasil)).setMimeType(ContentService.MimeType.JSON);
 }
+
+function doPost(e) {
+  var hasil;
+  try {
+    var d = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    if (d.aksi === 'usulan') hasil = simpanUsulan_(d);
+    else hasil = { ok: false, pesan: 'Permintaan tidak dikenal.' };
+  } catch (err) {
+    console.error(err);
+    hasil = { ok: false, pesan: 'Server sedang sibuk. Coba lagi sebentar lagi.' };
+  }
+  return ContentService.createTextOutput(JSON.stringify(hasil)).setMimeType(ContentService.MimeType.JSON);
+}
+
+// ---------- Usulan lokasi --------------------------------------------------
+var KOLOM_USULAN = ['Nomor usulan', 'Waktu kirim', 'Jenis tempat', 'Nama tempat', 'Kecamatan', 'Alamat / patokan',
+  'Penanggung jawab', 'Jabatan', 'WhatsApp', 'Perkiraan SIM Baru', 'Perkiraan Perpanjangan', 'Usulan tanggal',
+  'Catatan pengusul', 'Status (diisi petugas)', 'Tindak lanjut petugas'];
+var JENIS_TEMPAT = ['Pondok Pesantren', 'Kampus', 'Sekolah', 'Desa / Kelurahan', 'Instansi / Perusahaan', 'Lainnya'];
+
+function simpanUsulan_(d) {
+  if (d.website) return { ok: true, nomor: '-' };              // isian jebakan robot: pura-pura berhasil
+  var u = {
+    jenis: teks_(d.jenis, 40), nama: teks_(d.nama, 120), kec: teks_(d.kecamatan, 40), alamat: teks_(d.alamat, 200),
+    pj: teks_(d.pj, 80), jabatan: teks_(d.jabatan, 60), wa: String(d.wa || '').replace(/\D/g, '').replace(/^62/, '0'),
+    baru: angka_(d.baru), perp: angka_(d.perpanjangan), tgl: /^\d{4}-\d{2}-\d{2}$/.test(d.tanggal || '') ? d.tanggal : '',
+    catatan: teks_(d.catatan, 500)
+  };
+  if (JENIS_TEMPAT.indexOf(u.jenis) < 0) return { ok: false, pesan: 'Pilih jenis tempat.' };
+  if (u.nama.length < 3) return { ok: false, pesan: 'Nama tempat belum diisi.' };
+  if (!u.kec) return { ok: false, pesan: 'Pilih kecamatan.' };
+  if (u.pj.length < 3) return { ok: false, pesan: 'Nama penanggung jawab belum diisi.' };
+  if (!/^08\d{8,11}$/.test(u.wa)) return { ok: false, pesan: 'Nomor WhatsApp tidak valid (contoh 0812xxxxxxxx).' };
+  if (u.baru + u.perp < 1) return { ok: false, pesan: 'Isi perkiraan jumlah peserta.' };
+
+  var cache = CacheService.getScriptCache();
+  var kG = 'usl_g_' + Math.floor(Date.now() / 6e5), kW = 'usl_w_' + sidik_(u.wa);
+  var nG = Number(cache.get(kG) || 0), nW = Number(cache.get(kW) || 0);
+  if (nG >= BATAS_USULAN_PER_10MENIT) return { ok: false, pesan: 'Banyak usulan masuk bersamaan. Coba lagi 10 menit lagi.' };
+  if (nW >= BATAS_USULAN_PER_WA) return { ok: false, pesan: 'Nomor ini sudah mengirim beberapa usulan. Petugas akan menghubungi Anda.' };
+
+  var kunci = LockService.getScriptLock();
+  kunci.waitLock(15000);
+  try {
+    var ss = SpreadsheetApp.openById(ID_SPREADSHEET);
+    var sh = ss.getSheetByName(SHEET_USULAN);
+    if (!sh) {
+      sh = ss.insertSheet(SHEET_USULAN);
+      sh.getRange(1, 1, 1, KOLOM_USULAN.length).setValues([KOLOM_USULAN]).setFontWeight('bold').setBackground('#1f3864').setFontColor('#ffffff');
+      sh.setFrozenRows(1);
+      sh.getRange('N2:N').setDataValidation(SpreadsheetApp.newDataValidation()
+        .requireValueInList(['Baru', 'Dihubungi', 'Dijadwalkan', 'Ditunda', 'Tidak bisa dilayani'], true).build());
+      sh.getRange('I2:I').setNumberFormat('@');
+    }
+    var sekarang = new Date();
+    var nomor = 'U' + Utilities.formatDate(sekarang, ZONA, 'yyMMdd') + '-' + ('00' + sh.getLastRow()).slice(-3);
+    sh.appendRow([nomor, Utilities.formatDate(sekarang, ZONA, 'dd/MM/yyyy HH:mm'), u.jenis, u.nama, u.kec, u.alamat,
+      u.pj, u.jabatan, u.wa, u.baru, u.perp, u.tgl ? u.tgl.split('-').reverse().join('/') : '', u.catatan, 'Baru', '']);
+  } finally {
+    kunci.releaseLock();
+  }
+  cache.put(kG, String(nG + 1), 660);
+  cache.put(kW, String(nW + 1), 21600);
+  return { ok: true, nomor: nomor };
+}
+
+/** Teks satu baris, dipotong, dan tidak bisa menjadi rumus di spreadsheet. */
+function teks_(v, maks) {
+  var t = String(v == null ? '' : v).replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim().slice(0, maks);
+  return /^[=+\-@]/.test(t) ? "'" + t : t;
+}
+function angka_(v) { var n = Math.floor(Number(v) || 0); return Math.max(0, Math.min(n, 2000)); }
 
 // ---------- Jadwal & kuota -------------------------------------------------
 function jadwalPublik_() {

@@ -11,6 +11,7 @@ Alamat setelah aktif: `https://satpasbwi-sim.github.io/sim-komunitas-bwi/`
 | **Cek syarat** | Cek usia minimal, deteksi SIM yang sudah lewat masa berlaku (diarahkan ke SIM Baru), daftar berkas yang bisa dicentang, tarif PNBP resmi, pengingat perpanjangan 30 hari sebelum habis | Dihitung di HP pengguna, tidak dikirim ke mana pun |
 | **Cek status** | Masukkan NIK + tanggal lahir → terdaftar / masuk kuota / hasil ujian teori / lokasi | Apps Script, nama disamarkan, percobaan dibatasi |
 | **Latihan teori** | 10 soal acak (Persepsi Bahaya, Wawasan, Pengetahuan) + penjelasan, nilai lulus 70, tombol ke simulasi E-AVIS lengkap | Bank soal **Buku Digital SIM** (`bukusimbwi/simulasi/soal-eavis.json`) |
+| **Usulkan lokasi** | Pengurus pondok/kampus/sekolah/desa/instansi mengusulkan SIM Komunitas di tempatnya; dapat nomor usulan; cadangan lewat WhatsApp bila server tidak menjawab | Apps Script → sheet **`Usulan Lokasi`** (dibuat otomatis) |
 | **Kirim bukti teori** | Tombol muncul otomatis H-1 dan hari H | Halaman `bukusimbwi/bukti/` yang sudah ada |
 | Tanya jawab, WhatsApp Satpas, peringatan calo, mode gelap, bisa dipasang di layar HP | | |
 
@@ -39,6 +40,15 @@ Sebelum diisi, portal tetap berjalan: jadwal tampil tanpa angka kuota, dan Cek S
 
 ### 3. Aktifkan GitHub Pages
 Repo → **Settings → Pages** → Source: **Deploy from a branch** → Branch `main` / folder `/ (root)` → **Save**.
+
+## Usulan lokasi
+Usulan masuk ke sheet **Usulan Lokasi** (dibuat otomatis saat usulan pertama). Petugas mengisi kolom **Status** (Baru / Dihubungi / Dijadwalkan / Ditunda / Tidak bisa dilayani) dan **Tindak lanjut petugas**.
+Pengaman: isian jebakan robot, maks. 30 usulan per 10 menit dan 3 usulan per nomor WhatsApp per 6 jam, isian yang diawali `= + - @` dinetralkan agar tidak menjadi rumus.
+
+## Memperbarui script (setiap kali `PortalPublik.gs` berubah)
+1. Buka project di script.google.com → ganti seluruh isi file dengan versi terbaru → **Simpan**.
+2. Bila `appsscript.json` berubah (izin baru): **Setelan project** → centang *Tampilkan file manifes "appsscript.json"* → tempel isi terbaru → Simpan → jalankan `ujiCoba` → **Izinkan**.
+3. **Terapkan → Kelola deployment → ✏️ Edit → Versi: Versi baru → Terapkan.** URL `/exec` tetap sama.
 
 ## Menambah jadwal baru
 1. `apps-script/PortalPublik.gs` → tambah baris di `JADWAL`, lalu **Terapkan → Kelola deployment → Edit → Versi baru**.

@@ -201,7 +201,7 @@
         tautanMenu.forEach(function (a) { a.classList.toggle('aktif', a.getAttribute('href') === '#' + x.target.id); });
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
-    ['jadwal', 'syarat', 'status', 'teori', 'tanya'].forEach(function (id) { var e = document.getElementById(id); if (e) pengamat.observe(e); });
+    ['jadwal', 'usulan', 'syarat', 'status', 'teori', 'tanya'].forEach(function (id) { var e = document.getElementById(id); if (e) pengamat.observe(e); });
   }
   setInterval(function () { if (!document.hidden) muatJadwal(); }, 120000);
 
@@ -391,5 +391,67 @@
       h('div', { class: 'baris-aksi' },
         h('button', { class: 'tombol', type: 'button', onclick: function () { kuis.replaceChildren.apply(kuis, awalKuis); var b = $('#mulaiKuis'); b.disabled = false; b.textContent = '▶ Ulangi latihan'; $('#kuisInfo').textContent = 'Skor terbaik Anda di perangkat ini: ' + terbaik + '.'; } }, '↻ Latihan lagi'),
         h('a', { class: 'tombol garis', href: K.BUKU_TEORI, target: '_blank', rel: 'noopener' }, 'Simulasi lengkap E-AVIS')));
+  }
+  // =========================================================================
+  // 5. USULKAN LOKASI
+  // =========================================================================
+  var fu = $('#formUsulan');
+  if (fu) {
+    fu.tanggal.min = tambahHari(hariIni(), 7);
+    fu.wa.addEventListener('input', function () { this.value = this.value.replace(/[^\d+ -]/g, ''); });
+    fu.addEventListener('input', function (ev) { var l = ev.target.closest('.isian'); if (l) l.classList.remove('salah'); });
+
+    var pesanWa = function (d) {
+      return 'Assalamualaikum/Salam sejahtera. Saya ingin mengusulkan SIM Komunitas.\n' +
+        '• Tempat: ' + d.jenis + ' – ' + d.nama + '\n• Kecamatan: ' + d.kecamatan + (d.alamat ? ' (' + d.alamat + ')' : '') + '\n' +
+        '• Penanggung jawab: ' + d.pj + (d.jabatan ? ', ' + d.jabatan : '') + ' – ' + d.wa + '\n' +
+        '• Perkiraan peserta: SIM Baru ' + d.baru + ', Perpanjangan ' + d.perpanjangan + '\n' +
+        (d.tanggal ? '• Usulan tanggal: ' + tglPanjang(d.tanggal) + '\n' : '') + (d.catatan ? '• Catatan: ' + d.catatan + '\n' : '') +
+        (d.nomor ? '• Nomor usulan: ' + d.nomor : '');
+    };
+    var tombolWa = function (d, label) {
+      return h('a', { class: 'tombol kecil wa', target: '_blank', rel: 'noopener', href: 'https://wa.me/' + K.WA + '?text=' + encodeURIComponent(pesanWa(d)) }, label);
+    };
+
+    fu.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var out = $('#hasilUsulan');
+      var d = { aksi: 'usulan', jenis: nilaiRadio(fu, 'jenis'), nama: fu.nama.value.trim(), kecamatan: fu.kecamatan.value, alamat: fu.alamat.value.trim(),
+        pj: fu.pj.value.trim(), jabatan: fu.jabatan.value.trim(), wa: fu.wa.value.replace(/\D/g, '').replace(/^62/, '0'),
+        baru: Number(fu.baru.value) || 0, perpanjangan: Number(fu.perpanjangan.value) || 0, tanggal: fu.tanggal.value,
+        catatan: fu.catatan.value.trim(), website: fu.website.value };
+      var salah = null;
+      var tandai = function (el, pesan) { if (!salah) { salah = pesan; el.focus(); } var l = el.closest('.isian'); if (l) l.classList.add('salah'); };
+      if (d.nama.length < 3) tandai(fu.nama, 'Isi nama tempat.');
+      if (!d.kecamatan) tandai(fu.kecamatan, 'Pilih kecamatan.');
+      if (d.pj.length < 3) tandai(fu.pj, 'Isi nama penanggung jawab.');
+      if (!/^08\d{8,11}$/.test(d.wa)) tandai(fu.wa, 'Nomor WhatsApp belum benar (contoh 0812xxxxxxxx).');
+      if (d.baru + d.perpanjangan < 1) tandai(fu.baru, 'Isi perkiraan jumlah peserta.');
+      if (!salah && !fu.setuju.checked) { salah = 'Centang persetujuan untuk dihubungi petugas.'; fu.setuju.focus(); }
+      if (salah) { out.replaceChildren(h('div', { class: 'hasil gagal' }, salah)); return; }
+
+      var tombol = fu.querySelector('button[type=submit]');
+      tombol.disabled = true; tombol.textContent = 'Mengirim…';
+      var gagal = function (pesan) {
+        out.replaceChildren(h('div', { class: 'hasil awas' }, h('h3', null, 'Usulan belum terkirim'),
+          h('p', null, pesan || 'Server sedang tidak menjawab.') , h('p', null, 'Anda tetap bisa mengirimkannya lewat WhatsApp Satpas. Isian Anda sudah disiapkan:'),
+          h('div', { class: 'baris-aksi' }, tombolWa(d, '💬 Kirim lewat WhatsApp'))));
+      };
+      var janji = K.API_URL
+        ? fetch(K.API_URL, { method: 'POST', body: JSON.stringify(d), headers: { 'Content-Type': 'text/plain;charset=utf-8' }, credentials: 'omit' })
+            .then(function (r) { return r.text(); }).then(function (t) { return JSON.parse(t); })
+        : Promise.reject(new Error('API belum diatur'));
+      janji.then(function (r) {
+        if (!r.ok) { gagal(r.pesan); return; }
+        d.nomor = r.nomor;
+        out.replaceChildren(h('div', { class: 'hasil ok' },
+          h('h3', null, '✅ Usulan terkirim'),
+          h('p', null, 'Nomor usulan: ', h('b', null, r.nomor), '. Simpan nomor ini.'),
+          h('p', null, 'Petugas Satpas akan menghubungi ' + d.pj + ' lewat WhatsApp ' + d.wa + ' untuk mengatur jadwal. Jadwal yang disetujui akan tampil di halaman ini.'),
+          h('div', { class: 'baris-aksi' }, tombolWa(d, '💬 Kabari petugas juga lewat WhatsApp'))));
+        fu.reset(); fu.tanggal.min = tambahHari(hariIni(), 7);
+      }).catch(function () { gagal(); })
+        .finally(function () { tombol.disabled = false; tombol.textContent = '📍 Kirim usulan'; out.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+    });
   }
 })();

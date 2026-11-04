@@ -31,6 +31,7 @@
     <a href="#syarat"><span aria-hidden="true">✅</span>Cek Syarat</a>
     <a href="#status"><span aria-hidden="true">🔎</span>Cek Status</a>
     <a href="#teori"><span aria-hidden="true">📝</span>Latihan Teori</a>
+    <a href="#usulan"><span aria-hidden="true">📍</span>Usul Lokasi</a>
     <a href="#tanya"><span aria-hidden="true">💬</span>Tanya Jawab</a>
   </nav>
 </header>
@@ -84,6 +85,86 @@
       <p class="sub" id="jadwalInfo">Memuat jadwal…</p>
       <div class="grid" id="daftarJadwal" aria-live="polite"></div>
       <p class="kecil redup" id="jadwalHabis" hidden>Jadwal SIM Komunitas periode ini sudah selesai. Info jadwal berikutnya lewat WhatsApp Satpas <a data-wa href="#">0852-3390-0100</a>.</p>
+      <p class="ajak-usul">Belum ada jadwal di dekat Anda? <a href="#usulan">📍 Usulkan lokasi Anda</a></p>
+    </div>
+  </section>
+
+  <!-- ============ USULKAN LOKASI ============ -->
+  <section id="usulan" class="bagian usulan">
+    <div class="wrap usulan-isi">
+      <div class="usulan-teks">
+        <span class="chip emas">BARU</span>
+        <h2>Ingin SIM Komunitas datang ke tempat Anda?</h2>
+        <p class="sub">Pengurus pondok pesantren, kampus, sekolah, desa, atau instansi bisa mengusulkan lokasi. Usulan masuk langsung ke petugas Satpas, lalu Anda dihubungi lewat WhatsApp untuk mengatur jadwal.</p>
+        <ol class="usulan-langkah">
+          <li><b>Isi usulan</b><small>Kurang dari 2 menit</small></li>
+          <li><b>Dihubungi petugas</b><small>Lewat WhatsApp penanggung jawab</small></li>
+          <li><b>Jadwal diumumkan</b><small>Tampil di halaman ini</small></li>
+        </ol>
+        <p class="kecil redup">Lokasi dengan peserta lebih banyak dan tanggal yang longgar lebih mudah dijadwalkan.</p>
+      </div>
+      <form class="panel" id="formUsulan" novalidate>
+        <fieldset>
+          <legend>Jenis tempat</legend>
+          <div class="pilihan tiga">
+            <label><input type="radio" name="jenis" value="Pondok Pesantren" checked><span><b aria-hidden="true">🕌</b>Pesantren</span></label>
+            <label><input type="radio" name="jenis" value="Kampus"><span><b aria-hidden="true">🎓</b>Kampus</span></label>
+            <label><input type="radio" name="jenis" value="Sekolah"><span><b aria-hidden="true">🏫</b>Sekolah</span></label>
+            <label><input type="radio" name="jenis" value="Desa / Kelurahan"><span><b aria-hidden="true">🏘️</b>Desa</span></label>
+            <label><input type="radio" name="jenis" value="Instansi / Perusahaan"><span><b aria-hidden="true">🏢</b>Instansi</span></label>
+            <label><input type="radio" name="jenis" value="Lainnya"><span><b aria-hidden="true">✳️</b>Lainnya</span></label>
+          </div>
+        </fieldset>
+        <label class="isian">Nama tempat <input name="nama" maxlength="120" placeholder="Contoh: Ponpes Darul Ulum" required></label>
+        <div class="dua-kolom">
+          <label class="isian">Kecamatan
+            <select name="kecamatan" required>
+            <option value="">Pilih kecamatan</option>
+            <option>Bangorejo</option>
+            <option>Banyuwangi</option>
+            <option>Blimbingsari</option>
+            <option>Cluring</option>
+            <option>Gambiran</option>
+            <option>Genteng</option>
+            <option>Giri</option>
+            <option>Glagah</option>
+            <option>Glenmore</option>
+            <option>Kabat</option>
+            <option>Kalibaru</option>
+            <option>Kalipuro</option>
+            <option>Licin</option>
+            <option>Muncar</option>
+            <option>Pesanggaran</option>
+            <option>Purwoharjo</option>
+            <option>Rogojampi</option>
+            <option>Sempu</option>
+            <option>Siliragung</option>
+            <option>Singojuruh</option>
+            <option>Songgon</option>
+            <option>Srono</option>
+            <option>Tegaldlimo</option>
+            <option>Tegalsari</option>
+            <option>Wongsorejo</option>
+            </select>
+          </label>
+          <label class="isian">Alamat / patokan <span class="opsional">(opsional)</span><input name="alamat" maxlength="200" placeholder="Dusun, desa, patokan"></label>
+        </div>
+        <div class="dua-kolom">
+          <label class="isian">Nama penanggung jawab <input name="pj" maxlength="80" autocomplete="name" required></label>
+          <label class="isian">Jabatan <span class="opsional">(opsional)</span><input name="jabatan" maxlength="60" placeholder="Pengasuh, Kades, Wakasek…"></label>
+        </div>
+        <label class="isian">Nomor WhatsApp penanggung jawab <input name="wa" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="0812xxxxxxxx" required></label>
+        <div class="dua-kolom">
+          <label class="isian">Perkiraan peserta SIM Baru <input name="baru" type="number" inputmode="numeric" min="0" max="2000" value="0"></label>
+          <label class="isian">Perkiraan peserta Perpanjangan <input name="perpanjangan" type="number" inputmode="numeric" min="0" max="2000" value="0"></label>
+        </div>
+        <label class="isian">Usulan tanggal <span class="opsional">(opsional)</span><input name="tanggal" type="date"></label>
+        <label class="isian">Catatan <span class="opsional">(opsional)</span><textarea name="catatan" rows="3" maxlength="500" placeholder="Misalnya: tersedia aula dan lapangan untuk ujian praktik"></textarea></label>
+        <label class="jebakan" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+        <label class="setuju"><input type="checkbox" name="setuju" required><span>Saya bersedia dihubungi petugas Satpas Polresta Banyuwangi lewat nomor di atas.</span></label>
+        <button class="tombol besar penuh" type="submit">📍 Kirim usulan</button>
+        <div id="hasilUsulan" aria-live="polite"></div>
+      </form>
     </div>
   </section>
 
