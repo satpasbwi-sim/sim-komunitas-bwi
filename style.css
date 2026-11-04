@@ -250,12 +250,24 @@ footer p { margin: 4px 0; }
 
 /* ================= USULKAN LOKASI ================= */
 .usulan { background: linear-gradient(180deg, var(--latar) 0%, color-mix(in srgb, var(--emas) 10%, var(--latar)) 100%); }
-.usulan-isi { display: grid; grid-template-columns: .9fr 1.1fr; gap: 28px; align-items: start; }
-.usulan-teks h2 { margin-top: 10px; }
-.usulan-langkah { list-style: none; counter-reset: u; padding: 0; margin: 0 0 14px; display: grid; gap: 10px; }
-.usulan-langkah li { counter-increment: u; display: grid; grid-template-columns: 36px 1fr; column-gap: 10px; align-items: center; background: var(--kartu); border: 1px solid var(--garis); border-radius: 14px; padding: 10px 12px; }
-.usulan-langkah li::before { content: counter(u); grid-row: span 2; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #1f3864; color: #fff; font-weight: 800; }
-.usulan-langkah small { color: var(--redup); }
+.chip-judul { vertical-align: middle; margin-left: 6px; font-size: .62em; position: relative; top: -2px; }
+.usulan-langkah { list-style: none; counter-reset: u; padding: 0; margin: 0 0 18px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.usulan-langkah li { counter-increment: u; display: grid; grid-template-columns: 36px 1fr; grid-template-rows: auto 1fr; column-gap: 10px; align-items: center; background: var(--kartu); border: 1px solid var(--garis); border-radius: 14px; padding: 10px 12px; }
+.usulan-langkah li::before { content: counter(u); grid-row: 1 / 3; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #1f3864; color: #fff; font-weight: 800; }
+.usulan-langkah small { color: var(--redup); line-height: 1.3; }
+.usulan-isi { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.usulan-samping h3 { font-size: 1.02rem; margin-bottom: 8px; }
+.cek-lokasi { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 8px; }
+.cek-lokasi li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: .92rem; }
+.cek-lokasi li::before { content: "✓"; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--hijau-muda); color: var(--hijau); font-weight: 800; font-size: .8rem; }
+.samping-aksi { display: grid; gap: 8px; margin-top: 12px; }
+.samping-aksi .tombol { width: 100%; }
+@media (min-width: 861px) { .usulan-samping { position: sticky; top: 170px; } }
+@media (max-width: 860px) { .usulan-isi { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .usulan-langkah { grid-template-columns: 1fr; gap: 6px; }
+  .usulan-langkah li { padding: 8px 12px; }
+}
 .pilihan.tiga { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pilihan.tiga span { text-align: center; padding: 10px 6px; font-size: .88rem; }
 .pilihan.tiga span b { display: block; font-size: 1.3rem; line-height: 1.2; }
@@ -271,8 +283,6 @@ footer p { margin: 4px 0; }
 .isian.salah input, .isian.salah select { border-color: var(--merah); }
 .ajak-usul { margin: 16px 0 0; text-align: center; font-weight: 600; }
 .ajak-usul a { white-space: nowrap; }
-@media (min-width: 861px) { .usulan-teks { position: sticky; top: 140px; } }
-@media (max-width: 860px) { .usulan-isi { grid-template-columns: 1fr; } }
 @media (max-width: 520px) { .dua-kolom { grid-template-columns: 1fr; } }
 
 /* kartu ketentuan (unduhan) */

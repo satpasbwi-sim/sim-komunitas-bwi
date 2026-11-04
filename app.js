@@ -137,9 +137,6 @@
     var j = jadwalTerkini.filter(function (x) { return x.status !== 'selesai'; })[0];
     var tiket = $('#tiket'), kuota = $('#tiketKuota');
     kuota.replaceChildren();
-    document.querySelectorAll('[data-ticker-jadwal]').forEach(function (t) {
-      t.textContent = j ? '📅 Layanan berikutnya: ' + j.nama + ' – ' + tglPanjang(j.tanggal) + ', pukul ' + (j.mulai || '08:00') + ' WIB' : '';
-    });
     if (!j) {
       tiketTujuan = null; tiket.classList.add('kosong');
       $('#tiketNama').textContent = 'Jadwal berikutnya segera diumumkan';
