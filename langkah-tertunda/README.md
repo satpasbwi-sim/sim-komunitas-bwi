@@ -27,10 +27,13 @@ Semua langkah Apps Script dikerjakan dengan akun **satpasbwi@gmail.com** di http
   5. Cek: sheet **Jadwal Layanan** muncul (UNIBA 20/40) dan kolom kuning + kotak **Setujui ✔** muncul di **Usulan Lokasi**.
 - [ ] **5. Rapikan tab spreadsheet** (bila belum): tambahkan [`apps-script/RapikanTab.gs`](../apps-script/RapikanTab.gs) ke project yang sama → jalankan **`rapikanTab`**. Batalkan dengan `tampilkanSemuaTab`.
 
+- [ ] **5a. Dua versi portal:** setelah langkah 4, cek sheet **Jadwal Layanan** punya kolom **Layanan** (diisi otomatis "SIM Baru & Perpanjangan"), dan sheet **Usulan Lokasi** punya kolom **Layanan diusulkan** setelah usulan pertama dari portal. Bagikan link Versi B (`…/sim-komunitas-bwi/perpanjangan/`) ke koordinator wilayah yang hanya menginginkan perpanjangan.
+
 ## C. Setelah kegiatan UNIBA selesai (mulai Jumat 6 Nov)
 
 - [ ] **6. Langkah 4 – project Kuota Otomatis (v2) membaca sheet "Jadwal Layanan"**
   - Dikerjakan Claude: pilihan lokasi di Google Form & kuota ikut sheet Jadwal Layanan, sehingga lokasi yang disetujui langsung bisa dipilih di formulir (tanpa mengubah kode).
+  - Termasuk: lokasi "Perpanjangan saja" hanya menerima Jenis Permohonan *Perpanjangan* (pendaftar SIM Baru di lokasi itu ditandai, bukan masuk kuota).
   - Petugas: tempel kode baru ke project v2 → jalankan fungsi pemasangan yang disebutkan → uji dengan satu usulan.
 - [ ] **7. Hapus data uji** baris usulan "tes" (U261104-001) di sheet **Usulan Lokasi**.
 - [ ] **8. Arsipkan deployment lama** API Portal (`…AKfycbzQ6zt8…uwcl/exec`) lewat *Terapkan → Kelola deployment → Arsipkan* agar tidak tertukar.

@@ -27,13 +27,13 @@
 var JADWAL = [
   { kode: 'SIMLING', nama: 'Ponpes Safinatul Huda', ket: 'SIM Masuk Pesantren · Mobil SIMLING', ikon: '🕌',
     tanggal: '2026-10-31', mulai: '08:00', selesai: '15:00', cocok: 'Safinatul Huda', dibuka: false,
-    kuota: { baru: 50, perpanjangan: 40 } },
+    kuota: { baru: 50, perpanjangan: 40 }, layanan: 'lengkap' },
   { kode: 'BBPVP-MUNCAR', nama: 'BBPVP Muncar', ket: 'SIM Masuk Desa · Masyarakat Kec. Muncar', ikon: '🏘️',
     tanggal: '2026-11-03', mulai: '08:00', selesai: '15:00', cocok: 'BBPVP Muncar', dibuka: false,
-    kuota: { baru: 50, perpanjangan: 40 } },
+    kuota: { baru: 50, perpanjangan: 40 }, layanan: 'lengkap' },
   { kode: 'UNIBA', nama: 'UNIBA', ket: 'SIM Masuk Kampus · Universitas PGRI Banyuwangi', ikon: '🎓',
     tanggal: '2026-11-05', mulai: '08:00', selesai: '15:00', cocok: 'UNIBA', dibuka: true,
-    kuota: { baru: 20, perpanjangan: 40 } }
+    kuota: { baru: 20, perpanjangan: 40 }, layanan: 'lengkap' }
 ];
 
 // ====== 2. PENGATURAN TEKNIS (biasanya tidak perlu diubah) =================
@@ -91,8 +91,10 @@ function simpanUsulan_(d) {
     jenis: teks_(d.jenis, 40), nama: teks_(d.nama, 120), kec: teks_(d.kecamatan, 40), alamat: teks_(d.alamat, 200),
     pj: teks_(d.pj, 80), jabatan: teks_(d.jabatan, 60), wa: String(d.wa || '').replace(/\D/g, '').replace(/^62/, '0'),
     baru: angka_(d.baru), perp: angka_(d.perpanjangan), tgl: /^\d{4}-\d{2}-\d{2}$/.test(d.tanggal || '') ? d.tanggal : '',
-    catatan: teks_(d.catatan, 500)
+    catatan: teks_(d.catatan, 500),
+    layanan: d.layanan === 'Perpanjangan saja' ? 'Perpanjangan saja' : 'SIM Baru & Perpanjangan'
   };
+  if (u.layanan === 'Perpanjangan saja') u.baru = 0;
   if (JENIS_TEMPAT.indexOf(u.jenis) < 0) return { ok: false, pesan: 'Pilih jenis tempat.' };
   if (u.nama.length < 3) return { ok: false, pesan: 'Nama tempat belum diisi.' };
   if (!u.kec) return { ok: false, pesan: 'Pilih kecamatan.' };
@@ -121,8 +123,18 @@ function simpanUsulan_(d) {
     }
     var sekarang = new Date();
     var nomor = 'U' + Utilities.formatDate(sekarang, ZONA, 'yyMMdd') + '-' + ('00' + sh.getLastRow()).slice(-3);
-    sh.appendRow([nomor, Utilities.formatDate(sekarang, ZONA, 'dd/MM/yyyy HH:mm'), u.jenis, u.nama, u.kec, u.alamat,
-      u.pj, u.jabatan, "'" + u.wa, u.baru, u.perp, u.tgl ? u.tgl.split('-').reverse().join('/') : '', u.catatan, 'Baru', '']);
+    // tulis menurut judul kolom, supaya kolom tambahan (persetujuan, layanan) tidak tergeser
+    var judul = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(String);
+    if (judul.indexOf('Layanan diusulkan') < 0) {
+      sh.getRange(1, judul.length + 1).setValue('Layanan diusulkan').setFontWeight('bold').setBackground('#1f3864').setFontColor('#ffffff');
+      judul.push('Layanan diusulkan');
+    }
+    var isi = { 'Nomor usulan': nomor, 'Waktu kirim': Utilities.formatDate(sekarang, ZONA, 'dd/MM/yyyy HH:mm'), 'Jenis tempat': u.jenis,
+      'Nama tempat': u.nama, 'Kecamatan': u.kec, 'Alamat / patokan': u.alamat, 'Penanggung jawab': u.pj, 'Jabatan': u.jabatan,
+      'WhatsApp': "'" + u.wa, 'Perkiraan SIM Baru': u.baru, 'Perkiraan Perpanjangan': u.perp,
+      'Usulan tanggal': u.tgl ? u.tgl.split('-').reverse().join('/') : '', 'Catatan pengusul': u.catatan,
+      'Status (diisi petugas)': 'Baru', 'Tindak lanjut petugas': '', 'Layanan diusulkan': u.layanan };
+    sh.appendRow(judul.map(function (k) { return k in isi ? isi[k] : ''; }));
   } finally {
     kunci.releaseLock();
   }
@@ -163,7 +175,8 @@ function jadwalPublik_() {
     else if (k.baru.sisa === 0 && k.perpanjangan.sisa === 0) status = 'penuh';
     else status = 'buka';
     return { kode: j.kode, nama: j.nama, ket: j.ket, ikon: j.ikon, tanggal: j.tanggal,
-             mulai: j.mulai, selesai: j.selesai, status: status, kuota: k, maps: j.maps || '', baru: !!j.baru };
+             mulai: j.mulai, selesai: j.selesai, status: status, kuota: k, maps: j.maps || '', baru: !!j.baru,
+             layanan: j.layanan === 'perpanjangan' ? 'perpanjangan' : 'lengkap' };
   });
 
   var hasil = { ok: true, diperbarui: Utilities.formatDate(new Date(), ZONA, 'dd/MM/yyyy HH:mm') + ' WIB', jadwal: daftar };

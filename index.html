@@ -17,6 +17,7 @@
 <link rel="icon" href="img/ikon-192.png">
 <link rel="apple-touch-icon" href="img/ikon-apple-180.png">
 <link rel="manifest" href="manifest.webmanifest">
+<script src="versi.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="style.css">
@@ -37,8 +38,8 @@
     <a href="#jadwal"><span aria-hidden="true">📅</span>Jadwal</a>
     <a href="#syarat"><span aria-hidden="true">✅</span>Cek Syarat</a>
     <a href="#status"><span aria-hidden="true">🔎</span>Cek Status</a>
-    <a href="#teori"><span aria-hidden="true">📝</span>Latihan Teori</a>
-    <a href="#praktik"><span aria-hidden="true">🏍️</span>Latihan Praktik</a>
+    <a href="#teori" data-hanya="A"><span aria-hidden="true">📝</span>Latihan Teori</a>
+    <a href="#praktik" data-hanya="A"><span aria-hidden="true">🏍️</span>Latihan Praktik</a>
     <a href="#usulan"><span aria-hidden="true">📍</span>Usul Lokasi</a>
     <a href="#tanya"><span aria-hidden="true">💬</span>Tanya Jawab</a>
   </nav>
@@ -51,9 +52,10 @@
   <section class="sampul" id="beranda" data-panel="beranda">
     <div class="wrap sampul-isi">
       <div class="sampul-teks">
-        <p class="eyebrow"><span class="titik"></span>SIM Komunitas · Satpas Polresta Banyuwangi</p>
-        <h1><span class="h1-a">Urus SIM</span> <span class="h1-b">tanpa ke kantor!</span></h1>
-        <p class="lead">Petugas datang ke pesantren, kampus, sekolah, dan desa Anda. Daftar dari HP, datang di hari layanan, dan pulang dengan SIM jadi.</p>
+        <p class="eyebrow"><span class="titik"></span><span>SIM Komunitas<span data-hanya="B"> · Khusus Perpanjangan</span> · Satpas Polresta Banyuwangi</span></p>
+        <h1><span class="h1-a"><span data-hanya="A">Urus SIM</span><span data-hanya="B">Perpanjang SIM</span></span> <span class="h1-b">tanpa ke kantor!</span></h1>
+        <p class="lead" data-hanya="A">Petugas datang ke pesantren, kampus, sekolah, dan desa Anda. Daftar dari HP, datang di hari layanan, dan pulang dengan SIM jadi.</p>
+        <p class="lead" data-hanya="B">Perpanjangan SIM A &amp; SIM C dilayani langsung di wilayah Anda. Daftar dari HP, bawa SIM lama yang masih berlaku, tanpa ujian teori dan praktik.</p>
         <div class="cta">
           <a class="tombol besar" href="#jadwal">📝 Lihat jadwal &amp; daftar</a>
           <a class="tombol besar garis" href="#status">🔎 Cek status saya</a>
@@ -82,7 +84,8 @@
     <div class="wrap">
       <ul class="keunggulan">
         <li><span>📍</span><b>Semua di lokasi</b><small>Kesehatan, psikologi, ujian, cetak</small></li>
-        <li><span>📱</span><b>Ujian teori via HP</b><small>Kirim screenshot hasilnya</small></li>
+        <li data-hanya="A"><span>📱</span><b>Ujian teori via HP</b><small>Kirim screenshot hasilnya</small></li>
+        <li data-hanya="B"><span>✅</span><b>Tanpa ujian</b><small>Untuk SIM yang masih berlaku</small></li>
         <li><span>🆓</span><b>Daftar gratis</b><small>Hanya PNBP resmi di loket</small></li>
         <li><span>🛡️</span><b>Tanpa calo</b><small>Langsung dilayani petugas</small></li>
       </ul>
@@ -102,8 +105,8 @@
         <a class="layanan-kartu" href="#jadwal"><span class="lk-ikon">📅</span><b>Jadwal</b><small>Lokasi, tanggal, dan sisa kuota SIM Baru &amp; Perpanjangan. Daftar, kirim bukti teori, dan pasang pengingat.</small></a>
         <a class="layanan-kartu" href="#syarat"><span class="lk-ikon">✅</span><b>Cek Syarat</b><small>Cek usia, jenis pendaftaran yang tepat, berkas yang dibawa, biaya resmi, dan unduh ketentuan peserta (PDF).</small></a>
         <a class="layanan-kartu" href="#status"><span class="lk-ikon">🔎</span><b>Cek Status</b><small>Masukkan NIK dan tanggal lahir untuk melihat status pendaftaran, kuota, dan hasil ujian teori Anda.</small></a>
-        <a class="layanan-kartu" href="#teori"><span class="lk-ikon">📝</span><b>Latihan Teori</b><small>Kenali 3 tahap E-AVIS, coba 10 soal acak dari Buku Digital SIM, dan simulasi E-AVIS lengkap.</small></a>
-        <a class="layanan-kartu" href="#praktik"><span class="lk-ikon">🏍️</span><b>Latihan Praktik</b><small>Urutan materi, syarat lulus, kesalahan umum, dan kuis lulus atau gagal untuk SIM C &amp; SIM A.</small></a>
+        <a class="layanan-kartu" data-hanya="A" href="#teori"><span class="lk-ikon">📝</span><b>Latihan Teori</b><small>Kenali 3 tahap E-AVIS, coba 10 soal acak dari Buku Digital SIM, dan simulasi E-AVIS lengkap.</small></a>
+        <a class="layanan-kartu" data-hanya="A" href="#praktik"><span class="lk-ikon">🏍️</span><b>Latihan Praktik</b><small>Urutan materi, syarat lulus, kesalahan umum, dan kuis lulus atau gagal untuk SIM C &amp; SIM A.</small></a>
         <a class="layanan-kartu" href="#usulan"><span class="lk-ikon">📍</span><b>Usul Lokasi</b><small>Pengurus pesantren, kampus, sekolah, desa, atau instansi bisa mengusulkan SIM Komunitas di tempatnya.</small></a>
         <a class="layanan-kartu" href="#tanya"><span class="lk-ikon">💬</span><b>Tanya Jawab</b><small>Jawaban pertanyaan yang sering diajukan: biaya, SIM kedaluwarsa, belum lulus teori, kuota penuh.</small></a>
       </div>
@@ -134,6 +137,14 @@
       </ol>
       <div class="usulan-isi">
       <form class="panel" id="formUsulan" novalidate>
+        <fieldset data-hanya="A">
+          <legend>Layanan yang diusulkan</legend>
+          <div class="pilihan">
+            <label><input type="radio" name="layanan" value="SIM Baru & Perpanjangan" checked><span>SIM Baru &amp; Perpanjangan<small>Lengkap: ujian teori &amp; praktik di lokasi</small></span></label>
+            <label><input type="radio" name="layanan" value="Perpanjangan saja"><span>Perpanjangan saja<small>Tanpa ujian, butuh tempat lebih sederhana</small></span></label>
+          </div>
+        </fieldset>
+        <p class="layanan-b" data-hanya="B">📋 Usulan ini untuk layanan <b>Perpanjangan SIM saja</b>. Butuh SIM Baru juga? <a data-ke-versi="A" href="#usulan">Gunakan versi lengkap</a>.</p>
         <fieldset>
           <legend>Jenis tempat</legend>
           <div class="pilihan tiga">
@@ -185,7 +196,7 @@
         </div>
         <label class="isian">Nomor WhatsApp penanggung jawab <input name="wa" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="0812xxxxxxxx" required></label>
         <div class="dua-kolom">
-          <label class="isian">Perkiraan peserta SIM Baru <input name="baru" type="number" inputmode="numeric" min="0" max="2000" value="0"></label>
+          <label class="isian" data-hanya="A" data-perkiraan-baru>Perkiraan peserta SIM Baru <input name="baru" type="number" inputmode="numeric" min="0" max="2000" value="0"></label>
           <label class="isian">Perkiraan peserta Perpanjangan <input name="perpanjangan" type="number" inputmode="numeric" min="0" max="2000" value="0"></label>
         </div>
         <label class="isian">Usulan tanggal <span class="opsional">(opsional)</span><input name="tanggal" type="date"></label>
@@ -219,12 +230,19 @@
   <section class="bagian alt" data-panel="jadwal">
     <div class="wrap">
       <h2>Alurnya cuma 5 langkah</h2>
-      <ol class="alur">
+      <ol class="alur" data-hanya="A">
         <li><b>Daftar online</b><small>Isi formulir sebelum hari layanan. Simpan nomor WhatsApp yang dipakai.</small></li>
         <li><b>Belajar ujian teori</b><small>SIM Baru: kerjakan ujian teori lewat HP, simpan screenshot hasilnya.</small></li>
         <li><b>Kirim bukti teori</b><small>Unggah screenshot lewat tombol <i>Kirim bukti</i> atau QR di lokasi.</small></li>
         <li><b>Datang ke lokasi</b><small>Bawa KTP asli (dan SIM lama untuk perpanjangan). Tes kesehatan &amp; psikologi di tempat.</small></li>
         <li><b>Ujian praktik &amp; cetak</b><small>Lulus ujian praktik, foto, bayar PNBP di loket resmi, SIM dicetak. <a href="#praktik">Latihan praktik →</a></small></li>
+      </ol>
+      <ol class="alur" data-hanya="B">
+        <li><b>Daftar online</b><small>Isi formulir sebelum hari layanan, pilih jenis permohonan Perpanjangan.</small></li>
+        <li><b>Siapkan berkas</b><small>KTP-el asli, SIM lama asli yang masih berlaku, bukti JKN/BPJS aktif.</small></li>
+        <li><b>Datang ke lokasi</b><small>Sesuai jadwal; tunjukkan berkas ke petugas registrasi.</small></li>
+        <li><b>Tes kesehatan &amp; psikologi</b><small>Diperiksa petugas di tempat. Tidak ada ujian teori &amp; praktik.</small></li>
+        <li><b>Foto, bayar &amp; cetak</b><small>Foto, bayar PNBP di loket resmi/BRIVA, SIM baru langsung dicetak.</small></li>
       </ol>
     </div>
   </section>
@@ -238,7 +256,7 @@
         <fieldset>
           <legend>1. Mau mengurus apa?</legend>
           <div class="pilihan">
-            <label><input type="radio" name="permohonan" value="baru" checked><span>SIM Baru<small>Belum pernah punya</small></span></label>
+            <label data-hanya="A"><input type="radio" name="permohonan" value="baru" checked><span>SIM Baru<small>Belum pernah punya</small></span></label>
             <label><input type="radio" name="permohonan" value="perpanjangan"><span>Perpanjangan<small>SIM lama mau habis</small></span></label>
           </div>
         </fieldset>
@@ -284,7 +302,7 @@
   </section>
 
   <!-- ============ LATIHAN TEORI ============ -->
-  <section id="teori" data-panel="teori" class="bagian">
+  <section id="teori" data-panel="teori" data-hanya="A" class="bagian">
     <div class="wrap sempit">
       <h2>Latihan ujian teori</h2>
       <p class="sub">Ujian teori SIM memakai <b>E-AVIS</b> dan dapat dikerjakan lewat HP. Kenali tahapannya, lalu berlatih dengan soal dari <b>Buku Digital SIM Satpas Banyuwangi</b>.</p>
@@ -316,7 +334,7 @@
   </section>
 
   <!-- ============ LATIHAN PRAKTIK ============ -->
-  <section id="praktik" data-panel="praktik" class="bagian alt">
+  <section id="praktik" data-panel="praktik" data-hanya="A" class="bagian alt">
     <div class="wrap sempit">
       <h2>Latihan ujian praktik</h2>
       <p class="sub">Pelajari urutan materi dan syarat lulus ujian praktik sesuai Kep/105/VIII/2023 dan Buku Digital SIM (B.13), lalu uji pemahaman Anda dengan kuis <i>lulus atau gagal</i>.</p>
@@ -333,10 +351,11 @@
   <section id="tanya" data-panel="tanya" class="bagian alt">
     <div class="wrap sempit">
       <h2>Tanya jawab</h2>
+      <details data-hanya="B"><summary>Apakah perpanjangan perlu ujian teori dan praktik?</summary><p>Tidak, selama SIM lama <b>masih berlaku</b>. Peserta cukup membawa KTP-el, SIM lama asli, dan bukti JKN aktif, lalu mengikuti tes kesehatan &amp; psikologi di lokasi. Golongan yang dilayani: SIM A dan SIM C.</p></details>
       <details><summary>Siapa yang boleh ikut SIM Komunitas?</summary><p>Warga yang berdomisili di Banyuwangi (sesuai KTP), berusia minimal 17 tahun untuk SIM C dan SIM A, dan termasuk komunitas sasaran: santri &amp; pengurus pondok pesantren, mahasiswa &amp; civitas kampus, siswa SMA sederajat yang cukup umur, atau masyarakat desa di lokasi layanan. <a href="unduhan/Ketentuan-Peserta-SIM-Komunitas-Banyuwangi.pdf" download>Unduh ketentuan lengkap (PDF)</a>.</p></details>
       <details><summary>Berapa biayanya?</summary><p>Pendaftaran gratis. Yang dibayar hanya PNBP resmi (PP No. 76 Tahun 2020) di loket resmi/BRIVA: SIM C baru Rp100.000, SIM A baru Rp120.000, perpanjangan SIM C Rp75.000, perpanjangan SIM A Rp80.000. Biaya tes kesehatan dan psikologi mengikuti ketentuan petugas di lokasi. <b>Jangan membayar ke perorangan.</b></p></details>
       <details><summary>SIM saya sudah lewat masa berlaku. Bisa perpanjangan?</summary><p>Tidak. SIM yang sudah lewat masa berlaku harus diajukan sebagai <b>SIM Baru</b>, termasuk ujian teori dan praktik. Gunakan <a href="#syarat">Cek Syarat</a> untuk memastikan.</p></details>
-      <details><summary>Saya belum lulus ujian teori. Bagaimana?</summary><p>Tetap kirim screenshot hasilnya. Petugas akan menjelaskan jadwal ujian ulang. Setelah ujian ulang, kirim lagi hasil terbaru dengan nomor WhatsApp yang sama; bukti lama otomatis diganti.</p></details>
+      <details data-hanya="A"><summary>Saya belum lulus ujian teori. Bagaimana?</summary><p>Tetap kirim screenshot hasilnya. Petugas akan menjelaskan jadwal ujian ulang. Setelah ujian ulang, kirim lagi hasil terbaru dengan nomor WhatsApp yang sama; bukti lama otomatis diganti.</p></details>
       <details><summary>Data saya tidak ditemukan di Cek Status.</summary><p>Data baru tampil sekitar 5 menit setelah formulir dikirim. Pastikan NIK dan tanggal lahir sama persis dengan yang diisi di formulir. Bila masih tidak ada, hubungi WhatsApp Satpas.</p></details>
       <details><summary>Kuota sudah penuh, apa yang bisa saya lakukan?</summary><p>Pilih lokasi lain yang masih tersedia, atau datang langsung ke Satpas Polresta Banyuwangi pada jam pelayanan. Jadwal SIM Komunitas berikutnya diumumkan lewat halaman ini dan WhatsApp Satpas.</p></details>
     </div>
@@ -359,6 +378,7 @@
   </div>
   <div class="wrap">
     <p><b>Satpas Polresta Banyuwangi</b> · Pelayanan SIM Komunitas</p>
+    <p class="kecil ganti-versi"><span data-hanya="A">Versi lengkap (SIM Baru &amp; Perpanjangan) · <a data-ke-versi="B" href="#beranda">Buka versi khusus Perpanjangan</a></span><span data-hanya="B">Versi khusus Perpanjangan · <a data-ke-versi="A" href="#beranda">Buka versi lengkap (SIM Baru &amp; Perpanjangan)</a></span></p>
     <p class="kecil"><a data-buku href="#" target="_blank" rel="noopener">Buku Digital SIM Satpas Banyuwangi</a> · <a data-buku-komunitas href="#" target="_blank" rel="noopener">Halaman B.19 SIM Komunitas</a></p>
   </div>
 </footer>

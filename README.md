@@ -15,6 +15,18 @@ Alamat setelah aktif: `https://satpasbwi-sim.github.io/sim-komunitas-bwi/`
 | **Kirim bukti teori** | Tombol muncul otomatis H-1 dan hari H | Halaman `bukusimbwi/bukti/` yang sudah ada |
 | Tanya jawab, WhatsApp Satpas, peringatan calo, mode gelap, bisa dipasang di layar HP | | |
 
+## Dua versi portal
+
+| Versi | Untuk | Link untuk dibagikan | Menu |
+|---|---|---|---|
+| **A – SIM Baru & Perpanjangan** | lokasi layanan lengkap | https://satpasbwi-sim.github.io/sim-komunitas-bwi/ | Jadwal · Cek Syarat · Cek Status · Latihan Teori · Latihan Praktik · Usul Lokasi · Tanya Jawab |
+| **B – Khusus Perpanjangan** | lokasi perpanjangan saja | https://satpasbwi-sim.github.io/sim-komunitas-bwi/perpanjangan/ | Jadwal · Cek Syarat · Cek Status · Usul Lokasi · Tanya Jawab |
+
+Satu kode, satu data. Versi dipilih dari alamat (`versi.js`): `?versi=perpanjangan` (atau folder `perpanjangan/`) = Versi B, selain itu Versi A.
+Elemen berlabel `data-hanya="A"` / `data-hanya="B"` hanya tampil di versinya. Versi B: header hijau, kuota hanya Perpanjangan, Cek Syarat langsung ke perpanjangan (SIM kedaluwarsa diarahkan ke Versi A), tanpa Latihan Teori/Praktik, usulan otomatis "Perpanjangan saja", bisa dipasang sebagai aplikasi terpisah (`manifest-perpanjangan.webmanifest`).
+
+Jenis layanan tiap lokasi diatur di sheet **Jadwal Layanan**, kolom **Layanan** (`SIM Baru & Perpanjangan` / `Perpanjangan saja`). Lokasi "Perpanjangan saja" tampil di kedua versi dengan label *Khusus Perpanjangan* dan hanya kuota Perpanjangan.
+
 ## Data pribadi
 
 Repo ini **publik**, jadi isinya tidak boleh memuat data pendaftar.

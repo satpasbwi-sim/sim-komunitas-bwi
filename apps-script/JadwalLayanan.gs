@@ -13,6 +13,7 @@
  *   3. Terapkan → Kelola deployment → ✏️ → Versi baru (portal mulai membaca sheet Jadwal Layanan).
  *
  * CARA PAKAI PETUGAS:
+ *   Kolom "Layanan diusulkan" (diisi pengusul: SIM Baru & Perpanjangan / Perpanjangan saja) menentukan versi portal.
  *   Usulan Lokasi → isi "Tanggal layanan (disetujui)" (+ jam & kuota bila perlu) → centang "Setujui ✔".
  *   Otomatis: baris baru di "Jadwal Layanan" (status "Segera dibuka") & di sheet "Lokasi" (QR bukti teori),
  *   status usulan menjadi "Dijadwalkan", dan muncul tautan "💬 Kirim WhatsApp" ke penanggung jawab.
@@ -28,7 +29,8 @@ var BUKTI_URL = 'https://satpasbwi-sim.github.io/bukusimbwi/bukti/?lok=';
 var HARI_LABEL_BARU = 3;   // lokasi yang baru ditambahkan diberi label "BARU" di portal selama 3 hari
 
 var KOLOM_JADWAL = ['Kode', 'Nama tempat', 'Keterangan', 'Ikon', 'Tanggal layanan', 'Jam mulai', 'Jam selesai',
-  'Teks cocok di formulir', 'Kuota SIM Baru', 'Kuota Perpanjangan', 'Status', 'Link Google Maps', 'Ditambahkan', 'Sumber'];
+  'Teks cocok di formulir', 'Kuota SIM Baru', 'Kuota Perpanjangan', 'Status', 'Link Google Maps', 'Ditambahkan', 'Sumber', 'Layanan'];
+var LAYANAN_JADWAL = ['SIM Baru & Perpanjangan', 'Perpanjangan saja'];   // menentukan versi portal: A (lengkap) / B (perpanjangan)
 var STATUS_JADWAL = ['Segera dibuka', 'Buka', 'Tutup', 'Sembunyikan'];
 var KOLOM_SETUJU = ['Tanggal layanan (disetujui)', 'Jam mulai', 'Jam selesai', 'Kuota SIM Baru', 'Kuota Perpanjangan',
   'Kode lokasi', 'Link Google Maps', 'Setujui ✔', 'Kabari penanggung jawab'];
@@ -50,7 +52,8 @@ function pasangJadwalLayanan() {
     var awal = JADWAL.map(function (j) {
       var t = j.tanggal.split('-');
       return [j.kode, j.nama, j.ket, j.ikon, new Date(+t[0], t[1] - 1, +t[2]), j.mulai, j.selesai, j.cocok,
-        j.kuota.baru, j.kuota.perpanjangan, j.dibuka ? 'Buka' : 'Tutup', '', '', 'Jadwal awal'];
+        j.kuota.baru, j.kuota.perpanjangan, j.dibuka ? 'Buka' : 'Tutup', '', '', 'Jadwal awal',
+        j.layanan === 'perpanjangan' ? 'Perpanjangan saja' : 'SIM Baru & Perpanjangan'];
     });
     if (awal.length) sj.getRange(2, 1, awal.length, KOLOM_JADWAL.length).setValues(awal);
     laporan.push('Sheet "' + SHEET_JADWAL + '" dibuat dengan ' + awal.length + ' jadwal.');
@@ -58,6 +61,12 @@ function pasangJadwalLayanan() {
   sj.getRange('E2:E').setNumberFormat('dd/MM/yyyy');
   sj.getRange('F2:G').setNumberFormat('@');
   sj.getRange('M2:M').setNumberFormat('dd/MM/yyyy HH:mm');
+  if (String(sj.getRange(1, 15).getValue()) !== 'Layanan') {
+    sj.getRange(1, 15).setValue('Layanan').setFontWeight('bold').setBackground('#1f3864').setFontColor('#ffffff');
+    if (sj.getLastRow() > 1) sj.getRange(2, 15, sj.getLastRow() - 1, 1).setValue('SIM Baru & Perpanjangan');
+    laporan.push('Kolom "Layanan" ditambahkan di "' + SHEET_JADWAL + '".');
+  }
+  sj.getRange('O2:O').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(LAYANAN_JADWAL, true).build());
   sj.getRange('K2:K').setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(STATUS_JADWAL, true).build());
   sj.getRange(1, 1).setNote('Sumber jadwal portal. Status: "Segera dibuka" = tampil tanpa tombol Daftar; "Buka" = tombol Daftar muncul; ' +
     '"Tutup" = pendaftaran ditutup; "Sembunyikan" = tidak tampil. Jadwal yang lewat jam selesainya otomatis "Selesai".');
@@ -132,7 +141,8 @@ function setujuiUsulan_(sh, baris, judul) {
     if (tgl < hariIni) throw new Error('tanggal layanan sudah lewat.');
     if (!nama) throw new Error('nama tempat kosong.');
     var mulai = jam_(teks('Jam mulai'), '08:00'), selesai = jam_(teks('Jam selesai'), '15:00');
-    var kuotaBaru = angkaAtau_(ambil('Kuota SIM Baru'), ambil('Perkiraan SIM Baru'));
+    var layanan = teks('Layanan diusulkan') === 'Perpanjangan saja' ? 'Perpanjangan saja' : 'SIM Baru & Perpanjangan';
+    var kuotaBaru = layanan === 'Perpanjangan saja' ? 0 : angkaAtau_(ambil('Kuota SIM Baru'), ambil('Perkiraan SIM Baru'));
     var kuotaPerp = angkaAtau_(ambil('Kuota Perpanjangan'), ambil('Perkiraan Perpanjangan'));
     if (kuotaBaru + kuotaPerp < 1) throw new Error('isi kuota SIM Baru / Perpanjangan.');
     var kode = (teks('Kode lokasi') || kodeDari_(nama)).toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 24);
@@ -148,7 +158,7 @@ function setujuiUsulan_(sh, baris, judul) {
       if (nomor && data[i][13] === nomor) { barisJadwal = i + 1; break; }
       if (data[i][0].toUpperCase() === kode) throw new Error('kode "' + kode + '" sudah dipakai jadwal lain. Isi kolom "Kode lokasi" dengan kode lain.');
     }
-    var isi = [kode, nama, ket, info[0], tgl, mulai, selesai, nama, kuotaBaru, kuotaPerp, 'Segera dibuka', maps, new Date(), nomor];
+    var isi = [kode, nama, ket, info[0], tgl, mulai, selesai, nama, kuotaBaru, kuotaPerp, 'Segera dibuka', maps, new Date(), nomor, layanan];
     if (barisJadwal) sj.getRange(barisJadwal, 1, 1, isi.length).setValues([isi]);
     else sj.appendRow(isi);
 
@@ -181,9 +191,10 @@ function setujuiUsulan_(sh, baris, judul) {
       var pesan = 'Assalamualaikum / Salam sejahtera Bapak/Ibu ' + pj + '.\n' +
         'Usulan SIM Komunitas di ' + nama + (nomor ? ' (' + nomor + ')' : '') + ' telah DISETUJUI ✅\n\n' +
         '📅 ' + tglPanjang + ', pukul ' + mulai + '–' + selesai + ' WIB\n' +
-        '👥 Kuota: SIM Baru ' + kuotaBaru + ' orang, Perpanjangan ' + kuotaPerp + ' orang\n\n' +
+        '🪪 Layanan: ' + layanan + '\n' +
+        '👥 Kuota: ' + (layanan === 'Perpanjangan saja' ? 'Perpanjangan ' + kuotaPerp + ' orang' : 'SIM Baru ' + kuotaBaru + ' orang, Perpanjangan ' + kuotaPerp + ' orang') + '\n\n' +
         'Mohon diteruskan kepada calon peserta:\n' +
-        '• Jadwal, sisa kuota & pendaftaran: ' + PORTAL_URL + '#jadwal\n' +
+        '• Jadwal, sisa kuota & pendaftaran: ' + PORTAL_URL + (layanan === 'Perpanjangan saja' ? 'perpanjangan/' : '#jadwal') + '\n' +
         '• Ketentuan peserta (PDF): ' + PDF_KETENTUAN + '\n\n' +
         'Petugas akan menghubungi kembali untuk persiapan lokasi. Terima kasih.\n– Satpas Polresta Banyuwangi';
       var url = 'https://wa.me/' + nomorWA + '?text=' + encodeURIComponent(pesan);
@@ -213,7 +224,8 @@ function bacaJadwalLayanan_(ss) {
       tanggal: tgl, mulai: jam_(t[5], '08:00'), selesai: jam_(t[6], '15:00'), cocok: String(t[7]).trim() || String(t[1]).trim(),
       kuota: { baru: angkaAtau_(v[8], 0), perpanjangan: angkaAtau_(v[9], 0) },
       dibuka: status === 'Buka', segera: status === 'Segera dibuka', maps: String(t[11]).trim(),
-      baru: v[12] instanceof Date && v[12].getTime() > batasBaru });
+      baru: v[12] instanceof Date && v[12].getTime() > batasBaru,
+      layanan: String(t[14] || '').trim() === 'Perpanjangan saja' ? 'perpanjangan' : 'lengkap' });
   }
   return hasil.length ? hasil : null;
 }

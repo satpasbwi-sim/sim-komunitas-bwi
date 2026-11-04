@@ -433,3 +433,16 @@ html.kunci-gulir { overflow: hidden; }
 @media (max-width: 560px) { .pp-ajak-kuis { grid-template-columns: 1fr; } .pp-ajak-kuis .tombol { width: 100%; } }
 @media (min-width: 1001px) { .menu a { white-space: nowrap; font-size: .86rem; gap: 5px; padding: 8px 4px; } }
 @media (min-width: 641px) and (max-width: 1000px) { .menu a { flex-direction: column; gap: 2px; font-size: .74rem; padding: 6px 2px; min-height: 52px; } .menu a span { font-size: 1.15rem; } }
+
+/* ================= DUA VERSI: A (SIM Baru & Perpanjangan) · B (khusus Perpanjangan) ================= */
+html[data-versi="B"] [data-hanya="A"], html:not([data-versi="B"]) [data-hanya="B"] { display: none !important; }
+html[data-versi="B"] .menu { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+html[data-versi="B"] .layanan { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1000px) { html[data-versi="B"] .layanan { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { html[data-versi="B"] .layanan { grid-template-columns: 1fr; } }
+html[data-versi="B"] .atas { background: #1d4d3a; }
+html[data-versi="B"] .menu a.aktif, html[data-versi="B"] .menu a.aktif:hover { background: #c9a227; }
+.dua-kolom.satu { grid-template-columns: 1fr; }
+.chip.khusus { background: #e3f4e7; color: #1e7b34; align-self: flex-start; }
+.layanan-b { margin: 0 0 14px; padding: 10px 12px; border-radius: 12px; background: var(--hijau-muda); font-size: .9rem; }
+.ganti-versi { opacity: .9; }

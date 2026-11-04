@@ -2,6 +2,12 @@
 (function () {
   'use strict';
   var K = window.SIMKOM;
+  var VERSI = window.SIMKOM_VERSI === 'B' ? 'B' : 'A';   // A = SIM Baru & Perpanjangan, B = khusus Perpanjangan (lihat versi.js)
+  /** Jenis kuota yang ditampilkan untuk satu lokasi pada versi ini. */
+  function jenisKuota(j) {
+    var lengkap = VERSI === 'A' && j.layanan !== 'perpanjangan';
+    return lengkap ? [['SIM Baru', j.kuota && j.kuota.baru], ['Perpanjangan', j.kuota && j.kuota.perpanjangan]] : [['Perpanjangan', j.kuota && j.kuota.perpanjangan]];
+  }
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   var HARI = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -63,7 +69,8 @@
 
 
   // ---- halaman per menu: hanya bagian menu yang dipilih yang tampil ---------
-  var PANEL = ['beranda', 'jadwal', 'syarat', 'status', 'teori', 'praktik', 'usulan', 'tanya'];
+  var PANEL = VERSI === 'B' ? ['beranda', 'jadwal', 'syarat', 'status', 'usulan', 'tanya']
+                             : ['beranda', 'jadwal', 'syarat', 'status', 'teori', 'praktik', 'usulan', 'tanya'];
   var JUDUL_PANEL = { beranda: 'SIM Komunitas Banyuwangi', jadwal: 'Jadwal & Kuota', syarat: 'Cek Syarat', status: 'Cek Status',
     teori: 'Latihan Teori', praktik: 'Latihan Praktik', usulan: 'Usulkan Lokasi', tanya: 'Tanya Jawab' };
   document.querySelectorAll('[data-panel]').forEach(function (sec) {
@@ -80,7 +87,8 @@
       a.classList.toggle('aktif', aktif);
       if (aktif) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
-    document.title = id === 'beranda' ? JUDUL_PANEL.beranda : JUDUL_PANEL[id] + ' – SIM Komunitas Banyuwangi';
+    var dasar = VERSI === 'B' ? 'SIM Perpanjangan Komunitas Banyuwangi' : JUDUL_PANEL.beranda;
+    document.title = id === 'beranda' ? dasar : JUDUL_PANEL[id] + ' – ' + dasar;
     if (gulir !== false) window.scrollTo({ top: 0, behavior: 'instant' });
   }
   window.addEventListener('hashchange', function () { tampilPanel(); });
@@ -89,6 +97,12 @@
     if (a && a.getAttribute('href') === (location.hash || '#beranda')) { ev.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   });
   tampilPanel();
+
+  /** URL halaman ini pada versi lain, misalnya lokasiVersi('B', '#jadwal'). */
+  function lokasiVersi(v, hash) {
+    return location.pathname + (v === 'B' ? '?versi=perpanjangan' : '') + (hash || location.hash || '#beranda');
+  }
+  document.querySelectorAll('[data-ke-versi]').forEach(function (a) { a.href = lokasiVersi(a.getAttribute('data-ke-versi'), a.getAttribute('href')); });
 
   // =========================================================================
   // 1. JADWAL & KUOTA
@@ -159,7 +173,7 @@
     $('#tiketNama').textContent = (j.ikon ? j.ikon + ' ' : '') + j.nama;
     $('#tiketTgl').textContent = tglPanjang(j.tanggal) + ' · ' + (j.mulai || '08:00') + ' WIB';
     if (j.kuota) {
-      [['SIM Baru', j.kuota.baru], ['Perpanjangan', j.kuota.perpanjangan]].forEach(function (x) {
+      jenisKuota(j).forEach(function (x) {
         if (x[1]) kuota.appendChild(h('span', { class: 'chip ' + (x[1].sisa === 0 ? 'penuh' : 'buka') }, x[0] + ': ' + (x[1].sisa === 0 ? 'penuh' : 'sisa ' + x[1].sisa)));
       });
     } else kuota.appendChild(h('span', { class: 'chip ' + j.status }, STATUS_TEKS[j.status]));
@@ -192,8 +206,9 @@
       h('small', null, 'Pukul ' + (j.mulai || '08:00') + '–' + (j.selesai || '15:00') + ' WIB' + (hitung && j.status !== 'selesai' ? ' · ' + hitung : '')));
 
     var kq = $('.kj-kuota', node);
+    if (j.layanan === 'perpanjangan' && VERSI === 'A') kq.appendChild(h('span', { class: 'chip khusus' }, '🔁 Khusus Perpanjangan'));
     if (j.kuota && j.status !== 'selesai') {
-      [['SIM Baru', j.kuota.baru], ['Perpanjangan', j.kuota.perpanjangan]].forEach(function (x) {
+      jenisKuota(j).forEach(function (x) {
         if (!x[1]) return;
         var persen = x[1].batas ? Math.min(100, Math.round(x[1].terisi / x[1].batas * 100)) : 0;
         var bar = h('i', { class: x[1].sisa === 0 ? 'habis' : x[1].sisa <= x[1].batas * 0.2 ? 'tipis' : '' });
@@ -207,7 +222,7 @@
     if (j.status === 'segera') kq.appendChild(h('p', { class: 'kj-segera' }, '📣 Jadwal baru disetujui. Pendaftaran segera dibuka — pantau halaman ini atau tekan "Ingatkan saya".'));
     var aksi = $('.kj-aksi', node);
     if (j.status === 'buka') aksi.appendChild(h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Daftar sekarang'));
-    if (j.status !== 'selesai' && beda <= 1) {
+    if (j.status !== 'selesai' && beda <= 1 && VERSI === 'A' && j.layanan !== 'perpanjangan') {
       aksi.appendChild(h('a', { class: 'tombol kecil garis', href: K.BUKTI_URL + encodeURIComponent(j.kode) + '&tgl=' + j.tanggal, target: '_blank', rel: 'noopener' }, '📤 Kirim bukti teori'));
     }
     if (j.status !== 'selesai' && /^https:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|(www\.)?google\.[a-z.]+\/maps)/.test(j.maps || '')) {
@@ -246,6 +261,7 @@
   var fs = $('#formSyarat');
   function nilaiRadio(form, nama) { var x = form.querySelector('input[name="' + nama + '"]:checked'); return x && x.value; }
   fs.addEventListener('change', function () { $('#isianBerlaku').hidden = nilaiRadio(fs, 'permohonan') !== 'perpanjangan'; });
+  if (VERSI === 'B') { fs.querySelector('input[value="perpanjangan"]').checked = true; $('#isianBerlaku').hidden = false; }
 
   function usiaPada(lahir, pada) {
     var a = lahir.split('-').map(Number), b = pada.split('-').map(Number);
@@ -278,6 +294,13 @@
     }
 
     var jadiBaru = false;
+    if (VERSI === 'B' && berlaku < kini) {
+      out.replaceChildren(h('div', { class: 'hasil awas' },
+        h('h3', null, 'SIM lama sudah lewat masa berlaku'),
+        h('p', null, 'Masa berlaku berakhir ' + tglPanjang(berlaku) + '. SIM yang sudah lewat masa berlaku tidak bisa diperpanjang dan harus diajukan sebagai SIM Baru (ikut ujian teori & praktik). Layanan ini khusus perpanjangan.'),
+        h('div', { class: 'baris-aksi' }, h('a', { class: 'tombol kecil', href: lokasiVersi('A', '#syarat') }, '🔄 Buka layanan SIM Baru & Perpanjangan'))));
+      return;
+    }
     if (per === 'perpanjangan' && berlaku < kini) {
       jadiBaru = true;
       blok.push(h('div', { class: 'hasil awas' },
@@ -433,11 +456,19 @@
   var fu = $('#formUsulan');
   if (fu) {
     fu.tanggal.min = tambahHari(hariIni(), 7);
+    var aturPerkiraan = function () {
+      var hanyaPerp = VERSI === 'B' || nilaiRadio(fu, 'layanan') === 'Perpanjangan saja';
+      var l = fu.querySelector('[data-perkiraan-baru]');
+      if (l) { l.style.display = hanyaPerp ? 'none' : ''; l.closest('.dua-kolom').classList.toggle('satu', hanyaPerp); }
+    };
+    fu.addEventListener('change', function (ev) { if (ev.target.name === 'layanan') aturPerkiraan(); });
+    aturPerkiraan();
     fu.wa.addEventListener('input', function () { this.value = this.value.replace(/[^\d+ -]/g, ''); });
     fu.addEventListener('input', function (ev) { var l = ev.target.closest('.isian'); if (l) l.classList.remove('salah'); });
 
     var pesanWa = function (d) {
       return 'Assalamualaikum/Salam sejahtera. Saya ingin mengusulkan SIM Komunitas.\n' +
+        '• Layanan: ' + d.layanan + '\n' +
         '• Tempat: ' + d.jenis + ' – ' + d.nama + '\n• Kecamatan: ' + d.kecamatan + (d.alamat ? ' (' + d.alamat + ')' : '') + '\n' +
         '• Penanggung jawab: ' + d.pj + (d.jabatan ? ', ' + d.jabatan : '') + ' – ' + d.wa + '\n' +
         '• Perkiraan peserta: SIM Baru ' + d.baru + ', Perpanjangan ' + d.perpanjangan + '\n' +
@@ -451,7 +482,7 @@
     fu.addEventListener('submit', function (ev) {
       ev.preventDefault();
       var out = $('#hasilUsulan');
-      var d = { aksi: 'usulan', jenis: nilaiRadio(fu, 'jenis'), nama: fu.nama.value.trim(), kecamatan: fu.kecamatan.value, alamat: fu.alamat.value.trim(),
+      var d = { aksi: 'usulan', layanan: VERSI === 'B' ? 'Perpanjangan saja' : (nilaiRadio(fu, 'layanan') || 'SIM Baru & Perpanjangan'), jenis: nilaiRadio(fu, 'jenis'), nama: fu.nama.value.trim(), kecamatan: fu.kecamatan.value, alamat: fu.alamat.value.trim(),
         pj: fu.pj.value.trim(), jabatan: fu.jabatan.value.trim(), wa: fu.wa.value.replace(/\D/g, '').replace(/^62/, '0'),
         baru: Number(fu.baru.value) || 0, perpanjangan: Number(fu.perpanjangan.value) || 0, tanggal: fu.tanggal.value,
         catatan: fu.catatan.value.trim(), website: fu.website.value };
@@ -461,7 +492,8 @@
       if (!d.kecamatan) tandai(fu.kecamatan, 'Pilih kecamatan.');
       if (d.pj.length < 3) tandai(fu.pj, 'Isi nama penanggung jawab.');
       if (!/^08\d{8,11}$/.test(d.wa)) tandai(fu.wa, 'Nomor WhatsApp belum benar (contoh 0812xxxxxxxx).');
-      if (d.baru + d.perpanjangan < 1) tandai(fu.baru, 'Isi perkiraan jumlah peserta.');
+      if (d.layanan === 'Perpanjangan saja') d.baru = 0;
+      if (d.baru + d.perpanjangan < 1) tandai(d.layanan === 'Perpanjangan saja' ? fu.perpanjangan : fu.baru, 'Isi perkiraan jumlah peserta.');
       if (!salah && !fu.setuju.checked) { salah = 'Centang persetujuan untuk dihubungi petugas.'; fu.setuju.focus(); }
       if (salah) { out.replaceChildren(h('div', { class: 'hasil gagal' }, salah)); return; }
 
