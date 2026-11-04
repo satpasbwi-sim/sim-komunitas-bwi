@@ -5,7 +5,7 @@ window.SIMKOM = {
   // URL Web App dari apps-script/PortalPublik.gs (berakhiran /exec).
   // Kosongkan bila belum di-deploy: portal tetap jalan memakai JADWAL_CADANGAN tanpa angka kuota,
   // dan fitur Cek Status menampilkan petunjuk menghubungi petugas.
-  API_URL: '',
+  API_URL: 'https://script.google.com/macros/s/AKfycbzQ6zt8PMdWfBiBzeTPcjTPHTeNz9ewWqmV2IxDDKCXuP4mXrj1c3DfXgm0GWmeuwcl/exec',
 
   // Formulir pendaftaran (Google Form).
   FORM_URL: 'https://docs.google.com/forms/d/1j1uq_Icfur-kvcN8V1mTYfZWPPHFWyh3rSmIWg_EQyM/viewform',
