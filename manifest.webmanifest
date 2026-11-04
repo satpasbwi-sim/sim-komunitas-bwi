@@ -2,7 +2,7 @@
   "id": "./",
   "name": "SIM Komunitas Banyuwangi",
   "short_name": "SIM Komunitas",
-  "description": "Jadwal, sisa kuota, cek syarat, cek status, latihan ujian teori, dan usulan lokasi SIM Komunitas Satlantas Polresta Banyuwangi.",
+  "description": "Jadwal, sisa kuota, cek syarat, cek status, latihan ujian teori, dan usulan lokasi SIM Komunitas Satpas Polresta Banyuwangi.",
   "start_url": "./#beranda",
   "scope": "./",
   "display": "standalone",
