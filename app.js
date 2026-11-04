@@ -93,7 +93,44 @@
     jadwalTerkini.forEach(function (j) { wadah.appendChild(kartuJadwal(j, kini)); });
     $('#jadwalInfo').textContent = info;
     $('#jadwalHabis').hidden = jadwalTerkini.some(function (j) { return j.status !== 'selesai'; });
+    isiTiket();
   }
+
+  // ---- tiket "Layanan berikutnya" di sampul --------------------------------
+  var tiketTujuan = null;
+  function isiTiket() {
+    var j = jadwalTerkini.filter(function (x) { return x.status !== 'selesai'; })[0];
+    var tiket = $('#tiket'), kuota = $('#tiketKuota');
+    kuota.replaceChildren();
+    if (!j) {
+      tiketTujuan = null; tiket.classList.add('kosong');
+      $('#tiketNama').textContent = 'Jadwal berikutnya segera diumumkan';
+      $('#tiketTgl').textContent = 'Pantau halaman ini atau WhatsApp Satpas ' + K.WA_TAMPIL;
+      return;
+    }
+    tiket.classList.remove('kosong');
+    $('#tiketHitung').replaceChildren(
+      h('div', null, h('b', { id: 'hH' }, '–'), h('small', null, 'hari')),
+      h('div', null, h('b', { id: 'hJ' }, '–'), h('small', null, 'jam')),
+      h('div', null, h('b', { id: 'hM' }, '–'), h('small', null, 'menit')));
+    tiketTujuan = Date.parse(j.tanggal + 'T' + (j.mulai || '08:00') + ':00+07:00');
+    $('#tiketNama').textContent = (j.ikon ? j.ikon + ' ' : '') + j.nama;
+    $('#tiketTgl').textContent = tglPanjang(j.tanggal) + ' · ' + (j.mulai || '08:00') + ' WIB';
+    if (j.kuota) {
+      [['SIM Baru', j.kuota.baru], ['Perpanjangan', j.kuota.perpanjangan]].forEach(function (x) {
+        if (x[1]) kuota.appendChild(h('span', { class: 'chip ' + (x[1].sisa === 0 ? 'penuh' : 'buka') }, x[0] + ': ' + (x[1].sisa === 0 ? 'penuh' : 'sisa ' + x[1].sisa)));
+      });
+    } else kuota.appendChild(h('span', { class: 'chip ' + j.status }, STATUS_TEKS[j.status]));
+    hitungMundur();
+  }
+  function hitungMundur() {
+    if (!tiketTujuan || !$('#hH')) return;
+    var d = Math.max(0, tiketTujuan - Date.now());
+    if (d === 0) { $('#tiketHitung').replaceChildren(h('div', null, h('b', null, '🟢'), h('small', null, 'sedang berlangsung'))); return; }
+    var m = Math.floor(d / 6e4);
+    $('#hH').textContent = Math.floor(m / 1440); $('#hJ').textContent = Math.floor(m % 1440 / 60); $('#hM').textContent = m % 60;
+  }
+  setInterval(hitungMundur, 30000);
 
   function kartuJadwal(j, kini) {
     var node = $('#tplJadwal').content.firstElementChild.cloneNode(true);
