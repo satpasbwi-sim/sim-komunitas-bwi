@@ -22,16 +22,16 @@ Portal hanya menerima angka kuota, dan untuk Cek Status hanya status satu orang 
 
 ## Cara memasang (sekali saja)
 
-### 1. Aktifkan API di spreadsheet
-1. Buka spreadsheet **Formulir Pendaftaran SIM Komunitas (Jawaban)** → **Ekstensi → Apps Script**.
-2. Klik **+ → Skrip**, beri nama `PortalPublik`, lalu tempel isi file [`apps-script/PortalPublik.gs`](apps-script/PortalPublik.gs).
-   Jika project sudah punya fungsi `doGet`, buat project Apps Script terpisah yang terikat ke spreadsheet yang sama agar tidak bentrok.
-3. Periksa bagian **`JADWAL`**: nama lokasi, tanggal, `cocok` (potongan teks di kolom *Lokasi layanan*), `dibuka`, dan `kuota`. Samakan dengan kuota di project *Pemilahan & Kuota*.
-4. Pilih fungsi `ujiCoba` → **Jalankan** → izinkan akses → lihat log.
-5. **Terapkan → Deployment baru → Aplikasi web**
-   - Jalankan sebagai: **Saya (satpasbwi@gmail.com)**
+### 1. Aktifkan API (sekitar 3 menit, dengan akun satpasbwi@gmail.com)
+1. Buka **https://script.new** → beri nama project .
+2. Hapus isi , lalu tempel seluruh isi [](apps-script/PortalPublik.gs) (tombol *Copy raw file* di GitHub) → **Simpan**.
+3. Pilih fungsi **** → **Jalankan** → *Tinjau izin* → pilih akun → *Lanjutan* → *Buka (tidak aman)* → **Izinkan**. Izin yang diminta hanya **melihat** spreadsheet.
+   Log harus menampilkan jadwal beserta angka kuota.
+4. **Terapkan → Deployment baru** → ikon roda → **Aplikasi web**
+   - Jalankan sebagai: **Saya**
    - Yang memiliki akses: **Siapa saja**
-6. Salin URL yang berakhiran `/exec`.
+   → **Terapkan** → salin **URL aplikasi web** (berakhiran ).
+5. Cek kuota di bagian **** dan samakan dengan project *Pemilahan & Kuota*. Setiap kali  diubah: **Terapkan → Kelola deployment → Edit → Versi baru**.
 
 ### 2. Sambungkan portal
 Buka `config.js` dan isi `API_URL: 'https://script.google.com/macros/s/…/exec'`.

@@ -1,8 +1,8 @@
 /**
  * SIM Komunitas – API Portal Publik
  * ---------------------------------------------------------------------------
- * Dipasang sebagai project Apps Script yang TERIKAT pada spreadsheet
- * "Formulir Pendaftaran SIM Komunitas (Jawaban)" (Ekstensi → Apps Script).
+ * Project Apps Script mandiri (buat di https://script.new) yang membaca spreadsheet
+ * "Formulir Pendaftaran SIM Komunitas (Jawaban)" lewat ID_SPREADSHEET (hanya baca).
  *
  * Melayani dua permintaan dari portal https://satpasbwi-sim.github.io/sim-komunitas-bwi/
  *   ?aksi=jadwal                         → jadwal lokasi + sisa kuota (hanya angka)
@@ -41,6 +41,7 @@ var CACHE_JADWAL_DETIK = 60;          // angka kuota disegarkan paling lama tiap
 var BATAS_PER_NIK = 5;                // maks. percobaan cek status per NIK …
 var BATAS_GLOBAL_PER_MENIT = 150;     // … dan maks. cek status seluruh pengguna per menit
 var ZONA = 'Asia/Jakarta';
+var ID_SPREADSHEET = '1Gkn-UoX98ITUTdN2qMWVImjX_o7vxKCLS9xVibcEo0g'; // Formulir Pendaftaran SIM Komunitas (Jawaban)
 
 // ===========================================================================
 
@@ -64,7 +65,7 @@ function jadwalPublik_() {
   var simpan = cache.get('jadwal_v1');
   if (simpan) return JSON.parse(simpan);
 
-  var ss = SpreadsheetApp.getActive();
+  var ss = SpreadsheetApp.openById(ID_SPREADSHEET);
   var lokBaru = kolomLokasi_(ss.getSheetByName(SHEET_BARU));
   var lokPerp = kolomLokasi_(ss.getSheetByName(SHEET_PERPANJANGAN));
   var sekarang = Utilities.formatDate(new Date(), ZONA, "yyyy-MM-dd'T'HH:mm");
@@ -126,7 +127,7 @@ function cekStatus_(nikMentah, lahirMentah) {
   cache.put(kunciNik, String(nNik + 1), 900);
   cache.put(kunciGlobal, String(nGlobal + 1), 120);
 
-  var ss = SpreadsheetApp.getActive();
+  var ss = SpreadsheetApp.openById(ID_SPREADSHEET);
   var temuan = [];
   [[SHEET_BARU, 'SIM Baru'], [SHEET_PERPANJANGAN, 'Perpanjangan']].forEach(function (s) {
     var sh = ss.getSheetByName(s[0]);
