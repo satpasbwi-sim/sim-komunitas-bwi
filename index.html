@@ -22,8 +22,10 @@
 
 <header class="atas">
   <div class="wrap atas-isi">
-    <img src="img/logo-lantas-baru.webp" alt="" width="37" height="40" class="logo">
-    <div><b>SIM Komunitas</b><small>Satlantas Polresta Banyuwangi</small></div>
+    <a class="merek" href="#beranda" aria-label="SIM Komunitas – kembali ke Beranda">
+      <img src="img/logo-lantas-baru.webp" alt="" width="37" height="40" class="logo">
+      <span><b>SIM Komunitas</b><small>Satlantas Polresta Banyuwangi</small></span>
+    </a>
     <button type="button" class="tema" id="tombolTema" aria-label="Ganti mode terang/gelap">🌓</button>
   </div>
   <nav class="wrap menu" aria-label="Menu utama">
@@ -37,7 +39,7 @@
 </header>
 
 <main>
-  <section class="sampul">
+  <section class="sampul" id="beranda" data-panel="beranda">
     <div class="wrap sampul-isi">
       <div class="sampul-teks">
         <p class="eyebrow"><span class="titik"></span>SIM Komunitas · Satlantas Polresta Banyuwangi</p>
@@ -76,10 +78,21 @@
         <li><span>🛡️</span><b>Tanpa calo</b><small>Langsung dilayani petugas</small></li>
       </ul>
     </div>
+    <div class="wrap">
+      <h2 class="judul-layanan">Pilih layanan</h2>
+      <div class="layanan">
+        <a class="layanan-kartu" href="#jadwal"><span class="lk-ikon">📅</span><b>Jadwal</b><small>Lokasi, tanggal, dan sisa kuota SIM Baru &amp; Perpanjangan. Daftar, kirim bukti teori, dan pasang pengingat.</small></a>
+        <a class="layanan-kartu" href="#syarat"><span class="lk-ikon">✅</span><b>Cek Syarat</b><small>Cek usia, jenis pendaftaran yang tepat, berkas yang dibawa, biaya resmi, dan unduh ketentuan peserta (PDF).</small></a>
+        <a class="layanan-kartu" href="#status"><span class="lk-ikon">🔎</span><b>Cek Status</b><small>Masukkan NIK dan tanggal lahir untuk melihat status pendaftaran, kuota, dan hasil ujian teori Anda.</small></a>
+        <a class="layanan-kartu" href="#teori"><span class="lk-ikon">📝</span><b>Latihan Teori</b><small>10 soal acak dari Buku Digital SIM dengan penjelasan, nilai lulus 70, dan simulasi E-AVIS lengkap.</small></a>
+        <a class="layanan-kartu" href="#usulan"><span class="lk-ikon">📍</span><b>Usul Lokasi</b><small>Pengurus pesantren, kampus, sekolah, desa, atau instansi bisa mengusulkan SIM Komunitas di tempatnya.</small></a>
+        <a class="layanan-kartu" href="#tanya"><span class="lk-ikon">💬</span><b>Tanya Jawab</b><small>Jawaban pertanyaan yang sering diajukan: biaya, SIM kedaluwarsa, belum lulus teori, kuota penuh.</small></a>
+      </div>
+    </div>
   </section>
 
   <!-- ============ JADWAL & KUOTA ============ -->
-  <section id="jadwal" class="bagian">
+  <section id="jadwal" data-panel="jadwal" class="bagian">
     <div class="wrap">
       <h2>Jadwal &amp; sisa kuota</h2>
       <p class="sub" id="jadwalInfo">Memuat jadwal…</p>
@@ -90,7 +103,7 @@
   </section>
 
   <!-- ============ USULKAN LOKASI ============ -->
-  <section id="usulan" class="bagian usulan">
+  <section id="usulan" data-panel="usulan" class="bagian usulan">
     <div class="wrap usulan-isi">
       <div class="usulan-teks">
         <span class="chip emas">BARU</span>
@@ -169,7 +182,7 @@
   </section>
 
   <!-- ============ ALUR ============ -->
-  <section class="bagian alt">
+  <section class="bagian alt" data-panel="jadwal">
     <div class="wrap">
       <h2>Alurnya cuma 5 langkah</h2>
       <ol class="alur">
@@ -183,7 +196,7 @@
   </section>
 
   <!-- ============ CEK SYARAT ============ -->
-  <section id="syarat" class="bagian">
+  <section id="syarat" data-panel="syarat" class="bagian">
     <div class="wrap sempit">
       <h2>Cek syarat: apakah saya bisa ikut?</h2>
       <p class="sub">Jawab 3 pertanyaan, langsung tahu jenis pendaftaran yang tepat, berkas yang dibawa, dan biaya resminya. Data tidak dikirim ke mana pun.</p>
@@ -222,7 +235,7 @@
   </section>
 
   <!-- ============ CEK STATUS ============ -->
-  <section id="status" class="bagian alt">
+  <section id="status" data-panel="status" class="bagian alt">
     <div class="wrap sempit">
       <h2>Cek status pendaftaran</h2>
       <p class="sub">Sudah mengisi formulir? Lihat apakah data Anda masuk kuota, dan hasil ujian teori yang sudah dicek petugas.</p>
@@ -237,7 +250,7 @@
   </section>
 
   <!-- ============ LATIHAN TEORI ============ -->
-  <section id="teori" class="bagian">
+  <section id="teori" data-panel="teori" class="bagian">
     <div class="wrap sempit">
       <h2>Latihan ujian teori</h2>
       <p class="sub">10 soal acak dari bank soal <b>Buku Digital SIM Satpas Banyuwangi</b> (Persepsi Bahaya, Wawasan, Pengetahuan). Nilai lulus <b>70</b>.</p>
@@ -257,7 +270,7 @@
   </section>
 
   <!-- ============ TANYA JAWAB ============ -->
-  <section id="tanya" class="bagian alt">
+  <section id="tanya" data-panel="tanya" class="bagian alt">
     <div class="wrap sempit">
       <h2>Tanya jawab</h2>
       <details><summary>Siapa yang boleh ikut SIM Komunitas?</summary><p>Warga yang berdomisili di Banyuwangi (sesuai KTP), berusia minimal 17 tahun untuk SIM C dan SIM A, dan termasuk komunitas sasaran: santri &amp; pengurus pondok pesantren, mahasiswa &amp; civitas kampus, siswa SMA sederajat yang cukup umur, atau masyarakat desa di lokasi layanan. <a href="unduhan/Ketentuan-Peserta-SIM-Komunitas-Banyuwangi.pdf" download>Unduh ketentuan lengkap (PDF)</a>.</p></details>

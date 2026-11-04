@@ -61,6 +61,35 @@
     simpan('tema', tema);
   });
 
+
+  // ---- halaman per menu: hanya bagian menu yang dipilih yang tampil ---------
+  var PANEL = ['beranda', 'jadwal', 'syarat', 'status', 'teori', 'usulan', 'tanya'];
+  var JUDUL_PANEL = { beranda: 'SIM Komunitas Banyuwangi', jadwal: 'Jadwal & Kuota', syarat: 'Cek Syarat', status: 'Cek Status',
+    teori: 'Latihan Teori', usulan: 'Usulkan Lokasi', tanya: 'Tanya Jawab' };
+  document.querySelectorAll('[data-panel]').forEach(function (sec) {
+    if (sec.getAttribute('data-panel') === 'beranda' || !sec.id) return;
+    var w = sec.querySelector('.wrap');
+    if (w) w.insertBefore(h('a', { class: 'kembali', href: '#beranda' }, '← Beranda'), w.firstChild);
+  });
+  function tampilPanel(gulir) {
+    var id = (location.hash || '#beranda').slice(1);
+    if (PANEL.indexOf(id) < 0) id = 'beranda';
+    document.querySelectorAll('[data-panel]').forEach(function (sec) { sec.hidden = sec.getAttribute('data-panel') !== id; });
+    document.querySelectorAll('.menu a').forEach(function (a) {
+      var aktif = a.getAttribute('href') === '#' + id;
+      a.classList.toggle('aktif', aktif);
+      if (aktif) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    document.title = id === 'beranda' ? JUDUL_PANEL.beranda : JUDUL_PANEL[id] + ' – SIM Komunitas Banyuwangi';
+    if (gulir !== false) window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+  window.addEventListener('hashchange', function () { tampilPanel(); });
+  document.addEventListener('click', function (ev) {   // klik menu yang sedang aktif: kembali ke atas
+    var a = ev.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href') === (location.hash || '#beranda')) { ev.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+  tampilPanel();
+
   // =========================================================================
   // 1. JADWAL & KUOTA
   // =========================================================================
@@ -192,17 +221,6 @@
 
   muatJadwal();
 
-  // menu: tandai bagian yang sedang dibaca
-  if ('IntersectionObserver' in window) {
-    var tautanMenu = document.querySelectorAll('.menu a');
-    var pengamat = new IntersectionObserver(function (isi) {
-      isi.forEach(function (x) {
-        if (!x.isIntersecting) return;
-        tautanMenu.forEach(function (a) { a.classList.toggle('aktif', a.getAttribute('href') === '#' + x.target.id); });
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    ['jadwal', 'usulan', 'syarat', 'status', 'teori', 'tanya'].forEach(function (id) { var e = document.getElementById(id); if (e) pengamat.observe(e); });
-  }
   setInterval(function () { if (!document.hidden) muatJadwal(); }, 120000);
 
   // =========================================================================

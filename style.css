@@ -281,3 +281,22 @@ footer p { margin: 4px 0; }
 .ketentuan-isi p { margin: 4px 0 10px; color: var(--redup); }
 .ketentuan-aksi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 380px; }
 @media (max-width: 420px) { .ketentuan { grid-template-columns: 1fr; } .ketentuan-aksi { max-width: none; } }
+
+/* ================= HALAMAN PER MENU ================= */
+.merek { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; min-width: 0; }
+.merek span { display: flex; flex-direction: column; }
+[data-panel]:not(.sampul):not(.alt) { min-height: calc(100vh - 260px); }
+.kembali { display: inline-flex; align-items: center; gap: 4px; margin: 0 0 14px; font-size: .88rem; font-weight: 700; text-decoration: none; color: var(--biru-2); }
+.kembali:hover { text-decoration: underline; }
+.judul-layanan { margin: 30px 0 12px; font-size: clamp(1.25rem, 4vw, 1.6rem); }
+.layanan { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.layanan-kartu { display: grid; grid-template-columns: 46px 1fr; column-gap: 12px; align-items: start; padding: 14px 16px; border-radius: 16px; background: var(--kartu); color: var(--teks); text-decoration: none; border: 1px solid var(--garis); box-shadow: var(--bayang); transition: transform .15s, border-color .15s; }
+.layanan-kartu:hover, .layanan-kartu:focus-visible { transform: translateY(-2px); border-color: #c9a227; }
+.lk-ikon { grid-row: span 2; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: var(--emas-muda); font-size: 1.4rem; }
+.layanan-kartu b { font-size: 1.02rem; }
+.layanan-kartu small { color: var(--redup); font-size: .84rem; line-height: 1.4; margin-top: 2px; }
+@media (max-width: 860px) { .layanan { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .layanan { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .layanan-kartu { transition: none; } }
+.menu a.aktif, .menu a.aktif:hover, .menu a.aktif:focus-visible { background: #c9a227; color: #1b1b1b; }
+.layanan-kartu { grid-template-rows: auto 1fr; }
