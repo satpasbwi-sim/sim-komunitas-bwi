@@ -539,4 +539,152 @@
     var sudahMuatUlang = false;
     navigator.serviceWorker.addEventListener('controllerchange', function () { if (!sudahMuatUlang) { sudahMuatUlang = true; location.reload(); } });
   }
+  // =========================================================================
+  // 7. RUNNING TEXT: kecepatan tetap (±22 px/detik) berapa pun lebar layar
+  // =========================================================================
+  function aturTicker() {
+    document.querySelectorAll('.ticker-jalur').forEach(function (j) {
+      var isi = j.querySelector('.ticker-isi'); if (!isi) return;
+      j.style.animationDuration = Math.max(30, Math.round(isi.offsetWidth / 22)) + 's';
+    });
+  }
+  aturTicker();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(aturTicker);
+  window.addEventListener('resize', aturTicker);
+
+  // =========================================================================
+  // 8. POP-UP LATIHAN UJIAN PRAKTIK (format Buku Digital B.13, B.13.1, B.13.2)
+  // =========================================================================
+  var PRAKTIK = {
+    C: {
+      judul: 'Ujian praktik SIM C: sirkuit huruf S',
+      catatan: 'Sejak Agustus 2023 lintasan angka 8 dan zig-zag diganti satu sirkuit tak terputus berbentuk huruf S (lampiran Kep/105/VIII/2023).',
+      urutan: [
+        ['Pengereman / keseimbangan', 'Laju ±30 km/jam, kurangi gas, rem depan + belakang bersamaan, berhenti sebelum garis STOP.'],
+        ['Putar balik huruf U', 'Masuk dari sisi luar, gas tetap stabil, kaki tidak turun.'],
+        ['Tikungan huruf S', 'Kecepatan rata, pandang ke tikungan berikutnya.'],
+        ['Rem menghindar (cabang Y)', 'Rem di garis REM, lepas rem dulu, lalu menghindar sesuai isyarat petugas.']
+      ],
+      lulus: ['Tidak menyentuh satu pun patok/sensor elektronik.', 'Kaki tetap di pijakan (footstep) selama motor berjalan.',
+        'Saat berhenti & akan jalan: turunkan kaki kiri dan tengok kanan belakang.', 'Menyelesaikan seluruh materi.'],
+      salah: [
+        ['Mengerem terlambat atau hanya rem depan, motor melewati garis STOP.', 'Kurangi gas sebelum garis, rem depan + belakang bersamaan.'],
+        ['Terlalu pelan di putaran U sehingga kaki turun atau menyenggol patok.', 'Masuk dari sisi luar, pandang ke arah keluar putaran, gas stabil.'],
+        ['Kecepatan naik-turun dan panik di tikungan S.', 'Pandang jauh ke tikungan berikutnya, jaga kecepatan rata.'],
+        ['Berbelok sambil masih mengerem di cabang Y, motor oleng.', 'Rem tepat di garis REM, lepas rem, baru menghindar.']
+      ],
+      cek: 'Periksa rem, lampu, spion, ban, rantai, dan klakson, lalu pakai helm SNI.',
+      video: 'https://www.youtube.com/watch?v=A37m6DrR4Xs', simulasi: 'b5-3-2',
+      kuis: [
+        [false, 'Saat putar balik huruf U, motor terlalu pelan sehingga kaki kanan turun menyentuh tanah.', 'Kaki harus tetap di pijakan (footstep) selama motor berjalan. Jaga gas tetap stabil.'],
+        [true, 'Di garis STOP materi 1, motor berhenti tepat sebelum garis, kaki kiri turun, peserta menengok ke kanan belakang, lalu berjalan lagi.', 'Urutan ini sesuai ketentuan: berhenti sebelum garis, kaki kiri turun, tengok kanan belakang.'],
+        [false, 'Di tikungan huruf S, spion menyenggol satu patok.', 'Peserta tidak boleh menyentuh satu pun patok atau sensor elektronik.'],
+        [false, 'Saat pengereman materi 1, ban depan melewati garis STOP.', 'Motor harus berhenti sebelum garis. Kurangi gas lebih awal dan pakai rem depan + belakang bersamaan.'],
+        [true, 'Di garis REM motor direm, rem dilepas, lalu peserta menghindar ke kanan sesuai isyarat petugas dan berhenti di garis STOP.', 'Itulah urutan materi 4 yang benar.'],
+        [false, 'Petugas memberi isyarat ke kanan, tetapi peserta menghindar ke kiri.', 'Arah menghindar harus sesuai isyarat petugas.'],
+        [false, 'Di cabang Y peserta masih menahan rem sambil berbelok, motor oleng dan kaki turun.', 'Lepas rem dulu, baru menghindar. Kaki tidak boleh turun saat motor berjalan.'],
+        [true, 'Putar balik huruf U dilakukan pelan tetapi stabil, kaki tetap di pijakan, tidak menyentuh patok.', 'Tidak ada kesalahan pada materi ini, jadi lulus.'],
+        [false, 'Setelah berhenti di garis STOP, peserta langsung berjalan tanpa menengok ke kanan belakang.', 'Saat berhenti dan akan berjalan, peserta wajib menurunkan kaki kiri dan menengok ke kanan belakang.'],
+        [true, 'Kecepatan di huruf S sempat naik-turun, tetapi tidak menyentuh patok dan kaki tetap di pijakan.', 'Menurut ketentuan tetap lulus, namun kecepatan yang rata membuat tikungan lebih mudah.'],
+        [false, 'Peserta ragu sebelum cabang Y, lalu berhenti di tengah lintasan dan menurunkan kaki.', 'Kaki turun saat materi masih berjalan termasuk kesalahan. Jaga laju sampai garis STOP.'],
+        [false, 'Di lintasan lurus materi 1, peserta hanya melaju sekitar 15 km/jam lalu mengerem.', 'Materi pengereman meminta laju minimal ±30 km/jam sebelum berhenti di garis STOP.']
+      ]
+    },
+    A: {
+      judul: 'Ujian praktik SIM A: lima materi lapangan uji mobil',
+      catatan: 'Lintasan 6–10 pada denah lapangan uji (Kep/105/VIII/2023 huruf A.3 & I).',
+      urutan: [
+        ['Maju–mundur di jalur sempit', 'Berhenti sebelum garis STOP; saat mundur lihat kaca spion, jangan menengok ke belakang.'],
+        ['Slalom maju & mundur', 'Pelan dan rata melewati 9 patok.'],
+        ['Parkir seri', 'Masuk 1× gerakan mundur, keluar 1× gerakan maju.'],
+        ['Parkir paralel', 'Masuk 1× mundur + 1× maju, keluar 1× mundur + 1× maju.'],
+        ['Tanjakan & turunan', 'Berhenti sebelum garis STOP, tarik rem tangan, netralkan, jalan lagi tanpa mundur.']
+      ],
+      lulus: ['Tidak menyentuh satu pun patok/sensor elektronik.', 'Saat mundur di jalur sempit, lihat melalui kaca spion, kepala tidak menengok ke belakang.',
+        'Di tanjakan mobil tidak bergerak mundur dan tidak mati mesin.', 'Wajib memakai sabuk keselamatan sejak awal dan menyelesaikan seluruh materi.'],
+      salah: [
+        ['Menengok ke belakang saat mundur di jalur sempit.', 'Gunakan kaca spion kiri, kanan, dan tengah.'],
+        ['Bumper menyenggol patok saat slalom.', 'Pelan dan rata; mulai belok sedikit lebih awal.'],
+        ['Parkir seri berkali-kali maju-mundur.', 'Atur posisi sebelum mundur; masuk cukup 1× gerakan mundur.'],
+        ['Mobil mundur atau mesin mati di tanjakan.', 'Tahan rem tangan, naikkan gas pelan, lepas rem tangan saat mobil mulai menarik.']
+      ],
+      cek: 'Periksa kemudi, rem tangan & kaki, transmisi, kopling, oli, spion, lampu, bahan bakar, ban, dan klakson, lalu pasang sabuk keselamatan.',
+      video: 'https://www.youtube.com/watch?v=dETBScrOvhI', simulasi: 'b5-3-1',
+      kuis: [
+        [false, 'Saat mundur di jalur sempit, peserta menoleh ke belakang lewat jendela supaya lebih jelas.', 'Saat mundur, kepala tidak boleh menengok ke belakang. Lihat melalui kaca spion.'],
+        [true, 'Peserta memasang sabuk keselamatan sebelum mesin dijalankan, lalu maju dan berhenti tepat sebelum garis STOP jalur sempit.', 'Sabuk wajib dipakai sejak awal dan berhenti sebelum garis STOP sesuai ketentuan.'],
+        [false, 'Saat slalom, bumper belakang menyenggol patok ke-6 sampai bergeser.', 'Peserta tidak boleh menyentuh satu pun patok atau sensor.'],
+        [true, 'Parkir seri: mobil masuk dengan satu gerakan mundur, lalu keluar dengan satu gerakan maju tanpa menyentuh patok.', 'Itulah ketentuan parkir seri: masuk 1× mundur, keluar 1× maju.'],
+        [false, 'Parkir seri: peserta mundur, maju, lalu mundur lagi untuk meluruskan posisi mobil.', 'Masuk parkir seri cukup 1× gerakan mundur. Gerakan tambahan termasuk kesalahan.'],
+        [true, 'Parkir paralel: masuk dengan 1× mundur dan 1× maju, keluar dengan 1× mundur dan 1× maju.', 'Urutan ini sesuai ketentuan parkir paralel.'],
+        [false, 'Di tanjakan, setelah berhenti di garis STOP, mobil sempat mundur sedikit saat mulai berjalan.', 'Di tanjakan mobil tidak boleh bergerak mundur. Gunakan rem tangan saat mulai jalan.'],
+        [false, 'Di tanjakan, mesin mati saat peserta mencoba berjalan lagi.', 'Mobil tidak boleh mati mesin saat jalan kembali di tanjakan.'],
+        [true, 'Di tanjakan, peserta berhenti sebelum garis STOP, menarik rem tangan, menetralkan, lalu berjalan lagi tanpa mundur.', 'Itulah urutan materi tanjakan yang benar.'],
+        [false, 'Peserta menyelesaikan empat materi dengan baik, tetapi tidak mengikuti materi tanjakan.', 'Seluruh materi wajib diselesaikan.']
+      ]
+    }
+  };
+  var pop = $('#popPraktik'), ppIsi = $('#ppIsi'), golAktif = 'C', kuisP = null;
+
+  function daftarNomor(arr) {
+    return h('ol', { class: 'pp-urutan' }, arr.map(function (x) { return h('li', null, h('b', null, x[0]), h('small', null, x[1])); }));
+  }
+  function isiPraktik(gol) {
+    golAktif = gol;
+    pop.querySelectorAll('.pp-tab button').forEach(function (b) { b.setAttribute('aria-selected', String(b.getAttribute('data-gol') === gol)); });
+    var d = PRAKTIK[gol];
+    ppIsi.replaceChildren(
+      h('div', { class: 'pp-intisari' }, h('b', { class: 'pp-label' }, '⚡ Intisari'), h('h3', null, d.judul), h('p', { class: 'kecil redup' }, d.catatan), daftarNomor(d.urutan)),
+      h('div', { class: 'pp-dua' },
+        h('div', { class: 'pp-kotak hijau' }, h('h4', null, '✅ Syarat lulus'), h('ul', null, d.lulus.map(function (x) { return h('li', null, x); }))),
+        h('div', { class: 'pp-kotak' }, h('h4', null, '🔧 Sebelum ujian'), h('p', { class: 'kecil' }, d.cek),
+          h('p', { class: 'kecil' }, 'Gagal? Ujian ulang paling banyak 2 kali dalam 14 hari kerja.'))),
+      h('div', { class: 'pp-kotak merah' }, h('h4', null, '⚠️ Kesalahan yang sering membuat gagal'),
+        h('ul', { class: 'pp-salah' }, d.salah.map(function (x) { return h('li', null, h('span', null, '✗ ' + x[0]), h('span', null, '✓ ' + x[1])); }))),
+      h('div', { class: 'pp-kuis', id: 'ppKuis' }),
+      h('div', { class: 'pp-aksi' },
+        h('a', { class: 'tombol kecil garis', href: d.video, target: '_blank', rel: 'noopener' }, '▶️ Video tutorial'),
+        h('a', { class: 'tombol kecil garis', href: K.BUKU_URL + '#' + d.simulasi, target: '_blank', rel: 'noopener' }, '🎮 Simulasi lengkap di Buku Digital')));
+    mulaiKuisPraktik();
+  }
+  function mulaiKuisPraktik() {
+    kuisP = { soal: acak(PRAKTIK[golAktif].kuis).slice(0, 8), i: 0, skor: 0 };
+    tanyaPraktik();
+  }
+  function tanyaPraktik() {
+    var w = $('#ppKuis'), k = kuisP;
+    var kepala = h('div', { class: 'pp-kuis-kepala' }, h('b', null, '🎯 Kuis: lulus atau gagal?'), h('small', null, '8 kejadian acak di lapangan uji'));
+    if (k.i >= k.soal.length) {
+      var kunci = 'praktik_' + golAktif, terbaikP = ambil(kunci, 0);
+      if (k.skor > terbaikP) simpan(kunci, k.skor);
+      w.replaceChildren(kepala, h('div', { class: 'pp-skor' }, h('div', { class: 'skor' }, k.skor + ' / ' + k.soal.length),
+        h('p', null, k.skor >= 7 ? '🎉 Bagus! Anda sudah paham aturan lulus ujian praktik.' : '📚 Baca lagi syarat lulus dan kesalahan yang sering terjadi, lalu coba kembali.'),
+        h('button', { type: 'button', class: 'tombol kecil', onclick: mulaiKuisPraktik }, '↻ Ulangi kuis')));
+      return;
+    }
+    var s = k.soal[k.i], ket = h('div', { class: 'pp-ket' });
+    var opsi = h('div', { class: 'pp-opsi' });
+    [[true, '✅ Lulus'], [false, '❌ Gagal']].forEach(function (o) {
+      opsi.appendChild(h('button', { type: 'button', onclick: function () {
+        var benar = o[0] === s[0]; if (benar) k.skor++;
+        opsi.querySelectorAll('button').forEach(function (b, i) { b.disabled = true; if ([true, false][i] === s[0]) b.classList.add('benar'); });
+        if (!benar) this.classList.add('salah');
+        ket.replaceChildren(h('p', null, h('b', null, benar ? '✅ Benar! ' : '❌ Kurang tepat. '), 'Jawabannya ', h('b', null, s[0] ? 'lulus' : 'gagal'), '. ' + s[2]),
+          h('button', { type: 'button', class: 'tombol kecil', onclick: function () { k.i++; tanyaPraktik(); } }, k.i + 1 < k.soal.length ? 'Soal berikutnya →' : 'Lihat skor'));
+        ket.querySelector('button').focus();
+      } }, o[1]));
+    });
+    var bar = h('i'); bar.style.width = (k.i / k.soal.length * 100) + '%';
+    w.replaceChildren(kepala, h('div', { class: 'progres' }, bar), h('p', { class: 'soal-no' }, 'Soal ' + (k.i + 1) + ' dari ' + k.soal.length), h('p', { class: 'soal-q' }, s[1]), opsi, ket);
+  }
+  function bukaPraktik(gol) {
+    isiPraktik(gol || golAktif);
+    if (pop.showModal) pop.showModal(); else pop.setAttribute('open', '');
+    document.documentElement.classList.add('kunci-gulir');
+  }
+  pop.addEventListener('close', function () { document.documentElement.classList.remove('kunci-gulir'); });
+  pop.addEventListener('click', function (e) { if (e.target === pop) pop.close(); });   // klik di luar kotak
+  pop.querySelectorAll('[data-tutup-praktik]').forEach(function (b) { b.addEventListener('click', function () { pop.close(); }); });
+  pop.querySelectorAll('.pp-tab button').forEach(function (b) { b.addEventListener('click', function () { isiPraktik(b.getAttribute('data-gol')); ppIsi.scrollTop = 0; }); });
+  document.querySelectorAll('[data-buka-praktik]').forEach(function (b) { b.addEventListener('click', function () { bukaPraktik(b.getAttribute('data-buka-praktik') || null); }); });
 })();
