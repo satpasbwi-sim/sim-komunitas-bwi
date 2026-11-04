@@ -94,7 +94,7 @@
   // 1. JADWAL & KUOTA
   // =========================================================================
   var jadwalTerkini = [];
-  var STATUS_TEKS = { buka: 'Pendaftaran dibuka', penuh: 'Kuota penuh', tutup: 'Pendaftaran ditutup', selesai: 'Selesai' };
+  var STATUS_TEKS = { buka: 'Pendaftaran dibuka', segera: 'Segera dibuka', penuh: 'Kuota penuh', tutup: 'Pendaftaran ditutup', selesai: 'Selesai' };
 
   function statusLokal(j) {
     if (wib() > j.tanggal + 'T' + (j.selesai || '23:59')) return 'selesai';
@@ -128,6 +128,13 @@
     jadwalTerkini.forEach(function (j) { wadah.appendChild(kartuJadwal(j, kini)); });
     $('#jadwalInfo').textContent = info;
     $('#jadwalHabis').hidden = jadwalTerkini.some(function (j) { return j.status !== 'selesai'; });
+    var baru = jadwalTerkini.filter(function (j) { return j.baru && j.status !== 'selesai'; });
+    document.querySelectorAll('[data-pengumuman]').forEach(function (w) {
+      w.hidden = !baru.length;
+      w.replaceChildren(h('span', { class: 'pg-ikon' }, '🆕'), h('span', { class: 'pg-teks' }, h('b', null, 'Jadwal baru: '),
+        baru.map(function (j) { return j.nama + ' – ' + tglPanjang(j.tanggal); }).join(' · ')));
+      if (!w.closest('#jadwal')) w.appendChild(h('a', { class: 'tombol kecil', href: '#jadwal' }, 'Lihat'));
+    });
     isiTiket();
   }
 
@@ -172,7 +179,7 @@
     var beda = selisihHari(kini, j.tanggal);
     if (j.status === 'selesai') node.classList.add('lewat');
     $('.kj-ikon', node).textContent = j.ikon || '📍';
-    $('h3', node).textContent = j.nama;
+    $('h3', node).replaceChildren(h('span', null, j.nama, j.baru && j.status !== 'selesai' ? h('span', { class: 'chip baru-label' }, 'BARU') : null));
     $('.kj-ket', node).textContent = j.ket || '';
     var chip = $('.kj-status', node);
     var label = STATUS_TEKS[j.status];
@@ -197,10 +204,14 @@
       });
     }
 
+    if (j.status === 'segera') kq.appendChild(h('p', { class: 'kj-segera' }, '📣 Jadwal baru disetujui. Pendaftaran segera dibuka — pantau halaman ini atau tekan "Ingatkan saya".'));
     var aksi = $('.kj-aksi', node);
     if (j.status === 'buka') aksi.appendChild(h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Daftar sekarang'));
     if (j.status !== 'selesai' && beda <= 1) {
       aksi.appendChild(h('a', { class: 'tombol kecil garis', href: K.BUKTI_URL + encodeURIComponent(j.kode) + '&tgl=' + j.tanggal, target: '_blank', rel: 'noopener' }, '📤 Kirim bukti teori'));
+    }
+    if (j.status !== 'selesai' && /^https:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|(www\.)?google\.[a-z.]+\/maps)/.test(j.maps || '')) {
+      aksi.appendChild(h('a', { class: 'tombol kecil garis', href: j.maps, target: '_blank', rel: 'noopener' }, '🧭 Petunjuk arah'));
     }
     if (j.status !== 'selesai') {
       aksi.appendChild(h('a', { class: 'tombol kecil garis', href: tautanKalender(j), target: '_blank', rel: 'noopener' }, '🗓️ Ingatkan saya'));

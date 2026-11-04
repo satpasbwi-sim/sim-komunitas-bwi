@@ -50,11 +50,21 @@ Pengaman: isian jebakan robot, maks. 30 usulan per 10 menit dan 3 usulan per nom
 2. Bila `appsscript.json` berubah (izin baru): **Setelan project** → centang *Tampilkan file manifes "appsscript.json"* → tempel isi terbaru → Simpan → jalankan `ujiCoba` → **Izinkan**.
 3. **Terapkan → Kelola deployment → ✏️ Edit → Versi: Versi baru → Terapkan.** URL `/exec` tetap sama.
 
-## Menambah jadwal baru
-1. `apps-script/PortalPublik.gs` → tambah baris di `JADWAL`, lalu **Terapkan → Kelola deployment → Edit → Versi baru**.
-2. `config.js` → tambah baris yang sama di `JADWAL_CADANGAN` (dipakai bila server tidak menjawab).
+## Jadwal Layanan & persetujuan usulan (satu klik)
+Sejak `apps-script/JadwalLayanan.gs` dipasang, **sheet "Jadwal Layanan" adalah sumber jadwal portal** — tidak perlu mengubah kode.
 
-Lokasi yang sudah lewat jam selesainya otomatis ditandai **Selesai** dan dipindah ke bawah.
+**Pemasangan (sekali):** di project *API Portal Publik* tambahkan file `JadwalLayanan.gs`, jalankan `pasangJadwalLayanan()` → Izinkan, lalu **Terapkan → Kelola deployment → ✏️ → Versi baru**.
+
+**Menyetujui usulan:** sheet *Usulan Lokasi* → isi **Tanggal layanan (disetujui)** (jam, kuota, kode, link Maps opsional) → centang **Setujui ✔**. Otomatis:
+1. baris baru di *Jadwal Layanan* dengan status **Segera dibuka** (tampil di portal dengan label BARU, tanpa tombol Daftar);
+2. baris baru di sheet *Lokasi* (QR Kirim Bukti Teori);
+3. status usulan → *Dijadwalkan*, catatan tindak lanjut, dan tautan **💬 Kirim WhatsApp** berisi pesan siap kirim ke penanggung jawab.
+
+Bila ada yang kurang (misalnya tanggal belum diisi), centang dibatalkan dan alasannya tertulis di catatan sel.
+
+**Membuka pendaftaran:** tambahkan lokasi ke Google Form (project Kuota Otomatis), lalu ubah **Status** di *Jadwal Layanan* menjadi **Buka**. Status lain: *Tutup* (tampil, pendaftaran ditutup) dan *Sembunyikan* (tidak tampil). Jadwal yang lewat jam selesainya otomatis "Selesai". Kolom *Teks cocok di formulir* harus sama dengan potongan teks pilihan lokasi di Google Form agar sisa kuota terhitung.
+
+Portal berubah paling lambat ±1 menit setelah sheet diubah.
 
 ## Struktur
 ```

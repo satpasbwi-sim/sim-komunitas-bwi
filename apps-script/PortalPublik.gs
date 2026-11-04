@@ -18,7 +18,9 @@
  * Yang perlu diubah petugas hanya bagian JADWAL di bawah ini.
  */
 
-// ====== 1. JADWAL & KUOTA (ubah di sini) ===================================
+// ====== 1. JADWAL & KUOTA ====================================================
+// Sejak JadwalLayanan.gs dipasang, jadwal diambil dari sheet "Jadwal Layanan". Daftar di bawah hanya
+// dipakai bila sheet itu belum ada (dan untuk mengisi sheet saat pasangJadwalLayanan() pertama kali).
 // cocok   : potongan teks yang PASTI ada di kolom "Lokasi layanan" untuk lokasi ini
 // dibuka  : false = pendaftaran lokasi ini ditutup (tetap tampil sebagai "Ditutup")
 // kuota   : batas pendaftar per jenis permohonan
@@ -147,7 +149,8 @@ function jadwalPublik_() {
   var lokPerp = kolomLokasi_(ss.getSheetByName(SHEET_PERPANJANGAN));
   var sekarang = Utilities.formatDate(new Date(), ZONA, "yyyy-MM-dd'T'HH:mm");
 
-  var daftar = JADWAL.map(function (j) {
+  var sumber = (typeof bacaJadwalLayanan_ === 'function' && bacaJadwalLayanan_(ss)) || JADWAL;   // sheet "Jadwal Layanan" bila ada
+  var daftar = sumber.map(function (j) {
     var terisiBaru = hitung_(lokBaru, j.cocok), terisiPerp = hitung_(lokPerp, j.cocok);
     var k = {
       baru: angkaKuota_(j.kuota.baru, terisiBaru),
@@ -155,11 +158,12 @@ function jadwalPublik_() {
     };
     var status;
     if (sekarang > j.tanggal + 'T' + j.selesai) status = 'selesai';
+    else if (j.segera) status = 'segera';
     else if (!j.dibuka) status = 'tutup';
     else if (k.baru.sisa === 0 && k.perpanjangan.sisa === 0) status = 'penuh';
     else status = 'buka';
     return { kode: j.kode, nama: j.nama, ket: j.ket, ikon: j.ikon, tanggal: j.tanggal,
-             mulai: j.mulai, selesai: j.selesai, status: status, kuota: k };
+             mulai: j.mulai, selesai: j.selesai, status: status, kuota: k, maps: j.maps || '', baru: !!j.baru };
   });
 
   var hasil = { ok: true, diperbarui: Utilities.formatDate(new Date(), ZONA, 'dd/MM/yyyy HH:mm') + ' WIB', jadwal: daftar };
