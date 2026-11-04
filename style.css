@@ -274,3 +274,10 @@ footer p { margin: 4px 0; }
 @media (min-width: 861px) { .usulan-teks { position: sticky; top: 140px; } }
 @media (max-width: 860px) { .usulan-isi { grid-template-columns: 1fr; } }
 @media (max-width: 520px) { .dua-kolom { grid-template-columns: 1fr; } }
+
+/* kartu ketentuan (unduhan) */
+.ketentuan { display: grid; grid-template-columns: 52px 1fr; gap: 14px; align-items: start; margin-top: 16px; padding: 16px 18px; border-radius: 16px; background: var(--kartu); border: 1px solid var(--garis); border-left: 5px solid #c9a227; box-shadow: var(--bayang); }
+.ketentuan-ikon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--emas-muda); font-size: 1.6rem; }
+.ketentuan-isi p { margin: 4px 0 10px; color: var(--redup); }
+.ketentuan-aksi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 380px; }
+@media (max-width: 420px) { .ketentuan { grid-template-columns: 1fr; } .ketentuan-aksi { max-width: none; } }
