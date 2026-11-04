@@ -191,6 +191,18 @@
   }
 
   muatJadwal();
+
+  // menu: tandai bagian yang sedang dibaca
+  if ('IntersectionObserver' in window) {
+    var tautanMenu = document.querySelectorAll('.menu a');
+    var pengamat = new IntersectionObserver(function (isi) {
+      isi.forEach(function (x) {
+        if (!x.isIntersecting) return;
+        tautanMenu.forEach(function (a) { a.classList.toggle('aktif', a.getAttribute('href') === '#' + x.target.id); });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    ['jadwal', 'syarat', 'status', 'teori', 'tanya'].forEach(function (id) { var e = document.getElementById(id); if (e) pengamat.observe(e); });
+  }
   setInterval(function () { if (!document.hidden) muatJadwal(); }, 120000);
 
   // =========================================================================
