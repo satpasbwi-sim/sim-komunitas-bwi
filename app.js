@@ -107,9 +107,15 @@
     var janji = K.API_URL ? ambilJson(K.API_URL + '?aksi=jadwal', 10000) : Promise.reject(new Error('API belum diatur'));
     janji.then(function (d) {
       if (!d.ok) throw new Error(d.pesan);
+      simpan('jadwal_terakhir', { jadwal: d.jadwal, diperbarui: d.diperbarui });
       tampilkanJadwal(d.jadwal, 'Sisa kuota diperbarui ' + d.diperbarui + '.');
     }).catch(function () {
-      tampilkanJadwal(K.JADWAL_CADANGAN, K.API_URL ? 'Angka kuota sedang tidak dapat dimuat. Jadwal tetap dapat dilihat.' : 'Jadwal resmi SIM Komunitas.');
+      var akhir = ambil('jadwal_terakhir', null);   // data terakhir yang berhasil dimuat (untuk mode offline)
+      if (akhir && akhir.jadwal) {
+        tampilkanJadwal(akhir.jadwal, (navigator.onLine === false ? '📴 Offline – ' : '') + 'menampilkan data terakhir (' + akhir.diperbarui + '). Angka kuota bisa sudah berubah.');
+      } else {
+        tampilkanJadwal(K.JADWAL_CADANGAN, K.API_URL ? 'Angka kuota sedang tidak dapat dimuat. Jadwal tetap dapat dilihat.' : 'Jadwal resmi SIM Komunitas.');
+      }
     });
   }
 
@@ -471,5 +477,66 @@
       }).catch(function () { gagal(); })
         .finally(function () { tombol.disabled = false; tombol.textContent = '📍 Kirim usulan'; out.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
     });
+  }
+  // =========================================================================
+  // 6. PWA: pasang di HP, mode offline, pemberitahuan versi baru
+  // =========================================================================
+  var mandiri = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  var iOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var ajakan = null;
+  var kartuPasang = $('#kartuPasang'), tombolAtas = $('#tombolPasangAtas');
+  var ditunda = ambil('pasang_ditunda', 0) > Date.now();
+
+  function tampilkanPasang(teks, labelTombol) {
+    if (mandiri) return;
+    tombolAtas.hidden = !ajakan;
+    if (ditunda) return;
+    if (teks) $('#pasangTeks').textContent = teks;
+    if (labelTombol) $('#tombolPasang').textContent = labelTombol;
+    kartuPasang.hidden = false;
+  }
+  function pasang() {
+    if (ajakan) {
+      ajakan.prompt();
+      ajakan.userChoice.then(function (r) { if (r.outcome === 'accepted') { kartuPasang.hidden = true; tombolAtas.hidden = true; } ajakan = null; });
+    } else if (iOS) {
+      $('#pasangTeks').replaceChildren('Di iPhone/iPad (Safari): ketuk tombol ', h('b', null, 'Bagikan ⬆️'), ' di bawah layar → pilih ',
+        h('b', null, 'Tambahkan ke Layar Utama'), ' → ', h('b', null, 'Tambah'), '.');
+      $('#tombolPasang').hidden = true;
+    }
+  }
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); ajakan = e;
+    tampilkanPasang(null, '📲 Pasang aplikasi');
+  });
+  window.addEventListener('appinstalled', function () { kartuPasang.hidden = true; tombolAtas.hidden = true; ajakan = null; });
+  if (iOS && !mandiri) tampilkanPasang('Pasang di layar utama iPhone agar bisa dibuka seperti aplikasi, termasuk saat sinyal lemah.', '📲 Cara memasang');
+  $('#tombolPasang').addEventListener('click', pasang);
+  tombolAtas.addEventListener('click', pasang);
+  $('#tutupPasang').addEventListener('click', function () { kartuPasang.hidden = true; simpan('pasang_ditunda', Date.now() + 7 * 864e5); });
+
+  // penanda offline
+  function cekSinyal() { $('#bannerOffline').hidden = navigator.onLine !== false; }
+  window.addEventListener('online', function () { cekSinyal(); muatJadwal(); });
+  window.addEventListener('offline', cekSinyal);
+  cekSinyal();
+
+  // service worker + pemberitahuan versi baru
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      var beriTahu = function (w) {
+        if (!w || !navigator.serviceWorker.controller) return;   // pemasangan pertama: tidak perlu pemberitahuan
+        $('#toastVersi').hidden = false;
+        $('#muatUlang').onclick = function () { w.postMessage('pakai-versi-baru'); };
+      };
+      if (reg.waiting) beriTahu(reg.waiting);
+      reg.addEventListener('updatefound', function () {
+        var w = reg.installing;
+        w.addEventListener('statechange', function () { if (w.state === 'installed') beriTahu(w); });
+      });
+      setInterval(function () { reg.update().catch(function () {}); }, 30 * 60 * 1000);
+    }).catch(function () {});
+    var sudahMuatUlang = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () { if (!sudahMuatUlang) { sudahMuatUlang = true; location.reload(); } });
   }
 })();

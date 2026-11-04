@@ -1,16 +1,27 @@
 {
+  "id": "./",
   "name": "SIM Komunitas Banyuwangi",
   "short_name": "SIM Komunitas",
-  "description": "Jadwal, sisa kuota, cek status, dan latihan ujian teori SIM Komunitas Satlantas Polresta Banyuwangi.",
-  "start_url": "./",
+  "description": "Jadwal, sisa kuota, cek syarat, cek status, latihan ujian teori, dan usulan lokasi SIM Komunitas Satlantas Polresta Banyuwangi.",
+  "start_url": "./#beranda",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f3f6fb",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#fff7e8",
   "theme_color": "#1f3864",
   "lang": "id",
+  "dir": "ltr",
+  "categories": ["government", "utilities", "education"],
   "icons": [
     { "src": "img/ikon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "img/ikon-512.png", "sizes": "512x512", "type": "image/png" },
     { "src": "img/ikon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Jadwal & kuota", "short_name": "Jadwal", "url": "./#jadwal", "icons": [{ "src": "img/ikon-192.png", "sizes": "192x192" }] },
+    { "name": "Cek status pendaftaran", "short_name": "Cek Status", "url": "./#status", "icons": [{ "src": "img/ikon-192.png", "sizes": "192x192" }] },
+    { "name": "Latihan ujian teori", "short_name": "Latihan Teori", "url": "./#teori", "icons": [{ "src": "img/ikon-192.png", "sizes": "192x192" }] },
+    { "name": "Usulkan lokasi", "short_name": "Usul Lokasi", "url": "./#usulan", "icons": [{ "src": "img/ikon-192.png", "sizes": "192x192" }] }
   ]
 }

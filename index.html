@@ -6,6 +6,10 @@
 <title>SIM Komunitas Banyuwangi</title>
 <meta name="description" content="Jadwal, sisa kuota, cek status pendaftaran, cek syarat, dan latihan ujian teori SIM Komunitas Satlantas Polresta Banyuwangi.">
 <meta name="theme-color" content="#1f3864">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SIM Komunitas">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta property="og:title" content="SIM Komunitas Banyuwangi">
 <meta property="og:description" content="SIM datang ke pesantren, kampus, sekolah & desa. Cek jadwal, sisa kuota, dan status pendaftaran Anda.">
 <meta property="og:image" content="https://satpasbwi-sim.github.io/sim-komunitas-bwi/img/og-sampul.jpg">
@@ -26,6 +30,7 @@
       <img src="img/logo-lantas-baru.webp" alt="" width="37" height="40" class="logo">
       <span><b>SIM Komunitas</b><small>Satlantas Polresta Banyuwangi</small></span>
     </a>
+    <button type="button" class="pasang-atas" id="tombolPasangAtas" hidden>📲 Pasang</button>
     <button type="button" class="tema" id="tombolTema" aria-label="Ganti mode terang/gelap">🌓</button>
   </div>
   <nav class="wrap menu" aria-label="Menu utama">
@@ -79,6 +84,14 @@
       </ul>
     </div>
     <div class="wrap">
+      <div class="pasang" id="kartuPasang" hidden>
+        <div class="pasang-ikon"><img src="img/ikon-192.png" alt="" width="56" height="56"></div>
+        <div class="pasang-isi">
+          <b>Pasang SIM Komunitas di HP</b>
+          <p class="kecil" id="pasangTeks">Buka lebih cepat dari layar utama seperti aplikasi, dan tetap bisa melihat jadwal, ketentuan, dan latihan soal saat sinyal lemah.</p>
+          <div class="baris-aksi"><button type="button" class="tombol kecil" id="tombolPasang">📲 Pasang aplikasi</button><button type="button" class="tombol kecil garis" id="tutupPasang">Nanti saja</button></div>
+        </div>
+      </div>
       <h2 class="judul-layanan">Pilih layanan</h2>
       <div class="layanan">
         <a class="layanan-kartu" href="#jadwal"><span class="lk-ikon">📅</span><b>Jadwal</b><small>Lokasi, tanggal, dan sisa kuota SIM Baru &amp; Perpanjangan. Daftar, kirim bukti teori, dan pasang pengingat.</small></a>
@@ -308,6 +321,9 @@
     <div class="kj-aksi"></div>
   </article>
 </template>
+
+<div class="offline" id="bannerOffline" role="status" hidden>📴 Anda sedang offline. Jadwal, ketentuan, dan latihan soal tetap bisa dibuka; cek status dan usulan perlu internet.</div>
+<div class="toast" id="toastVersi" role="status" hidden><span>Versi baru portal tersedia.</span><button type="button" class="tombol kecil" id="muatUlang">Muat ulang</button></div>
 
 <script src="config.js"></script>
 <script src="app.js"></script>

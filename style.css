@@ -300,3 +300,18 @@ footer p { margin: 4px 0; }
 @media (prefers-reduced-motion: reduce) { .layanan-kartu { transition: none; } }
 .menu a.aktif, .menu a.aktif:hover, .menu a.aktif:focus-visible { background: #c9a227; color: #1b1b1b; }
 .layanan-kartu { grid-template-rows: auto 1fr; }
+
+/* ================= PWA ================= */
+.atas { padding-top: env(safe-area-inset-top); }
+.pasang-atas { margin-left: auto; background: #c9a227; color: #1b1b1b; border: 0; border-radius: 999px; padding: 0 14px; height: 38px; font: inherit; font-weight: 800; font-size: .85rem; cursor: pointer; }
+.pasang-atas:not([hidden]) + .tema { margin-left: 8px; }
+.pasang { display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center; margin-top: 26px; padding: 14px 16px; border-radius: 16px; background: linear-gradient(135deg, #1f3864, #2d4f8c); color: #fff; box-shadow: var(--bayang); }
+.pasang-ikon img { width: 56px; height: 56px; border-radius: 14px; display: block; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.pasang-isi p { margin: 4px 0 10px; opacity: .92; }
+.pasang .tombol { background: #ffd24d; color: #1b1b1b; }
+.pasang .tombol.garis { background: transparent; color: #fff; border-color: rgba(255,255,255,.6); }
+.offline { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: #3a2810; color: #ffe2b3; font-size: .88rem; text-align: center; }
+.toast { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 21; display: flex; gap: 12px; align-items: center; padding: 10px 12px 10px 16px; border-radius: 14px; background: #17202e; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.3); width: max-content; max-width: calc(100vw - 32px); font-size: .9rem; }
+.toast .tombol { background: #ffd24d; color: #1b1b1b; }
+@media (display-mode: standalone) { .pasang, .pasang-atas { display: none !important; } }
+@media (max-width: 420px) { .pasang { grid-template-columns: 48px 1fr; } .pasang-ikon img { width: 48px; height: 48px; } .pasang-atas { padding: 0 10px; } }
