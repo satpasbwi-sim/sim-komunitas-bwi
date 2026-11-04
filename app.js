@@ -63,9 +63,9 @@
 
 
   // ---- halaman per menu: hanya bagian menu yang dipilih yang tampil ---------
-  var PANEL = ['beranda', 'jadwal', 'syarat', 'status', 'teori', 'usulan', 'tanya'];
+  var PANEL = ['beranda', 'jadwal', 'syarat', 'status', 'teori', 'praktik', 'usulan', 'tanya'];
   var JUDUL_PANEL = { beranda: 'SIM Komunitas Banyuwangi', jadwal: 'Jadwal & Kuota', syarat: 'Cek Syarat', status: 'Cek Status',
-    teori: 'Latihan Teori', usulan: 'Usulkan Lokasi', tanya: 'Tanya Jawab' };
+    teori: 'Latihan Teori', praktik: 'Latihan Praktik', usulan: 'Usulkan Lokasi', tanya: 'Tanya Jawab' };
   document.querySelectorAll('[data-panel]').forEach(function (sec) {
     if (sec.getAttribute('data-panel') === 'beranda' || !sec.id) return;
     var w = sec.querySelector('.wrap');
@@ -635,16 +635,17 @@
       ]
     }
   };
-  var pop = $('#popPraktik'), ppIsi = $('#ppIsi'), golAktif = 'C', kuisP = null;
+  var pop = $('#popPraktik'), ppIsi = $('#ppIsi'), halPraktik = $('#praktikIsi'), golAktif = 'C', kuisP = null;
 
   function daftarNomor(arr) {
     return h('ol', { class: 'pp-urutan' }, arr.map(function (x) { return h('li', null, h('b', null, x[0]), h('small', null, x[1])); }));
   }
+  /** Halaman menu Latihan Praktik: keterangan pendukung per golongan SIM. */
   function isiPraktik(gol) {
     golAktif = gol;
-    pop.querySelectorAll('.pp-tab button').forEach(function (b) { b.setAttribute('aria-selected', String(b.getAttribute('data-gol') === gol)); });
+    document.querySelectorAll('#praktikTab button').forEach(function (b) { b.setAttribute('aria-selected', String(b.getAttribute('data-gol') === gol)); });
     var d = PRAKTIK[gol];
-    ppIsi.replaceChildren(
+    halPraktik.replaceChildren(
       h('div', { class: 'pp-intisari' }, h('b', { class: 'pp-label' }, '⚡ Intisari'), h('h3', null, d.judul), h('p', { class: 'kecil redup' }, d.catatan), daftarNomor(d.urutan)),
       h('div', { class: 'pp-dua' },
         h('div', { class: 'pp-kotak hijau' }, h('h4', null, '✅ Syarat lulus'), h('ul', null, d.lulus.map(function (x) { return h('li', null, x); }))),
@@ -652,25 +653,28 @@
           h('p', { class: 'kecil' }, 'Gagal? Ujian ulang paling banyak 2 kali dalam 14 hari kerja.'))),
       h('div', { class: 'pp-kotak merah' }, h('h4', null, '⚠️ Kesalahan yang sering membuat gagal'),
         h('ul', { class: 'pp-salah' }, d.salah.map(function (x) { return h('li', null, h('span', null, '✗ ' + x[0]), h('span', null, '✓ ' + x[1])); }))),
-      h('div', { class: 'pp-kuis', id: 'ppKuis' }),
+      h('div', { class: 'pp-ajak-kuis' },
+        h('div', null, h('b', null, '🎯 Kuis: lulus atau gagal?'), h('p', { class: 'kecil' }, '8 kejadian acak di lapangan uji SIM ' + gol + '. Tebak peserta lulus atau gagal, lengkap dengan penjelasannya.'),
+          ambil('praktik_' + gol, 0) ? h('p', { class: 'kecil redup' }, 'Skor terbaik Anda: ' + ambil('praktik_' + gol, 0) + ' / 8') : null),
+        h('button', { type: 'button', class: 'tombol', onclick: function () { bukaKuisPraktik(); } }, '▶ Mulai kuis')),
       h('div', { class: 'pp-aksi' },
         h('a', { class: 'tombol kecil garis', href: d.video, target: '_blank', rel: 'noopener' }, '▶️ Video tutorial'),
         h('a', { class: 'tombol kecil garis', href: K.BUKU_URL + '#' + d.simulasi, target: '_blank', rel: 'noopener' }, '🎮 Simulasi lengkap di Buku Digital')));
-    mulaiKuisPraktik();
   }
   function mulaiKuisPraktik() {
     kuisP = { soal: acak(PRAKTIK[golAktif].kuis).slice(0, 8), i: 0, skor: 0 };
     tanyaPraktik();
   }
   function tanyaPraktik() {
-    var w = $('#ppKuis'), k = kuisP;
-    var kepala = h('div', { class: 'pp-kuis-kepala' }, h('b', null, '🎯 Kuis: lulus atau gagal?'), h('small', null, '8 kejadian acak di lapangan uji'));
+    var w = ppIsi, k = kuisP;
     if (k.i >= k.soal.length) {
       var kunci = 'praktik_' + golAktif, terbaikP = ambil(kunci, 0);
       if (k.skor > terbaikP) simpan(kunci, k.skor);
-      w.replaceChildren(kepala, h('div', { class: 'pp-skor' }, h('div', { class: 'skor' }, k.skor + ' / ' + k.soal.length),
+      w.replaceChildren(h('div', { class: 'pp-kuis pp-skor' }, h('div', { class: 'skor' }, k.skor + ' / ' + k.soal.length),
         h('p', null, k.skor >= 7 ? '🎉 Bagus! Anda sudah paham aturan lulus ujian praktik.' : '📚 Baca lagi syarat lulus dan kesalahan yang sering terjadi, lalu coba kembali.'),
-        h('button', { type: 'button', class: 'tombol kecil', onclick: mulaiKuisPraktik }, '↻ Ulangi kuis')));
+        h('div', { class: 'pp-aksi' },
+          h('button', { type: 'button', class: 'tombol kecil', onclick: mulaiKuisPraktik }, '↻ Ulangi kuis'),
+          h('button', { type: 'button', class: 'tombol kecil garis', onclick: function () { pop.close(); isiPraktik(golAktif); } }, '📖 Kembali ke materi'))));
       return;
     }
     var s = k.soal[k.i], ket = h('div', { class: 'pp-ket' });
@@ -686,16 +690,19 @@
       } }, o[1]));
     });
     var bar = h('i'); bar.style.width = (k.i / k.soal.length * 100) + '%';
-    w.replaceChildren(kepala, h('div', { class: 'progres' }, bar), h('p', { class: 'soal-no' }, 'Soal ' + (k.i + 1) + ' dari ' + k.soal.length), h('p', { class: 'soal-q' }, s[1]), opsi, ket);
+    w.replaceChildren(h('div', { class: 'pp-kuis' }, h('div', { class: 'progres' }, bar), h('p', { class: 'soal-no' }, 'Soal ' + (k.i + 1) + ' dari ' + k.soal.length),
+      h('p', { class: 'soal-q' }, s[1]), opsi, ket));
   }
-  function bukaPraktik(gol) {
-    isiPraktik(gol || golAktif);
+  function bukaKuisPraktik() {
+    $('#ppJudul').textContent = 'Kuis Ujian Praktik SIM ' + golAktif;
+    $('#ppSub').textContent = (golAktif === 'C' ? '🏍️ Motor · sirkuit huruf S' : '🚗 Mobil · 5 materi lapangan uji') + ' · lulus atau gagal?';
+    mulaiKuisPraktik();
     if (pop.showModal) pop.showModal(); else pop.setAttribute('open', '');
     document.documentElement.classList.add('kunci-gulir');
   }
   pop.addEventListener('close', function () { document.documentElement.classList.remove('kunci-gulir'); });
   pop.addEventListener('click', function (e) { if (e.target === pop) pop.close(); });   // klik di luar kotak
   pop.querySelectorAll('[data-tutup-praktik]').forEach(function (b) { b.addEventListener('click', function () { pop.close(); }); });
-  pop.querySelectorAll('.pp-tab button').forEach(function (b) { b.addEventListener('click', function () { isiPraktik(b.getAttribute('data-gol')); ppIsi.scrollTop = 0; }); });
-  document.querySelectorAll('[data-buka-praktik]').forEach(function (b) { b.addEventListener('click', function () { bukaPraktik(b.getAttribute('data-buka-praktik') || null); }); });
+  document.querySelectorAll('#praktikTab button').forEach(function (b) { b.addEventListener('click', function () { isiPraktik(b.getAttribute('data-gol')); }); });
+  isiPraktik('C');
 })();

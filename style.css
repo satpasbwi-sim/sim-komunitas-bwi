@@ -41,7 +41,7 @@ h2 { font-size: clamp(1.35rem, 4vw, 1.75rem); }
 .atas-isi b { display: block; font-size: 1.05rem; line-height: 1.15; }
 .atas-isi small { display: block; opacity: .85; font-size: .78rem; line-height: 1.2; margin-top: 1px; }
 .tema { margin-left: auto; background: rgba(255,255,255,.12); color: #fff; border: 0; border-radius: 999px; width: 38px; height: 38px; font-size: 1.1rem; cursor: pointer; }
-.menu { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; padding-bottom: 10px; }
+.menu { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; padding-bottom: 10px; }
 .menu a { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; color: #fff; text-decoration: none; font-size: .9rem; font-weight: 700; padding: 8px 6px; border-radius: 12px; background: rgba(255,255,255,.1); text-align: center; line-height: 1.15; }
 .menu a span { font-size: 1rem; }
 .menu a.aktif { background: #c9a227; color: #1b1b1b; }
@@ -408,3 +408,28 @@ html.kunci-gulir { overflow: hidden; }
 :root[data-theme="dark"] .pengumuman { background: #3a2c10; border-color: #7a5d1c; color: #ffe7b0; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pengumuman { background: #3a2c10; border-color: #7a5d1c; color: #ffe7b0; } }
 #jadwal .pengumuman { margin: 0 0 14px; }
+
+/* ================= LATIHAN TEORI & PRAKTIK (terpisah) ================= */
+@media (max-width: 640px) { .menu a { font-size: .64rem; padding: 6px 1px; } .menu a span { font-size: 1.05rem; } }
+@media (max-width: 380px) { .menu { gap: 3px; } .menu a { font-size: .6rem; } }
+.layanan { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1000px) { .layanan { grid-template-columns: repeat(2, minmax(0, 1fr)); } .layanan-kartu:last-child:nth-child(odd) { grid-column: 1 / -1; } }
+@media (max-width: 520px) { .layanan { grid-template-columns: 1fr; } }
+.eavis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px; }
+.ev { background: var(--kartu); border: 1px solid var(--garis); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+.ev-ikon { font-size: 1.4rem; }
+.ev small { color: var(--oranye); font-weight: 700; }
+.ev p { margin: 4px 0 0; color: var(--redup); }
+.angka-teori { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 8px; }
+.angka-teori div { background: #1f3864; color: #fff; border-radius: 14px; padding: 10px; text-align: center; }
+.angka-teori b { display: block; font-size: 1.3rem; }
+.angka-teori small { opacity: .85; }
+.judul-latihan { margin: 22px 0 10px; font-size: 1.1rem; }
+@media (max-width: 640px) { .eavis { grid-template-columns: 1fr; } }
+#praktik .pp-tab { padding: 0; background: none; border: 0; margin-bottom: 14px; }
+.praktik-isi { display: grid; gap: 12px; margin-bottom: 12px; }
+.pp-ajak-kuis { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; background: var(--kartu); border: 2px solid #c9a227; border-radius: 14px; padding: 14px; }
+.pp-ajak-kuis p { margin: 4px 0 0; }
+@media (max-width: 560px) { .pp-ajak-kuis { grid-template-columns: 1fr; } .pp-ajak-kuis .tombol { width: 100%; } }
+@media (min-width: 1001px) { .menu a { white-space: nowrap; font-size: .86rem; gap: 5px; padding: 8px 4px; } }
+@media (min-width: 641px) and (max-width: 1000px) { .menu a { flex-direction: column; gap: 2px; font-size: .74rem; padding: 6px 2px; min-height: 52px; } .menu a span { font-size: 1.15rem; } }
