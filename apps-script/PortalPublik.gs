@@ -31,7 +31,7 @@ var JADWAL = [
     kuota: { baru: 50, perpanjangan: 40 } },
   { kode: 'UNIBA', nama: 'UNIBA', ket: 'SIM Masuk Kampus · Universitas PGRI Banyuwangi', ikon: '🎓',
     tanggal: '2026-11-05', mulai: '08:00', selesai: '15:00', cocok: 'UNIBA', dibuka: true,
-    kuota: { baru: 50, perpanjangan: 40 } }
+    kuota: { baru: 20, perpanjangan: 40 } }
 ];
 
 // ====== 2. PENGATURAN TEKNIS (biasanya tidak perlu diubah) =================
