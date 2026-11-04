@@ -469,3 +469,6 @@ footer { text-align: left; padding-bottom: 26px; }
 html[data-versi="B"] footer { background: #1d4d3a; }
 @media (max-width: 860px) { .ft-tautan { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .ft-kartu { transition: none; } }
+.ft-kini { text-transform: none; letter-spacing: 0; background: #ffd24d; color: #1b1b1b; padding: 1px 7px; border-radius: 999px; margin-left: 4px; }
+html:not([data-versi="B"]) .ft-versi-a, html[data-versi="B"] .ft-versi-b { outline: 3px solid #ffd24d; outline-offset: 3px; }
+footer .ft-tautan { margin-bottom: 4px; }
