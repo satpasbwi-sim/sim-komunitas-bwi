@@ -23,15 +23,15 @@ Portal hanya menerima angka kuota, dan untuk Cek Status hanya status satu orang 
 ## Cara memasang (sekali saja)
 
 ### 1. Aktifkan API (sekitar 3 menit, dengan akun satpasbwi@gmail.com)
-1. Buka **https://script.new** → beri nama project .
-2. Hapus isi , lalu tempel seluruh isi [](apps-script/PortalPublik.gs) (tombol *Copy raw file* di GitHub) → **Simpan**.
-3. Pilih fungsi **** → **Jalankan** → *Tinjau izin* → pilih akun → *Lanjutan* → *Buka (tidak aman)* → **Izinkan**. Izin yang diminta hanya **melihat** spreadsheet.
+1. Buka **https://script.new** → beri nama project `SIM Komunitas - API Portal Publik`.
+2. Hapus isi `Code.gs`, lalu tempel seluruh isi [`apps-script/PortalPublik.gs`](apps-script/PortalPublik.gs) (tombol *Copy raw file* di GitHub) → **Simpan**.
+3. Pilih fungsi **`ujiCoba`** → **Jalankan** → *Tinjau izin* → pilih akun → *Lanjutan* → *Buka (tidak aman)* → **Izinkan**. Izin yang diminta hanya **melihat** spreadsheet.
    Log harus menampilkan jadwal beserta angka kuota.
 4. **Terapkan → Deployment baru** → ikon roda → **Aplikasi web**
    - Jalankan sebagai: **Saya**
    - Yang memiliki akses: **Siapa saja**
-   → **Terapkan** → salin **URL aplikasi web** (berakhiran ).
-5. Cek kuota di bagian **** dan samakan dengan project *Pemilahan & Kuota*. Setiap kali  diubah: **Terapkan → Kelola deployment → Edit → Versi baru**.
+   → **Terapkan** → salin **URL aplikasi web** (berakhiran `/exec`).
+5. Cek kuota di bagian **`JADWAL`** dan samakan dengan project *Pemilahan & Kuota*. Setiap kali `JADWAL` diubah: **Terapkan → Kelola deployment → Edit → Versi baru**.
 
 ### 2. Sambungkan portal
 Buka `config.js` dan isi `API_URL: 'https://script.google.com/macros/s/…/exec'`.
