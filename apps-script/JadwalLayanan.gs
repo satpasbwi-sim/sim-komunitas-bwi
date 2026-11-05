@@ -17,7 +17,8 @@
  *   Usulan Lokasi → isi "Tanggal layanan (disetujui)" (+ jam & kuota bila perlu) → centang "Setujui ✔".
  *   Otomatis: baris baru di "Jadwal Layanan" (status "Segera dibuka") & di sheet "Lokasi" (QR bukti teori),
  *   status usulan menjadi "Dijadwalkan", dan muncul tautan "💬 Kirim WhatsApp" ke penanggung jawab.
- *   Setelah lokasi ditambahkan ke Google Form, ubah status di "Jadwal Layanan" menjadi "Buka".
+ *   Ubah status di "Jadwal Layanan" menjadi "Buka": dalam ±1 menit proyek Kuota Otomatis (v2) menambahkan lokasi itu
+ *   ke pilihan Google Form dan membangun ulang rumus kuota (tidak perlu mengubah kode).
  *   Portal ikut berubah paling lambat ±1 menit.
  */
 
@@ -158,7 +159,10 @@ function setujuiUsulan_(sh, baris, judul) {
       if (nomor && data[i][13] === nomor) { barisJadwal = i + 1; break; }
       if (data[i][0].toUpperCase() === kode) throw new Error('kode "' + kode + '" sudah dipakai jadwal lain. Isi kolom "Kode lokasi" dengan kode lain.');
     }
-    var isi = [kode, nama, ket, info[0], tgl, mulai, selesai, nama, kuotaBaru, kuotaPerp, 'Segera dibuka', maps, new Date(), nomor, layanan];
+    // teks pilihan Google Form (tanpa koma; dibaca proyek Kuota Otomatis v2): "Nama (Khusus Perpanjangan) - Sabtu 14 November 2026"
+    var teksForm = (nama.replace(/,/g, '') + (layanan === 'Perpanjangan saja' ? ' (Khusus Perpanjangan)' : '') + ' - ' +
+      hariTanggal_(tgl).replace(/,/g, '')).replace(/\s+/g, ' ');
+    var isi = [kode, nama, ket, info[0], tgl, mulai, selesai, teksForm, kuotaBaru, kuotaPerp, 'Segera dibuka', maps, new Date(), nomor, layanan];
     if (barisJadwal) sj.getRange(barisJadwal, 1, 1, isi.length).setValues([isi]);
     else sj.appendRow(isi);
 

@@ -26,13 +26,13 @@
 // kuota   : batas pendaftar per jenis permohonan
 var JADWAL = [
   { kode: 'SIMLING', nama: 'Ponpes Safinatul Huda', ket: 'SIM Masuk Pesantren · Mobil SIMLING', ikon: '🕌',
-    tanggal: '2026-10-31', mulai: '08:00', selesai: '15:00', cocok: 'Safinatul Huda', dibuka: false,
+    tanggal: '2026-10-31', mulai: '08:00', selesai: '15:00', cocok: 'Ponpes Safinatul Huda (Mobil SIMLING) - 30-31 Oktober 2026', dibuka: false,
     kuota: { baru: 50, perpanjangan: 40 }, layanan: 'lengkap' },
   { kode: 'BBPVP-MUNCAR', nama: 'BBPVP Muncar', ket: 'SIM Masuk Desa · Masyarakat Kec. Muncar', ikon: '🏘️',
-    tanggal: '2026-11-03', mulai: '08:00', selesai: '15:00', cocok: 'BBPVP Muncar', dibuka: false,
+    tanggal: '2026-11-03', mulai: '08:00', selesai: '15:00', cocok: 'BBPVP Muncar (Masyarakat Desa Kec. Muncar) - Selasa 3 November 2026', dibuka: false,
     kuota: { baru: 50, perpanjangan: 40 }, layanan: 'lengkap' },
   { kode: 'UNIBA', nama: 'UNIBA', ket: 'SIM Masuk Kampus · Universitas PGRI Banyuwangi', ikon: '🎓',
-    tanggal: '2026-11-05', mulai: '08:00', selesai: '15:00', cocok: 'UNIBA', dibuka: true,
+    tanggal: '2026-11-05', mulai: '08:00', selesai: '15:00', cocok: 'UNIBA (Universitas PGRI Banyuwangi) - Kamis 5 November 2026', dibuka: true,
     kuota: { baru: 20, perpanjangan: 40 }, layanan: 'lengkap' }
 ];
 
@@ -43,7 +43,7 @@ var SHEET_BUKTI = 'Bukti Teori';
 var SHEET_USULAN = 'Usulan Lokasi';
 var BATAS_USULAN_PER_10MENIT = 30;   // pengaman dari kiriman beruntun (spam)
 var BATAS_USULAN_PER_WA = 3;         // maks. usulan per nomor WhatsApp per 6 jam
-var KETERANGAN_TIDAK_DIHITUNG = /luar kuota|cadangan|ditolak|duplikat|batal|tidak memenuhi/i;
+var KETERANGAN_TIDAK_DIHITUNG = /luar kuota|cadangan|ditolak|duplikat|ganda|batal|tidak memenuhi|tidak dilayani/i;
 var CACHE_JADWAL_DETIK = 60;          // angka kuota disegarkan paling lama tiap 1 menit
 var BATAS_PER_NIK = 5;                // maks. percobaan cek status per NIK …
 var BATAS_GLOBAL_PER_MENIT = 150;     // … dan maks. cek status seluruh pengguna per menit

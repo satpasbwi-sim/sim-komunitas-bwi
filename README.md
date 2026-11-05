@@ -74,7 +74,7 @@ Sejak `apps-script/JadwalLayanan.gs` dipasang, **sheet "Jadwal Layanan" adalah s
 
 Bila ada yang kurang (misalnya tanggal belum diisi), centang dibatalkan dan alasannya tertulis di catatan sel.
 
-**Membuka pendaftaran:** tambahkan lokasi ke Google Form (project Kuota Otomatis), lalu ubah **Status** di *Jadwal Layanan* menjadi **Buka**. Status lain: *Tutup* (tampil, pendaftaran ditutup) dan *Sembunyikan* (tidak tampil). Jadwal yang lewat jam selesainya otomatis "Selesai". Kolom *Teks cocok di formulir* harus sama dengan potongan teks pilihan lokasi di Google Form agar sisa kuota terhitung.
+**Membuka pendaftaran:** ubah **Status** di *Jadwal Layanan* menjadi **Buka**. Project *Kuota Otomatis (v2)* (`apps-script/kuota-v2/Kode.gs`) membaca sheet itu tiap menit: pilihan Google Form, rumus kuota, serta buka/tutup formulir menyesuaikan sendiri. Status lain: *Tutup* (tampil, pendaftaran ditutup) dan *Sembunyikan* (tidak tampil). Jadwal yang lewat jam selesainya otomatis "Selesai". Kolom *Teks cocok di formulir* harus sama dengan potongan teks pilihan lokasi di Google Form agar sisa kuota terhitung.
 
 Portal berubah paling lambat ±1 menit setelah sheet diubah.
 

@@ -31,10 +31,17 @@ Semua langkah Apps Script dikerjakan dengan akun **satpasbwi@gmail.com** di http
 
 ## C. Setelah kegiatan UNIBA selesai (mulai Jumat 6 Nov)
 
-- [ ] **6. Langkah 4 – project Kuota Otomatis (v2) membaca sheet "Jadwal Layanan"**
-  - Dikerjakan Claude: pilihan lokasi di Google Form & kuota ikut sheet Jadwal Layanan, sehingga lokasi yang disetujui langsung bisa dipilih di formulir (tanpa mengubah kode).
-  - Termasuk: lokasi "Perpanjangan saja" hanya menerima Jenis Permohonan *Perpanjangan* (pendaftar SIM Baru di lokasi itu ditandai, bukan masuk kuota).
-  - Petugas: tempel kode baru ke project v2 → jalankan fungsi pemasangan yang disebutkan → uji dengan satu usulan.
+- [ ] **6. Langkah 4 – project Kuota Otomatis (v2) membaca sheet "Jadwal Layanan"** *(kode siap 5 Nov 2026)*
+  - **Syarat:** langkah 4 bagian B (JadwalLayanan.gs + `pasangJadwalLayanan`) sudah dijalankan, sehingga sheet **Jadwal Layanan** ada.
+  1. Buka project **SIM Komunitas - Kuota Otomatis (v2, 2 Nov 2026)**: https://script.google.com/d/1s5wmRwgbqSlLGhELCJ6iHXz5l56N00Cgdxmc0l11LgRMx2aPW7tPwqzI/edit
+  2. Salin dulu isi `Kode.gs` yang lama ke dokumen cadangan (untuk berjaga-jaga).
+  3. Ganti seluruh isi `Kode.gs` dengan [`apps-script/kuota-v2/Kode.gs`](https://github.com/satpasbwi-sim/sim-komunitas-bwi/blob/main/apps-script/kuota-v2/Kode.gs) → **Simpan**.
+  4. Jalankan **`pasang`** sekali → Izinkan bila diminta. (Membangun ulang sheet SIM Baru/Perpanjangan dari jadwal di sheet, memasang ulang pemicu, dan menyimpan "sidik" jadwal.)
+  5. Cek: Log menampilkan lokasi dari sheet; pilihan Google Form hanya berisi lokasi berstatus **Buka**.
+  6. Pastikan pemicu `saatAdaPendaftar` / `cekKuotaBerkala` **tidak** aktif juga di project v1 (Pemilahan & Kuota).
+  - Sesudahnya petugas cukup mengubah sheet **Jadwal Layanan** (Status, kuota, tanggal); dalam ±1 menit formulir & rumus kuota menyesuaikan. Tidak ada lokasi Buka → formulir tertutup sendiri; ada lagi → terbuka sendiri.
+  - Lokasi "Perpanjangan saja": pendaftar SIM Baru di lokasi itu bertanda **"Tidak dilayani di lokasi ini"**; keterangan formulir menyebut lokasi itu khusus Perpanjangan.
+  - Setelah `pasang`, jalankan lagi `rapikanTab` (project API Portal) bila ingin tab tertata.
 - [ ] **7. Hapus data uji** baris usulan "tes" (U261104-001) di sheet **Usulan Lokasi**.
 - [ ] **8. Arsipkan deployment lama** API Portal (`…AKfycbzQ6zt8…uwcl/exec`) lewat *Terapkan → Kelola deployment → Arsipkan* agar tidak tertukar.
 
