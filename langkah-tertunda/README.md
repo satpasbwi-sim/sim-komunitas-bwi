@@ -1,13 +1,13 @@
 # Langkah yang Belum Dilaksanakan – SIM Komunitas
 
-Dicatat 4 November 2026. Centang `[x]` bila sudah selesai.
+Dicatat 4 November 2026, diperbarui 5 November 2026 (setelah kegiatan UNIBA). Centang `[x]` bila sudah selesai.
 Semua langkah Apps Script dikerjakan dengan akun **satpasbwi@gmail.com** di https://script.google.com.
 
 ---
 
-## A. Malam ini (sebelum kegiatan UNIBA, Kamis 5 Nov)
+## A. Sebelum kegiatan UNIBA (Kamis 5 Nov) — selesai
 
-- [ ] **1. Kuota SIM Baru UNIBA = 20 di project "SIM Komunitas - Kuota Otomatis (v2, 2 Nov 2026)"**
+- [x] **1. Kuota SIM Baru UNIBA = 20 di project "SIM Komunitas - Kuota Otomatis (v2, 2 Nov 2026)"**
   - Buka https://script.google.com/d/1s5wmRwgbqSlLGhELCJ6iHXz5l56N00Cgdxmc0l11LgRMx2aPW7tPwqzI/edit
   - Ctrl+F `Kamis 5 November 2026', tanggal: [2026, 11, 5]` → tambahkan sebelum `}` di akhir baris: `, kuota: { 'Baru': 20 }`
   - Simpan → jalankan **`pasang`** (bukan hanya `cekKuota`).
@@ -15,7 +15,7 @@ Semua langkah Apps Script dikerjakan dengan akun **satpasbwi@gmail.com** di http
 - [ ] **2. Pastikan hanya satu project kuota yang aktif**
   - Buka project **SIM Komunitas - Pemilahan & Kuota (v1)** → ⏰ Pemicu.
   - Bila ada `saatAdaPendaftar` / `cekKuotaBerkala` dan yang dipakai adalah v2 → hapus pemicu di v1.
-- [ ] **3. Saat hari H:** tampilkan sheet **Cetak SIM Baru / Cetak SIM Perpanjangan** lewat *Lihat → Sheet tersembunyi* bila sudah menjalankan `rapikanTab`.
+- [x] **3. Saat hari H:** tampilkan sheet **Cetak SIM Baru / Cetak SIM Perpanjangan** lewat *Lihat → Sheet tersembunyi* bila sudah menjalankan `rapikanTab`.
 
 ## B. Setelah pendaftaran UNIBA ditutup
 
@@ -61,10 +61,9 @@ Semua langkah Apps Script dikerjakan dengan akun **satpasbwi@gmail.com** di http
 ---
 
 ### Alamat penting
-| Apa | Alamat |
-|---|---|
-| Portal | https://satpasbwi-sim.github.io/sim-komunitas-bwi/ |
-| Repo | https://github.com/satpasbwi-sim/sim-komunitas-bwi |
-| API Portal (dipakai) | https://script.google.com/macros/s/AKfycbzoHAKZwTeuKGKZldMFGv7_oPKrsh5x3MYk1weTZOOeBZZOQz5cuybgQ1bulJ8URWR_yA/exec |
-| Spreadsheet | https://docs.google.com/spreadsheets/d/1Gkn-UoX98ITUTdN2qMWVImjX_o7vxKCLS9xVibcEo0g/edit |
-| Project kuota v2 | https://script.google.com/d/1s5wmRwgbqSlLGhELCJ6iHXz5l56N00Cgdxmc0l11LgRMx2aPW7tPwqzI/edit |
+- **Portal Versi Lengkap:** https://satpasbwi-sim.github.io/sim-komunitas-bwi/
+- **Portal Versi Perpanjangan:** https://satpasbwi-sim.github.io/sim-komunitas-bwi/perpanjangan/
+- **Repo:** https://github.com/satpasbwi-sim/sim-komunitas-bwi
+- **API Portal (dipakai):** https://script.google.com/macros/s/AKfycbzoHAKZwTeuKGKZldMFGv7_oPKrsh5x3MYk1weTZOOeBZZOQz5cuybgQ1bulJ8URWR_yA/exec
+- **Spreadsheet:** https://docs.google.com/spreadsheets/d/1Gkn-UoX98ITUTdN2qMWVImjX_o7vxKCLS9xVibcEo0g/edit
+- **Project kuota v2:** https://script.google.com/d/1s5wmRwgbqSlLGhELCJ6iHXz5l56N00Cgdxmc0l11LgRMx2aPW7tPwqzI/edit
