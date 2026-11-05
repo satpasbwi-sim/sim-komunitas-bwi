@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panduan Koordinator SIM Komunitas – Satpas Polresta Banyuwangi</title>
+<meta name="description" content="Panduan bagi koordinator wilayah (pesantren, kampus, sekolah, desa, instansi) yang mengusulkan dan menyiapkan lokasi SIM Komunitas Banyuwangi.">
+<link rel="icon" href="../img/ikon-192.png">
+<style>
+  @page { size: A4; margin: 14mm 14mm 16mm; }
+  :root { --biru: #1f3864; --emas: #c9a227; --abu: #5b6678; --garis: #d6deea; --hijau: #1e7b34; --merah: #b3261e; }
+  * { box-sizing: border-box; }
+  html { background: #e8eef8; }
+  body { margin: 0 auto; max-width: 210mm; background: #fff; color: #17202e; font: 10.2pt/1.45 "Plus Jakarta Sans", "Segoe UI", system-ui, Arial, sans-serif; padding: 14mm; }
+  @media print { html { background: #fff; } body { padding: 0; max-width: none; } .layar { display: none !important; } }
+  h1, h2, h3 { color: var(--biru); line-height: 1.2; }
+  .kop { display: grid; grid-template-columns: 58px 1fr 78px; gap: 12px; align-items: center; border-bottom: 3px solid var(--biru); padding-bottom: 8px; }
+  .kop img.logo { width: 54px; height: auto; }
+  .kop .instansi { font-size: 8.5pt; letter-spacing: .06em; font-weight: 700; color: var(--abu); text-transform: uppercase; }
+  .kop h1 { margin: 2px 0 0; font-size: 17pt; }
+  .kop .sub { margin: 2px 0 0; font-size: 9pt; color: var(--abu); }
+  .kop .qr { text-align: center; font-size: 6.5pt; color: var(--abu); }
+  .kop .qr img { width: 70px; height: 70px; display: block; margin: 0 auto 2px; }
+  .garis-emas { height: 3px; background: var(--emas); margin: 2px 0 10px; }
+  .ringkas { background: #f3f6fb; border: 1px solid var(--garis); border-left: 4px solid var(--emas); border-radius: 6px; padding: 8px 12px; margin: 0 0 10px; }
+  .ringkas b { color: var(--biru); }
+  h2 { font-size: 11.5pt; margin: 14px 0 6px; padding: 4px 8px; background: var(--biru); color: #fff; border-radius: 4px; break-after: avoid; }
+  h3 { font-size: 10.2pt; margin: 8px 0 4px; break-after: avoid; }
+  ol, ul { margin: 4px 0 6px; padding-left: 18px; }
+  li { margin: 2px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 4px 0 8px; font-size: 9.3pt; break-inside: avoid; }
+  th, td { border: 1px solid var(--garis); padding: 4px 6px; vertical-align: top; text-align: left; }
+  th { background: #eaf0fa; color: var(--biru); }
+  td.ps, th.ps { width: 27%; color: var(--abu); font-size: 8.4pt; }
+  .dua { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kotak { border: 1px solid var(--garis); border-radius: 6px; padding: 6px 10px; break-inside: avoid; }
+  .kotak.hijau { border-color: #b7dfc2; background: #f1faf3; }
+  .kotak.merah { border-color: #f2c4bf; background: #fdf3f2; }
+  .kotak h3 { margin-top: 2px; }
+  .ps-inline { color: var(--abu); font-size: 8.4pt; white-space: nowrap; }
+  .cek { list-style: none; padding-left: 0; }
+  .cek li::before { content: "☐ "; color: var(--biru); font-weight: 700; }
+  .catatan { font-size: 8.4pt; color: var(--abu); }
+  .kaki { margin-top: 12px; border-top: 1px solid var(--garis); padding-top: 6px; font-size: 8pt; color: var(--abu); display: flex; justify-content: space-between; gap: 10px; }
+  .hal-baru { break-before: page; }
+  .layar { position: sticky; top: 0; background: var(--biru); color: #fff; padding: 10px 14mm; margin: -14mm -14mm 12px; display: flex; gap: 10px; align-items: center; justify-content: space-between; z-index: 2; }
+  .layar a, .layar button { color: #1b1b1b; background: #ffd24d; border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+  @media (max-width: 640px) { table { table-layout: fixed; } th, td { overflow-wrap: anywhere; } .ps-inline { white-space: normal; } body { padding: 16px; font-size: 10.5pt; } .layar { margin: -16px -16px 12px; padding: 10px 16px; } .kop { grid-template-columns: 44px 1fr; } .kop .qr { display: none; } .dua { grid-template-columns: 1fr; } td.ps, th.ps { width: 34%; } }
+  .templat { border: 1px dashed var(--biru); border-radius: 6px; padding: 8px 10px; background: #f7f9fd; font-size: 9.3pt; white-space: pre-line; break-inside: avoid; }
+  .cek2 { columns: 2; column-gap: 18px; }
+  .cek2 li { break-inside: avoid; }
+  .label { display: inline-block; font-size: 7.6pt; font-weight: 800; padding: 1px 6px; border-radius: 99px; vertical-align: middle; }
+  .label.a { background: #e3ecfb; color: #1f3864; } .label.b { background: #e3f4e7; color: #1e7b34; }
+  @media (max-width: 640px) { .cek2 { columns: 1; } }
+</style>
+</head>
+<body>
+
+<div class="layar">
+  <span>Panduan Koordinator SIM Komunitas</span>
+  <a href="Panduan-Koordinator-SIM-Komunitas-Banyuwangi.pdf" download>⬇ Unduh PDF</a>
+</div>
+
+<header class="kop">
+  <img class="logo" src="../img/logo-lantas-baru.webp" alt="Logo Lalu Lintas Polri">
+  <div>
+    <div class="instansi">Satpas Polresta Banyuwangi</div>
+    <h1>Panduan Koordinator SIM Komunitas</h1>
+    <p class="sub">Untuk pengurus pondok pesantren, kampus, sekolah, desa/kelurahan, dan instansi yang mengusulkan lokasi layanan SIM</p>
+  </div>
+  <div class="qr"><img src="../img/qr-portal.svg" alt="QR portal SIM Komunitas">Portal SIM Komunitas</div>
+</header>
+<div class="garis-emas"></div>
+
+<div class="ringkas">
+  <b>Peran koordinator:</b> mengusulkan lokasi, menyiapkan tempat, menyebarkan <b>link resmi</b> pendaftaran, mendorong warga
+  <b>mendaftar sendiri</b> dan hadir tepat waktu, serta mendampingi petugas pada hari pelaksanaan. Pemeriksaan, ujian, dan
+  pencetakan SIM sepenuhnya dilakukan petugas Satpas Polresta Banyuwangi.
+</div>
+
+<h2>A. Pilih jenis layanan</h2>
+<table>
+  <tr><th style="width:22%">Jenis</th><th>Untuk siapa</th><th style="width:30%">Link untuk warga</th></tr>
+  <tr><td><span class="label a">VERSI LENGKAP</span><br><b>SIM Baru &amp; Perpanjangan</b></td>
+      <td>Warga yang belum punya SIM, SIM-nya sudah kedaluwarsa, atau ingin memperpanjang. Ada ujian teori (via HP) dan ujian praktik di lokasi.</td>
+      <td>satpasbwi-sim.github.io/sim-komunitas-bwi/</td></tr>
+  <tr><td><span class="label b">VERSI PERPANJANGAN</span><br><b>Khusus Perpanjangan</b></td>
+      <td>Pemilik SIM A atau SIM C yang <b>masih berlaku</b>. Tanpa ujian teori &amp; praktik; tempat yang dibutuhkan lebih sederhana.</td>
+      <td>satpasbwi-sim.github.io/sim-komunitas-bwi/perpanjangan/</td></tr>
+</table>
+<p class="catatan">Jenis layanan dipilih saat mengisi menu <b>Usul Lokasi</b> di portal. SIM yang sudah lewat masa berlaku tidak bisa diperpanjang dan harus mengikuti layanan SIM Baru (Pasal 4 Perpol 5/2021).</p>
+
+<h2>B. Alur dan waktu</h2>
+<table>
+  <tr><th style="width:16%">Waktu</th><th style="width:28%">Langkah</th><th>Yang dilakukan koordinator</th></tr>
+  <tr><td>±14 hari sebelum <span class="ps-inline">(disarankan)</span></td><td><b>1. Usulkan lokasi</b></td><td>Isi menu <b>Usul Lokasi</b> di portal: jenis tempat, jenis layanan, kecamatan, perkiraan peserta, usulan tanggal, nomor WhatsApp penanggung jawab. Simpan <b>nomor usulan</b> yang muncul.</td></tr>
+  <tr><td>Setelah usulan</td><td><b>2. Dihubungi petugas</b></td><td>Sepakati tanggal, jam, kuota, dan titik lokasi. Satpas dapat mengirim <b>surat resmi</b> permohonan fasilitasi kepada pimpinan lembaga/kepala desa.</td></tr>
+  <tr><td>Saat disetujui</td><td><b>3. Jadwal ditetapkan</b></td><td>Koordinator menerima pesan WhatsApp berisi tanggal, kuota, dan link. Jadwal tampil di portal dengan label <b>BARU</b> dan status <b>Segera dibuka</b>.</td></tr>
+  <tr><td>Pendaftaran dibuka</td><td><b>4. Sebarkan link</b></td><td>Bagikan link versi yang sesuai (bagian A) dan templat pesan (bagian D). Pantau <b>sisa kuota</b> di menu Jadwal.</td></tr>
+  <tr><td>H-3 s.d. H-1</td><td><b>5. Ingatkan warga</b></td><td>Ingatkan jam datang dan berkas yang dibawa. Peserta SIM Baru mengerjakan ujian teori via HP dan menyimpan screenshot hasilnya.</td></tr>
+  <tr><td>Hari H</td><td><b>6. Pelaksanaan</b></td><td>Datang lebih awal, siapkan tempat, arahkan peserta ke meja registrasi, bantu petugas mengatur antrean.</td></tr>
+  <tr><td>Sesudah</td><td><b>7. Evaluasi</b></td><td>Sampaikan masukan kepada petugas. Warga yang belum terlayani dapat diarahkan ke jadwal berikutnya atau ke Satpas.</td></tr>
+</table>
+
+<h2>C. Persiapan tempat</h2>
+<div class="dua">
+  <div class="kotak">
+    <h3>Untuk semua jenis layanan</h3>
+    <ul class="cek">
+      <li>Area parkir untuk <b>mobil SIM Keliling</b> dan kendaraan petugas</li>
+      <li>Ruang atau tenda <b>registrasi</b> beserta meja dan kursi petugas</li>
+      <li>Tempat <b>tes kesehatan</b> dan <b>tes psikologi</b></li>
+      <li>Meja <b>foto &amp; sidik jari</b> (identifikasi)</li>
+      <li>Kursi tunggu peserta, teduh</li>
+      <li><b>Listrik</b> (stopkontak dekat meja petugas)</li>
+      <li><b>Sinyal internet</b> yang memadai</li>
+      <li>Pengaturan parkir peserta &amp; keamanan internal</li>
+    </ul>
+  </div>
+  <div class="kotak">
+    <h3>Tambahan untuk <span class="label a">VERSI LENGKAP</span></h3>
+    <ul class="cek">
+      <li><b>Area/lapangan rata</b> untuk ujian praktik (sirkuit SIM C; area SIM A bila ada pemohon SIM A)</li>
+      <li>Area aman dan teduh untuk peserta mengerjakan <b>ujian teori via HP</b> (E-AVIS)</li>
+      <li>Ruang terpisah dari lalu lintas umum selama ujian praktik</li>
+    </ul>
+    <p class="catatan">Letak dan ukuran area ujian praktik dipastikan bersama petugas saat survei/koordinasi.</p>
+  </div>
+</div>
+
+<h2>D. Menyebarkan informasi</h2>
+<p>Gunakan <b>link resmi</b> di bagian A. Contoh pesan untuk grup WhatsApp (sesuaikan isi dalam kurung):</p>
+<div class="templat">📢 <b>SIM Komunitas – [nama lokasi]</b>
+📅 [hari, tanggal], pukul [08.00] WIB
+🪪 Layanan: [SIM Baru &amp; Perpanjangan / Perpanjangan SIM A &amp; C]
+📝 Daftar &amp; cek sisa kuota: [link versi yang sesuai]
+📋 Bawa: KTP-el asli, bukti JKN/BPJS aktif[, SIM lama asli untuk perpanjangan]
+✅ Pendaftaran gratis, hanya PNBP resmi di loket. Kuota terbatas.
+ℹ️ Info: WhatsApp Satpas Polresta Banyuwangi 0852-3390-0100</div>
+<ul>
+  <li><b>Setiap warga mendaftar sendiri</b> lewat formulir di portal. Koordinator boleh membantu mengisikan di HP warga yang bersangkutan.</li>
+  <li><b>Jangan mengumpulkan</b> foto KTP, NIK, atau data pribadi warga di grup atau daftar pribadi. Data cukup dimasukkan ke formulir resmi.</li>
+  <li>Pendaftar melebihi kuota otomatis menjadi <b>cadangan</b>. Warga dapat mengecek statusnya di menu <b>Cek Status</b>.</li>
+</ul>
+
+<div class="dua">
+  <div class="kotak hijau">
+    <h3>E. Pada hari pelaksanaan</h3>
+    <ol>
+      <li>Hadir lebih awal dan tunjukkan lokasi kepada petugas.</li>
+      <li>Pastikan peserta membawa berkas asli.</li>
+      <li>Arahkan peserta sesuai alur: registrasi → kesehatan → psikologi → (ujian) → identifikasi → cetak.</li>
+      <li>Peserta SIM Baru mengirim bukti ujian teori lewat QR di lokasi.</li>
+      <li>Laporkan kendala tempat atau listrik kepada petugas.</li>
+    </ol>
+  </div>
+  <div class="kotak merah">
+    <h3>F. Yang tidak diperbolehkan</h3>
+    <ul>
+      <li>Memungut biaya apa pun dari warga.</li>
+      <li>Menjanjikan kelulusan ujian atau SIM tanpa ujian.</li>
+      <li>Mengumpulkan uang PNBP; PNBP dibayar sendiri di loket resmi/BRIVA.</li>
+      <li>Mewakilkan ujian atau mendaftarkan orang tanpa sepengetahuannya.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>G. Kontak</h2>
+<ul>
+  <li>WhatsApp Satpas Polresta Banyuwangi: <b>0852-3390-0100</b></li>
+  <li>Instagram: <b>@satpassim_banyuwangi</b></li>
+  <li>Portal: <b>satpasbwi-sim.github.io/sim-komunitas-bwi</b> (menu Usul Lokasi, Jadwal, Cek Status)</li>
+</ul>
+
+<div class="kaki">
+  <span>Satpas Polresta Banyuwangi · Panduan Koordinator SIM Komunitas</span>
+  <span>Diperbarui 5 November 2026. Ketentuan teknis di lokasi mengikuti kesepakatan dengan petugas.</span>
+</div>
+
+</body>
+</html>
