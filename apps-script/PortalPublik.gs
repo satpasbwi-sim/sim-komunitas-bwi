@@ -230,7 +230,10 @@ function cekStatus_(nikMentah, lahirMentah) {
     var iNik = cariKolom_(h, /^nik$/i), iLahir = cariKolom_(h, /tanggal lahir/i), iNama = cariKolom_(h, /^nama$/i),
         iSim = cariKolom_(h, /jenis sim/i), iLok = cariKolom_(h, /lokasi layanan/i), iKet = cariKolom_(h, /^keterangan$/i),
         iBukti = cariKolom_(h, /status bukti/i), iNilai = cariKolom_(h, /nilai teori/i), iWaktu = cariKolom_(h, /waktu daftar/i),
-        iUrut = cariKolom_(h, /no\. ?urut/i);
+        iUrut = cariKolom_(h, /no\. ?urut/i),
+        // SIM Perpanjangan: "SIM lama berlaku s/d"; SIM Baru: "Permohonan di form" = Perpanjangan bila dipindah
+        // otomatis karena SIM lama habis sebelum hari layanan (lihat kuota-v2/Kode.gs)
+        iBerlaku = cariKolom_(h, /berlaku s\/d/i), iAsal = cariKolom_(h, /permohonan di form/i);
     for (var r = 1; r < data.length; r++) {
       if (String(tampil[r][iNik]).replace(/\D/g, '') !== nik) continue;
       if (tanggalIso_(data[r][iLahir], tampil[r][iLahir]) !== lahir) continue;
@@ -245,7 +248,9 @@ function cekStatus_(nikMentah, lahirMentah) {
         keterangan: ket || 'Terdaftar',
         masukKuota: !KETERANGAN_TIDAK_DIHITUNG.test(ket),
         statusTeori: iBukti >= 0 ? tampil[r][iBukti] : '',
-        nilaiTeori: iNilai >= 0 ? tampil[r][iNilai] : ''
+        nilaiTeori: iNilai >= 0 ? tampil[r][iNilai] : '',
+        berlaku: iBerlaku >= 0 ? tampil[r][iBerlaku] : '',
+        dialihkan: iAsal >= 0 && /perpanjangan/i.test(tampil[r][iAsal])
       });
     }
   });

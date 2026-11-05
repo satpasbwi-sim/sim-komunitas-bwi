@@ -221,7 +221,11 @@
 
     if (j.status === 'segera') kq.appendChild(h('p', { class: 'kj-segera' }, '📣 Jadwal baru disetujui. Pendaftaran segera dibuka — pantau halaman ini atau tekan "Ingatkan saya".'));
     var aksi = $('.kj-aksi', node);
-    if (j.status === 'buka') aksi.appendChild(h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Daftar sekarang'));
+    if (j.status === 'buka') {
+      aksi.appendChild(VERSI === 'B'
+        ? h('button', { class: 'tombol kecil', type: 'button', 'aria-expanded': 'false', onclick: function () { cekSebelumDaftar(j, node, this); } }, '📝 Daftar sekarang')
+        : h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Daftar sekarang'));
+    }
     if (j.status !== 'selesai' && beda <= 1 && VERSI === 'A' && j.layanan !== 'perpanjangan') {
       aksi.appendChild(h('a', { class: 'tombol kecil garis', href: K.BUKTI_URL + encodeURIComponent(j.kode) + '&tgl=' + j.tanggal, target: '_blank', rel: 'noopener' }, '📤 Kirim bukti teori'));
     }
@@ -233,6 +237,44 @@
       aksi.appendChild(h('button', { class: 'tombol kecil garis', type: 'button', onclick: function () { bagikan(j); } }, '↗ Bagikan'));
     }
     return node;
+  }
+
+  /**
+   * Versi Perpanjangan: sebelum membuka formulir, minta masa berlaku SIM lama. SIM yang habis sebelum hari layanan
+   * tidak bisa diperpanjang (patokan sama dengan script kuota) → diarahkan ke SIM Baru di Versi A.
+   */
+  function cekSebelumDaftar(j, node, tombol) {
+    var ada = $('.kj-cek', node);
+    if (ada) { ada.remove(); tombol.setAttribute('aria-expanded', 'false'); return; }
+    tombol.setAttribute('aria-expanded', 'true');
+    var isian = h('input', { type: 'date', name: 'berlaku' });
+    isian.value = ambil('berlaku_sim', '');
+    var hasil = h('div', { 'aria-live': 'polite' });
+    var lanjut = function () {
+      var berlaku = isian.value;
+      if (!berlaku) { hasil.replaceChildren(h('div', { class: 'hasil gagal' }, 'Isi tanggal masa berlaku SIM lama (tertera di kartu SIM).')); isian.focus(); return; }
+      simpan('berlaku_sim', berlaku);
+      if (berlaku < j.tanggal) {
+        hasil.replaceChildren(h('div', { class: 'hasil awas' },
+          h('h3', null, 'SIM tidak berlaku lagi pada hari layanan'),
+          h('p', null, 'SIM lama berlaku sampai ' + tglPanjang(berlaku) + ', sedangkan layanan di ' + j.nama + ' pada ' + tglPanjang(j.tanggal) +
+            '. SIM yang sudah lewat masa berlaku tidak bisa diperpanjang: daftarlah sebagai SIM Baru dan ikuti ujian teori & praktik.'),
+          h('div', { class: 'baris-aksi' },
+            h('a', { class: 'tombol kecil', href: lokasiVersi('A', '#jadwal') }, '🔄 Daftar SIM Baru'),
+            h('a', { class: 'tombol kecil garis', href: lokasiVersi('A', '#teori') }, '📘 Latihan teori'))));
+        return;
+      }
+      hasil.replaceChildren(h('div', { class: 'hasil ok' },
+        h('p', null, '✅ SIM masih berlaku pada hari layanan (s/d ' + tglPanjang(berlaku) + '). Di formulir, pilih jenis permohonan ', h('b', null, 'Perpanjangan'), '.'),
+        h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Buka formulir pendaftaran')));
+    };
+    var kotak = h('div', { class: 'panel kj-cek' },
+      h('p', null, h('b', null, 'Cek dulu masa berlaku SIM lama'), h('br'), h('small', { class: 'redup' }, 'Perpanjangan hanya untuk SIM yang masih berlaku pada hari layanan (' + tglPanjang(j.tanggal) + ').')),
+      h('label', { class: 'isian' }, 'Berlaku sampai (lihat kartu SIM)', isian),
+      h('button', { class: 'tombol kecil', type: 'button', onclick: lanjut }, 'Lanjut'),
+      hasil);
+    node.insertBefore(kotak, $('.kj-aksi', node));
+    isian.focus();
   }
 
   function tautanKalender(j) {
@@ -253,7 +295,8 @@
 
   muatJadwal();
 
-  setInterval(function () { if (!document.hidden) muatJadwal(); }, 120000);
+  // jadwal tidak dimuat ulang selama kotak cek masa berlaku terbuka (isiannya akan hilang)
+  setInterval(function () { if (!document.hidden && !$('.kj-cek')) muatJadwal(); }, 120000);
 
   // =========================================================================
   // 2. CEK SYARAT
@@ -293,19 +336,21 @@
       return;
     }
 
+    // patokan = hari layanan terdekat (sama dengan script kuota): SIM yang habis sebelum hari itu harus SIM Baru
     var jadiBaru = false;
-    if (VERSI === 'B' && berlaku < kini) {
+    var habisKapan = 'Masa berlaku berakhir ' + tglPanjang(berlaku) + (acuan > kini ? ', sebelum hari layanan ' + tglPanjang(acuan) : '') + '. ';
+    if (VERSI === 'B' && berlaku < acuan) {
       out.replaceChildren(h('div', { class: 'hasil awas' },
-        h('h3', null, 'SIM lama sudah lewat masa berlaku'),
-        h('p', null, 'Masa berlaku berakhir ' + tglPanjang(berlaku) + '. SIM yang sudah lewat masa berlaku tidak bisa diperpanjang dan harus diajukan sebagai SIM Baru (ikut ujian teori & praktik). Layanan ini khusus perpanjangan.'),
+        h('h3', null, berlaku < kini ? 'SIM lama sudah lewat masa berlaku' : 'SIM lama habis sebelum hari layanan'),
+        h('p', null, habisKapan + 'SIM yang sudah lewat masa berlaku tidak bisa diperpanjang dan harus diajukan sebagai SIM Baru (ikut ujian teori & praktik). Layanan ini khusus perpanjangan.'),
         h('div', { class: 'baris-aksi' }, h('a', { class: 'tombol kecil', href: lokasiVersi('A', '#syarat') }, '🔄 Buka layanan SIM Baru & Perpanjangan'))));
       return;
     }
-    if (per === 'perpanjangan' && berlaku < kini) {
+    if (per === 'perpanjangan' && berlaku < acuan) {
       jadiBaru = true;
       blok.push(h('div', { class: 'hasil awas' },
-        h('h3', null, 'SIM lama sudah lewat masa berlaku'),
-        h('p', null, 'Masa berlaku berakhir ' + tglPanjang(berlaku) + '. SIM yang sudah lewat masa berlaku tidak bisa diperpanjang, jadi daftarlah sebagai SIM Baru (ikut ujian teori dan praktik).')));
+        h('h3', null, berlaku < kini ? 'SIM lama sudah lewat masa berlaku' : 'SIM lama habis sebelum hari layanan'),
+        h('p', null, habisKapan + 'SIM yang sudah lewat masa berlaku tidak bisa diperpanjang, jadi daftarlah sebagai SIM Baru (ikut ujian teori dan praktik).')));
       per = 'baru';
     }
 
@@ -372,7 +417,21 @@
     tahap.push(r.masukKuota
       ? h('li', { class: 'selesai' }, h('b', null, 'Masuk kuota'), h('small', null, r.keterangan))
       : h('li', { class: 'gagal' }, h('b', null, r.keterangan), h('small', null, 'Hubungi petugas untuk pilihan lokasi lain.')));
-    var kodeLok = (jadwalTerkini.filter(function (j) { return r.lokasi.toLowerCase().indexOf(j.nama.toLowerCase()) >= 0; })[0] || {}).kode;
+    var jl = jadwalTerkini.filter(function (j) { return r.lokasi.toLowerCase().indexOf(j.nama.toLowerCase()) >= 0; })[0] || {};
+    var kodeLok = jl.kode;
+    var gol = /\bA\b/.test(r.sim) ? 'A' : 'C';
+    // r.dialihkan / r.berlaku: dari API (PortalPublik.gs). API lama tidak mengirimnya → kartu tetap tampil seperti biasa.
+    if (r.permohonan === 'SIM Baru' && r.dialihkan) {
+      tahap.push(h('li', { class: 'gagal' }, h('b', null, 'Dialihkan ke SIM Baru'),
+        h('small', null, 'Anda mendaftar Perpanjangan, tetapi SIM lama sudah habis sebelum hari layanan. SIM yang lewat masa berlaku tidak bisa diperpanjang, jadi Anda wajib ujian teori & praktik.')));
+    }
+    if (r.permohonan === 'Perpanjangan') {
+      tahap.push(h('li', { class: 'selesai' }, h('b', null, 'Tanpa ujian teori & praktik'),
+        h('small', null, (r.berlaku ? 'SIM lama berlaku s/d ' + r.berlaku + ' – masih berlaku pada hari layanan.' : 'SIM lama masih berlaku pada hari layanan.'))));
+      tahap.push(h('li', { class: 'kini' }, h('b', null, 'Siapkan berkas'),
+        h('small', null, 'KTP-el asli, SIM ' + gol + ' lama (asli), HP dengan nomor WhatsApp pendaftaran. PNBP resmi ' + rupiah(K.PNBP.perpanjangan[gol]) +
+          ' dibayar di loket/BRIVA, ditambah tes kesehatan & psikologi di lokasi.')));
+    }
     if (r.permohonan === 'SIM Baru') {
       var st = (r.statusTeori || '').toLowerCase();
       if (st === 'lulus') tahap.push(h('li', { class: 'selesai' }, h('b', null, 'Ujian teori: Lulus' + (r.nilaiTeori ? ' (nilai ' + r.nilaiTeori + ')' : '')), h('small', null, 'Bukti sudah dicek petugas.')));
@@ -380,7 +439,8 @@
       else tahap.push(h('li', { class: 'kini' }, h('b', null, 'Ujian teori: menunggu bukti'), h('small', null, 'Kerjakan ujian teori via HP, lalu kirim screenshot hasilnya.'),
         kodeLok ? h('a', { class: 'tombol kecil garis', href: K.BUKTI_URL + encodeURIComponent(kodeLok), target: '_blank', rel: 'noopener' }, '📤 Kirim bukti teori') : null));
     }
-    tahap.push(h('li', { class: 'kini' }, h('b', null, 'Datang ke lokasi'), h('small', null, r.lokasi)));
+    tahap.push(h('li', { class: 'kini' }, h('b', null, 'Datang ke lokasi'),
+      h('small', null, r.lokasi + (jl.mulai ? ' · pukul ' + jl.mulai + '–' + (jl.selesai || '15:00') + ' WIB' : ''))));
     return h('div', { class: 'hasil' + (r.masukKuota ? ' ok' : ' awas') },
       h('h3', null, r.nama), h('p', { class: 'kecil' }, r.permohonan + ' · ' + r.sim), h('ul', { class: 'tahap' }, tahap));
   }

@@ -105,7 +105,7 @@
       <div class="layanan">
         <a class="layanan-kartu" href="#jadwal"><span class="lk-ikon">📅</span><b>Jadwal</b><small><span data-hanya="A">Lokasi, tanggal, dan sisa kuota SIM Baru &amp; Perpanjangan. Daftar, kirim bukti teori, dan pasang pengingat.</span><span data-hanya="B">Lokasi, tanggal, dan sisa kuota Perpanjangan. Daftar, petunjuk arah, dan pasang pengingat.</span></small></a>
         <a class="layanan-kartu" href="#syarat"><span class="lk-ikon">✅</span><b>Cek Syarat</b><small>Cek usia, jenis pendaftaran yang tepat, berkas yang dibawa, biaya resmi, dan unduh ketentuan peserta (PDF).</small></a>
-        <a class="layanan-kartu" href="#status"><span class="lk-ikon">🔎</span><b>Cek Status</b><small>Masukkan NIK dan tanggal lahir untuk melihat status pendaftaran, kuota, dan hasil ujian teori Anda.</small></a>
+        <a class="layanan-kartu" href="#status"><span class="lk-ikon">🔎</span><b>Cek Status</b><small data-hanya="A">Masukkan NIK dan tanggal lahir untuk melihat status pendaftaran, kuota, dan hasil ujian teori Anda.</small><small data-hanya="B">Masukkan NIK dan tanggal lahir untuk melihat status pendaftaran, kuota, masa berlaku SIM lama, dan berkas yang dibawa.</small></a>
         <a class="layanan-kartu" data-hanya="A" href="#teori"><span class="lk-ikon">📝</span><b>Latihan Teori</b><small>Kenali 3 tahap E-AVIS, coba 10 soal acak dari Buku Digital SIM, dan simulasi E-AVIS lengkap.</small></a>
         <a class="layanan-kartu" data-hanya="A" href="#praktik"><span class="lk-ikon">🏍️</span><b>Latihan Praktik</b><small>Urutan materi, syarat lulus, kesalahan umum, dan kuis lulus atau gagal untuk SIM C &amp; SIM A.</small></a>
         <a class="layanan-kartu" href="#usulan"><span class="lk-ikon">📍</span><b>Usul Lokasi</b><small>Pengurus pesantren, kampus, sekolah, desa, atau instansi bisa mengusulkan SIM Komunitas di tempatnya.</small></a>
@@ -291,7 +291,8 @@
   <section id="status" data-panel="status" class="bagian alt">
     <div class="wrap sempit">
       <h2>Cek status pendaftaran</h2>
-      <p class="sub">Sudah mengisi formulir? Lihat apakah data Anda masuk kuota, dan hasil ujian teori yang sudah dicek petugas.</p>
+      <p class="sub" data-hanya="A">Sudah mengisi formulir? Lihat apakah data Anda masuk kuota, dan hasil ujian teori yang sudah dicek petugas.</p>
+      <p class="sub" data-hanya="B">Sudah mengisi formulir? Lihat apakah data Anda masuk kuota, masa berlaku SIM lama, berkas yang dibawa, dan jadwal datang.</p>
       <form class="panel" id="formStatus" novalidate>
         <label class="isian">NIK (16 angka) <input name="nik" inputmode="numeric" autocomplete="off" maxlength="19" placeholder="3510xxxxxxxxxxxx" required></label>
         <label class="isian">Tanggal lahir <input type="date" name="lahir" required></label>
