@@ -7,7 +7,7 @@
    - Gambar, ikon, PDF, font, bank soal      → cache dulu, diperbarui diam-diam di belakang
    - Apps Script (kuota, cek status, usulan) → selalu jaringan, TIDAK disimpan (data pribadi & angka langsung)
    Naikkan VERSI bila daftar PRECACHE berubah. */
-var VERSI = 'simkom-v11';
+var VERSI = 'simkom-v12';
 var CACHE = VERSI + '-inti';
 var PRECACHE = [
   './', 'index.html', 'style.css', 'app.js', 'config.js', 'versi.js', 'manifest.webmanifest', 'manifest-perpanjangan.webmanifest',
