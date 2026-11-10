@@ -301,6 +301,11 @@
     chip.classList.add('segera');
     chip.textContent = STATUS_TEKS.menyusul;
     $('.kj-waktu', node).replaceChildren('Tanggal layanan diumumkan menyusul', h('small', null, 'Pantau halaman ini atau WhatsApp Satpas ' + K.WA_TAMPIL));
+    if (j.dibuka === false) {
+      // formulir untuk lokasi ini belum dibuka (lokasi diberi tutup: true di project Kuota v2)
+      $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, '⏳ Pendaftaran belum dibuka. Tanggal layanan dan pembukaan pendaftaran akan diumumkan.'));
+      return node;
+    }
     $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, '📣 Pendaftaran sudah dapat dilakukan lewat formulir. Hari & jam layanan akan diumumkan.'));
     $('.kj-aksi', node).appendChild(h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Daftar sekarang'));
     return node;
