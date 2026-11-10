@@ -280,6 +280,12 @@ footer p { margin: 4px 0; }
 .setuju input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--hijau); flex: none; }
 .tombol.penuh { width: 100%; }
 .isian.salah input, .isian.salah select { border-color: var(--merah); }
+/* pesan salah tepat di bawah isian (bukan hanya di bawah tombol kirim) */
+.isian.salah[data-pesan]::after { content: "⚠ " attr(data-pesan); display: block; margin-top: 5px; color: var(--merah); font-weight: 600; font-size: .86rem; }
+.setuju.salah span { color: var(--merah); font-weight: 600; }
+.isian .petunjuk { display: block; font-weight: 500; color: var(--redup); font-size: .82rem; margin-top: 2px; }
+.usul-warga { margin: -4px 0 16px; padding: 10px 14px; border-radius: 12px; background: var(--kartu); border: 1px solid var(--garis); font-size: .93rem; }
+@media (max-width: 860px) { .usulan-samping { order: -1; } } /* HP: syarat tempat dibaca sebelum mengisi formulir */
 .ajak-usul { margin: 16px 0 0; text-align: center; font-weight: 600; }
 .ajak-usul a { white-space: nowrap; }
 @media (max-width: 520px) { .dua-kolom { grid-template-columns: 1fr; } }

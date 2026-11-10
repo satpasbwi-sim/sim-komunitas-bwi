@@ -132,6 +132,7 @@
     <div class="wrap">
       <h2>Usulkan SIM Komunitas di tempat Anda <span class="chip emas chip-judul">BARU</span></h2>
       <p class="sub">Pengurus pondok pesantren, kampus, sekolah, desa, atau instansi bisa mengusulkan lokasi. Usulan masuk langsung ke petugas Satpas, lalu Anda dihubungi lewat WhatsApp untuk mengatur jadwal.</p>
+      <p class="usul-warga">🙋 <b>Warga biasa juga boleh mengusulkan.</b> Bila bisa, ajak pengurus tempat itu (pengasuh pondok, kepala sekolah, kepala desa, pimpinan instansi) menjadi penanggung jawab, karena merekalah yang menyiapkan tempat.</p>
       <ol class="usulan-langkah">
         <li><b>Isi usulan</b><small>Kurang dari 2 menit</small></li>
         <li><b>Dihubungi petugas</b><small>Lewat WhatsApp penanggung jawab</small></li>
@@ -158,6 +159,7 @@
             <label><input type="radio" name="jenis" value="Lainnya"><span><b aria-hidden="true">✳️</b>Lainnya</span></label>
           </div>
         </fieldset>
+        <label class="isian" id="isianJenisLain" style="display:none">Sebutkan jenis tempat <input name="jenisLain" maxlength="60" placeholder="Contoh: karang taruna, paguyuban ojek, pasar"></label>
         <label class="isian">Nama tempat <input name="nama" maxlength="120" placeholder="Contoh: Ponpes Darul Ulum" required></label>
         <div class="dua-kolom">
           <label class="isian">Kecamatan
@@ -198,10 +200,10 @@
         </div>
         <label class="isian">Nomor WhatsApp penanggung jawab <input name="wa" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="0812xxxxxxxx" required></label>
         <div class="dua-kolom">
-          <label class="isian" data-hanya="A" data-perkiraan-baru>Perkiraan peserta SIM Baru <input name="baru" type="number" inputmode="numeric" min="0" max="2000" value="0"></label>
-          <label class="isian">Perkiraan peserta Perpanjangan <input name="perpanjangan" type="number" inputmode="numeric" min="0" max="2000" value="0"></label>
+          <label class="isian" data-hanya="A" data-perkiraan-baru>Perkiraan peserta SIM Baru <input name="baru" type="number" inputmode="numeric" min="0" max="2000" placeholder="Contoh: 40"></label>
+          <label class="isian">Perkiraan peserta Perpanjangan <input name="perpanjangan" type="number" inputmode="numeric" min="0" max="2000" placeholder="Contoh: 10"></label>
         </div>
-        <label class="isian">Usulan tanggal <span class="opsional">(opsional)</span><input name="tanggal" type="date"></label>
+        <label class="isian">Usulan tanggal <span class="opsional">(opsional)</span><small class="petunjuk">Paling cepat 7 hari dari hari ini; sebaiknya ±14 hari agar ada waktu menyiapkan tempat dan peserta.</small><input name="tanggal" type="date"></label>
         <label class="isian">Catatan <span class="opsional">(opsional)</span><textarea name="catatan" rows="3" maxlength="500" placeholder="Misalnya: tersedia aula dan lapangan untuk ujian praktik"></textarea></label>
         <label class="jebakan" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
         <label class="setuju"><input type="checkbox" name="setuju" required><span>Saya bersedia dihubungi petugas Satpas Polresta Banyuwangi lewat nomor di atas.</span></label>
@@ -210,7 +212,7 @@
       </form>
       <aside class="usulan-samping">
         <div class="panel">
-          <h3>Yang perlu disiapkan di lokasi</h3>
+          <h3>Sebelum mengusulkan, pastikan tempat Anda punya:</h3>
           <ul class="cek-lokasi">
             <li>Ruang untuk registrasi, tes kesehatan &amp; psikologi</li>
             <li>Area atau lapangan untuk ujian praktik</li>
@@ -220,10 +222,9 @@
           </ul>
           <p class="kecil redup">Lokasi dengan peserta lebih banyak dan tanggal yang longgar lebih mudah dijadwalkan.</p>
           <div class="samping-aksi">
-            <a class="tombol kecil" href="unduhan/Panduan-Koordinator-SIM-Komunitas-Banyuwangi.pdf" download>🧭 Panduan koordinator (PDF)</a>
-            <a class="tombol kecil garis" href="unduhan/panduan-koordinator.html" target="_blank" rel="noopener">👁 Baca panduan koordinator di layar</a>
-            <a class="tombol kecil garis" href="unduhan/Ketentuan-Peserta-SIM-Komunitas-Banyuwangi.pdf" download>📄 Ketentuan peserta (PDF)</a>
-            <a class="tombol kecil garis" href="unduhan/ketentuan-sim-komunitas.html" target="_blank" rel="noopener">👁 Baca panduan peserta di layar</a>
+            <a class="tombol kecil" href="unduhan/panduan-koordinator.html" target="_blank" rel="noopener">🧭 Panduan untuk penyelenggara</a>
+            <a class="tombol kecil garis" href="unduhan/ketentuan-sim-komunitas.html" target="_blank" rel="noopener">📄 Ketentuan untuk peserta</a>
+            <p class="kecil redup">Bisa dibaca di layar atau diunduh sebagai PDF dari halamannya.</p>
           </div>
         </div>
       </aside>
@@ -363,6 +364,10 @@
       <details><summary>SIM saya sudah lewat masa berlaku. Bisa perpanjangan?</summary><p>Tidak. SIM yang sudah lewat masa berlaku harus diajukan sebagai <b>SIM Baru</b>, termasuk ujian teori dan praktik. Gunakan <a href="#syarat">Cek Syarat</a> untuk memastikan.</p></details>
       <details data-hanya="A"><summary>Saya belum lulus ujian teori. Bagaimana?</summary><p>Tetap kirim screenshot hasilnya. Petugas akan menjelaskan jadwal ujian ulang. Setelah ujian ulang, kirim lagi hasil terbaru dengan nomor WhatsApp yang sama; bukti lama otomatis diganti.</p></details>
       <details><summary>Data saya tidak ditemukan di Cek Status.</summary><p>Data baru tampil sekitar 5 menit setelah formulir dikirim. Pastikan NIK dan tanggal lahir sama persis dengan yang diisi di formulir. Bila masih tidak ada, hubungi WhatsApp Satpas.</p></details>
+      <details><summary>Saya warga biasa, bukan pengurus. Boleh mengusulkan lokasi?</summary><p>Boleh. Isi menu <a href="#usulan">Usul Lokasi</a>. Bila bisa, ajak pengurus tempat itu (pengasuh pondok, kepala sekolah, kepala desa, pimpinan instansi) menjadi penanggung jawab, karena merekalah yang menyiapkan tempat bersama petugas.</p></details>
+      <details><summary>Apa saja yang harus disiapkan bila lokasi kami diusulkan?</summary><p>Ruang untuk registrasi serta tes kesehatan &amp; psikologi, area atau lapangan untuk ujian praktik, listrik dan sinyal internet, penanggung jawab yang mudah dihubungi, dan perkiraan jumlah peserta. Rinciannya ada di <a href="unduhan/panduan-koordinator.html" target="_blank" rel="noopener">Panduan untuk penyelenggara</a>.</p></details>
+      <details><summary>Berapa jumlah peserta yang dibutuhkan?</summary><p>Jumlah peserta dan kuota disepakati bersama petugas saat Anda dihubungi. Lokasi dengan peserta lebih banyak dan tanggal yang longgar lebih mudah dijadwalkan.</p></details>
+      <details><summary>Kapan sebaiknya mengusulkan, dan apakah ada biaya untuk penyelenggara?</summary><p>Usulkan sekitar <b>14 hari</b> sebelum tanggal yang diinginkan (paling cepat 7 hari). Setelah itu petugas menghubungi penanggung jawab lewat WhatsApp untuk menyepakati tanggal, jam, kuota, dan titik lokasi. Pendaftaran peserta gratis; peserta hanya membayar PNBP resmi di loket. Penyelenggara <b>dilarang memungut biaya apa pun</b> dari warga.</p></details>
       <details><summary>Kuota sudah penuh, apa yang bisa saya lakukan?</summary><p>Pilih lokasi lain yang masih tersedia, atau datang langsung ke Satpas Polresta Banyuwangi pada jam pelayanan. Jadwal SIM Komunitas berikutnya diumumkan lewat halaman ini dan WhatsApp Satpas.</p></details>
     </div>
   </section>

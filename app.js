@@ -593,18 +593,28 @@
       var l = fu.querySelector('[data-perkiraan-baru]');
       if (l) { l.style.display = hanyaPerp ? 'none' : ''; l.closest('.dua-kolom').classList.toggle('satu', hanyaPerp); }
     };
-    fu.addEventListener('change', function (ev) { if (ev.target.name === 'layanan') aturPerkiraan(); });
-    aturPerkiraan();
+    var isianLain = $('#isianJenisLain');
+    var aturJenisLain = function () {
+      var lain = nilaiRadio(fu, 'jenis') === 'Lainnya';
+      isianLain.style.display = lain ? '' : 'none';
+      if (!lain) isianLain.classList.remove('salah');
+    };
+    fu.addEventListener('change', function (ev) {
+      if (ev.target.name === 'layanan') aturPerkiraan();
+      if (ev.target.name === 'jenis') { aturJenisLain(); if (ev.target.value === 'Lainnya') fu.jenisLain.focus(); }
+      if (ev.target.name === 'setuju') ev.target.closest('.setuju').classList.remove('salah');
+    });
+    aturPerkiraan(); aturJenisLain();
     fu.wa.addEventListener('input', function () { this.value = this.value.replace(/[^\d+ -]/g, ''); });
-    fu.addEventListener('input', function (ev) { var l = ev.target.closest('.isian'); if (l) l.classList.remove('salah'); });
+    fu.addEventListener('input', function (ev) { var l = ev.target.closest('.isian'); if (l) { l.classList.remove('salah'); delete l.dataset.pesan; } });
 
     var pesanWa = function (d) {
       return 'Assalamualaikum/Salam sejahtera. Saya ingin mengusulkan SIM Komunitas.\n' +
         '• Layanan: ' + d.layanan + '\n' +
-        '• Tempat: ' + d.jenis + ' – ' + d.nama + '\n• Kecamatan: ' + d.kecamatan + (d.alamat ? ' (' + d.alamat + ')' : '') + '\n' +
+        '• Tempat: ' + d.jenis + (d.jenisLain ? ' (' + d.jenisLain + ')' : '') + ' – ' + d.nama + '\n• Kecamatan: ' + d.kecamatan + (d.alamat ? ' (' + d.alamat + ')' : '') + '\n' +
         '• Penanggung jawab: ' + d.pj + (d.jabatan ? ', ' + d.jabatan : '') + ' – ' + d.wa + '\n' +
         '• Perkiraan peserta: SIM Baru ' + d.baru + ', Perpanjangan ' + d.perpanjangan + '\n' +
-        (d.tanggal ? '• Usulan tanggal: ' + tglPanjang(d.tanggal) + '\n' : '') + (d.catatan ? '• Catatan: ' + d.catatan + '\n' : '') +
+        (d.tanggal ? '• Usulan tanggal: ' + tglPanjang(d.tanggal) + '\n' : '') + (d.catatanAsli ? '• Catatan: ' + d.catatanAsli + '\n' : '') +
         (d.nomor ? '• Nomor usulan: ' + d.nomor : '');
     };
     var tombolWa = function (d, label) {
@@ -618,16 +628,33 @@
         pj: fu.pj.value.trim(), jabatan: fu.jabatan.value.trim(), wa: fu.wa.value.replace(/\D/g, '').replace(/^62/, '0'),
         baru: Number(fu.baru.value) || 0, perpanjangan: Number(fu.perpanjangan.value) || 0, tanggal: fu.tanggal.value,
         catatan: fu.catatan.value.trim(), website: fu.website.value };
+      d.jenisLain = d.jenis === 'Lainnya' ? fu.jenisLain.value.trim() : '';
+      d.catatanAsli = d.catatan;
+      // jenis "Lainnya": keterangannya ikut di Catatan (server hanya menerima jenis tempat baku)
+      if (d.jenisLain) d.catatan = ('Jenis tempat: ' + d.jenisLain + (d.catatan ? '. ' + d.catatan : '')).slice(0, 500);
       var salah = null;
-      var tandai = function (el, pesan) { if (!salah) { salah = pesan; el.focus(); } var l = el.closest('.isian'); if (l) l.classList.add('salah'); };
+      var tandai = function (el, pesan) {
+        var l = el.closest('.isian');
+        if (l) { l.classList.add('salah'); l.dataset.pesan = pesan; }
+        if (!salah) {
+          salah = pesan; el.focus({ preventScroll: true });
+          // gulir ke isian pertama yang salah (scrollIntoView tidak menggulir di sebagian browser karena kepala halaman menempel)
+          window.scrollTo({ top: Math.max(0, (l || el).getBoundingClientRect().top + window.scrollY - window.innerHeight / 3), behavior: 'smooth' });
+        }
+      };
+      if (d.jenis === 'Lainnya' && d.jenisLain.length < 3) tandai(fu.jenisLain, 'Sebutkan jenis tempatnya.');
       if (d.nama.length < 3) tandai(fu.nama, 'Isi nama tempat.');
       if (!d.kecamatan) tandai(fu.kecamatan, 'Pilih kecamatan.');
       if (d.pj.length < 3) tandai(fu.pj, 'Isi nama penanggung jawab.');
       if (!/^08\d{8,11}$/.test(d.wa)) tandai(fu.wa, 'Nomor WhatsApp belum benar (contoh 0812xxxxxxxx).');
       if (d.layanan === 'Perpanjangan saja') d.baru = 0;
       if (d.baru + d.perpanjangan < 1) tandai(d.layanan === 'Perpanjangan saja' ? fu.perpanjangan : fu.baru, 'Isi perkiraan jumlah peserta.');
-      if (!salah && !fu.setuju.checked) { salah = 'Centang persetujuan untuk dihubungi petugas.'; fu.setuju.focus(); }
-      if (salah) { out.replaceChildren(h('div', { class: 'hasil gagal' }, salah)); return; }
+      if (!salah && !fu.setuju.checked) { salah = 'Centang persetujuan untuk dihubungi petugas.'; fu.setuju.focus(); fu.setuju.closest('.setuju').classList.add('salah'); }
+      if (salah) {
+        var n = fu.querySelectorAll('.isian.salah').length;
+        out.replaceChildren(h('div', { class: 'hasil gagal' }, n > 1 ? salah + ' Ada ' + n + ' isian bertanda merah yang perlu dilengkapi.' : salah));
+        return;
+      }
 
       var tombol = fu.querySelector('button[type=submit]');
       tombol.disabled = true; tombol.textContent = 'Mengirim…';
@@ -648,7 +675,7 @@
           h('p', null, 'Nomor usulan: ', h('b', null, r.nomor), '. Simpan nomor ini.'),
           h('p', null, 'Petugas Satpas akan menghubungi ' + d.pj + ' lewat WhatsApp ' + d.wa + ' untuk mengatur jadwal. Jadwal yang disetujui akan tampil di halaman ini.'),
           h('div', { class: 'baris-aksi' }, tombolWa(d, '💬 Kabari petugas juga lewat WhatsApp'))));
-        fu.reset(); fu.tanggal.min = tambahHari(hariIni(), 7);
+        fu.reset(); fu.tanggal.min = tambahHari(hariIni(), 7); aturPerkiraan(); aturJenisLain();
       }).catch(function () { gagal(); })
         .finally(function () { tombol.disabled = false; tombol.textContent = '📍 Kirim usulan'; out.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
     });
