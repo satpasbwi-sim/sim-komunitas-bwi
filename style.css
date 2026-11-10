@@ -41,7 +41,7 @@ h2 { font-size: clamp(1.35rem, 4vw, 1.75rem); }
 .atas-isi b { display: block; font-size: 1.05rem; line-height: 1.15; }
 .atas-isi small { display: block; opacity: .85; font-size: .78rem; line-height: 1.2; margin-top: 1px; }
 .tema { margin-left: auto; background: rgba(255,255,255,.12); color: #fff; border: 0; border-radius: 999px; width: 38px; height: 38px; font-size: 1.1rem; cursor: pointer; }
-.menu { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; padding-bottom: 10px; }
+.menu { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; padding-bottom: 10px; } /* Versi A: 8 menu termasuk Kirim Bukti */
 .menu a { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; color: #fff; text-decoration: none; font-size: .9rem; font-weight: 700; padding: 8px 6px; border-radius: 12px; background: rgba(255,255,255,.1); text-align: center; line-height: 1.15; }
 .menu a span { font-size: 1rem; }
 .menu a.aktif { background: #c9a227; color: #1b1b1b; }
@@ -483,12 +483,3 @@ footer .ft-tautan { margin-bottom: 4px; }
   .popup.pop-bukti { width: calc(100vw - 24px); height: fit-content; max-height: calc(100dvh - 24px); margin: auto; inset: 0; border-radius: 20px; }
   .pop-bukti .pp-kepala { padding-top: 14px; }
 }
-/* Tombol pop-up Kirim Bukti: bilah tersendiri di bagian atas, ikut menempel bersama kepala halaman (Versi A) */
-.bilah-bukti { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 16px; border: 0; border-top: 1px solid rgba(255,255,255,.15);
-  background: #ffd24d; color: #1b1b1b; font: inherit; text-align: left; cursor: pointer; }
-.bilah-bukti:hover { background: #ffdc70; }
-.bilah-bukti:focus-visible { outline: 3px solid #fff; outline-offset: -3px; }
-.bilah-bukti .bb-ikon { font-size: 1.3rem; }
-.bilah-bukti .bb-teks { flex: 1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
-.bilah-bukti small { font-size: .78rem; opacity: .8; }
-.bilah-bukti .bb-panah { font-size: 1.4rem; font-weight: 700; }
