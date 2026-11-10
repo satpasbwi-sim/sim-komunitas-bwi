@@ -88,7 +88,7 @@
         <li><span>📍</span><b>Semua di lokasi</b><small><span data-hanya="A">Kesehatan, psikologi, ujian, cetak</span><span data-hanya="B">Kesehatan, psikologi, foto, cetak</span></small></li>
         <li data-hanya="A"><span>📱</span><b>Ujian teori via HP</b><small>Kirim screenshot hasilnya</small></li>
         <li data-hanya="B"><span>✅</span><b>Tanpa ujian</b><small>Untuk SIM yang masih berlaku</small></li>
-        <li><span>🆓</span><b>Daftar gratis</b><small>Hanya PNBP resmi di loket</small></li>
+        <li><span>🆓</span><b>Daftar gratis</b><small>Hanya biaya resmi negara (PNBP) di loket</small></li>
         <li><span>🛡️</span><b>Tanpa calo</b><small>Langsung dilayani petugas</small></li>
       </ul>
     </div>
@@ -102,15 +102,17 @@
         </div>
       </div>
       <div class="pengumuman" data-pengumuman hidden></div>
+      <!-- Cara ikut: salinan daftar langkah dari bagian ALUR (diisi app.js) supaya pengunjung baru langsung paham urutannya -->
+      <div class="cara-ikut" id="caraIkut"></div>
       <h2 class="judul-layanan">Pilih layanan</h2>
       <div class="layanan">
         <a class="layanan-kartu" href="#jadwal"><span class="lk-ikon">📅</span><b>Jadwal</b><small><span data-hanya="A">Lokasi, tanggal, dan sisa kuota SIM Baru &amp; Perpanjangan. Daftar, kirim bukti teori, dan pasang pengingat.</span><span data-hanya="B">Lokasi, tanggal, dan sisa kuota Perpanjangan. Daftar, petunjuk arah, dan pasang pengingat.</span></small></a>
         <a class="layanan-kartu" href="#syarat"><span class="lk-ikon">✅</span><b>Cek Syarat</b><small>Cek usia, jenis pendaftaran yang tepat, berkas yang dibawa, biaya resmi, dan unduh ketentuan peserta (PDF).</small></a>
         <a class="layanan-kartu" href="#status"><span class="lk-ikon">🔎</span><b>Cek Status</b><small data-hanya="A">Masukkan NIK dan tanggal lahir untuk melihat status pendaftaran, kuota, dan hasil ujian teori Anda.</small><small data-hanya="B">Masukkan NIK dan tanggal lahir untuk melihat status pendaftaran, kuota, masa berlaku SIM lama, dan berkas yang dibawa.</small></a>
-        <a class="layanan-kartu" data-hanya="A" href="#teori"><span class="lk-ikon">📝</span><b>Latihan Teori</b><small>Kenali 3 tahap E-AVIS, coba 10 soal acak dari Buku Digital SIM, dan simulasi E-AVIS lengkap.</small></a>
+        <a class="layanan-kartu" data-hanya="A" href="#teori"><span class="lk-ikon">📝</span><b>Latihan Teori</b><small>Kenali 3 tahap ujian teori di HP (E-AVIS), coba 10 soal acak dari Buku Digital SIM, dan simulasi E-AVIS lengkap.</small></a>
         <a class="layanan-kartu" data-hanya="A" href="#praktik"><span class="lk-ikon">🏍️</span><b>Latihan Praktik</b><small>Urutan materi, syarat lulus, kesalahan umum, dan kuis lulus atau gagal untuk SIM C &amp; SIM A.</small></a>
         <a class="layanan-kartu" href="#usulan"><span class="lk-ikon">📍</span><b>Usul Lokasi</b><small>Pengurus pesantren, kampus, sekolah, desa, atau instansi bisa mengusulkan SIM Komunitas di tempatnya.</small></a>
-        <a class="layanan-kartu" href="#tanya"><span class="lk-ikon">💬</span><b>Tanya Jawab</b><small>Jawaban pertanyaan yang sering diajukan: biaya, SIM kedaluwarsa, belum lulus teori, kuota penuh.</small></a>
+        <a class="layanan-kartu" href="#tanya"><span class="lk-ikon">💬</span><b>Tanya Jawab</b><small>Jawaban pertanyaan yang sering diajukan: cara daftar, arti istilah, biaya, pelajar &amp; KTP-el, SIM kedaluwarsa, kuota penuh.</small></a>
       </div>
     </div>
   </section>
@@ -235,20 +237,20 @@
   <!-- ============ ALUR ============ -->
   <section class="bagian alt" data-panel="jadwal">
     <div class="wrap">
-      <h2>Alurnya cuma 5 langkah</h2>
+      <h2 class="alur-judul">Cara ikut: cuma 5 langkah</h2>
       <ol class="alur" data-hanya="A">
-        <li><b>Daftar online</b><small>Isi formulir sebelum hari layanan. Simpan nomor WhatsApp yang dipakai.</small></li>
-        <li><b>Belajar ujian teori</b><small>SIM Baru: kerjakan ujian teori lewat HP, simpan screenshot hasilnya.</small></li>
-        <li><b>Kirim bukti teori</b><small>Unggah screenshot lewat tombol <i>Kirim bukti</i> atau QR di lokasi.</small></li>
-        <li><b>Datang ke lokasi</b><small>Bawa KTP asli (dan SIM lama untuk perpanjangan). Tes kesehatan &amp; psikologi di tempat.</small></li>
-        <li><b>Ujian praktik &amp; cetak</b><small>Lulus ujian praktik, foto, bayar PNBP di loket resmi, SIM dicetak. <a href="#praktik">Latihan praktik →</a></small></li>
+        <li><b>Cek syarat</b><small>Usia minimal 17 tahun dan sudah punya KTP-el (KTP elektronik). SIM lama sudah mati? Daftar sebagai SIM Baru. <a href="#syarat">Cek Syarat →</a></small></li>
+        <li><b>Daftar dari HP</b><small>Buka menu Jadwal, pilih lokasi, tekan <i>Daftar sekarang</i>, lalu isi formulir. Gratis. Ingat nomor WhatsApp yang dipakai. <a href="#jadwal">Lihat jadwal →</a></small></li>
+        <li><b>Cek status &amp; belajar</b><small>±5 menit setelah daftar, cek data Anda di <a href="#status">Cek Status</a>. Sambil menunggu hari layanan, coba <a href="#teori">Latihan Teori</a> &amp; <a href="#praktik">Praktik</a>.</small></li>
+        <li><b>Datang di hari layanan</b><small>Bawa KTP-el asli (dan SIM lama untuk perpanjangan). Ikuti tes kesehatan &amp; psikologi, lalu ujian teori lewat HP dan kirim screenshot hasilnya lewat menu <i>📤 Kirim Bukti</i>.</small></li>
+        <li><b>Ujian praktik &amp; SIM jadi</b><small>Lulus ujian praktik, foto, bayar biaya resmi negara (PNBP) di loket resmi, SIM dicetak di lokasi.</small></li>
       </ol>
       <ol class="alur" data-hanya="B">
-        <li><b>Daftar online</b><small>Isi formulir sebelum hari layanan, pilih jenis permohonan Perpanjangan.</small></li>
-        <li><b>Siapkan berkas</b><small>KTP-el asli, SIM lama asli yang masih berlaku, bukti JKN/BPJS aktif.</small></li>
-        <li><b>Datang ke lokasi</b><small>Sesuai jadwal; tunjukkan berkas ke petugas registrasi.</small></li>
-        <li><b>Tes kesehatan &amp; psikologi</b><small>Diperiksa petugas di tempat. Tidak ada ujian teori &amp; praktik.</small></li>
-        <li><b>Foto, bayar &amp; cetak</b><small>Foto, bayar PNBP di loket resmi/BRIVA, SIM baru langsung dicetak.</small></li>
+        <li><b>Cek masa berlaku</b><small>SIM lama harus masih berlaku pada hari layanan. Sudah mati? Daftar sebagai SIM Baru. <a href="#syarat">Cek Syarat →</a></small></li>
+        <li><b>Daftar dari HP</b><small>Buka menu Jadwal, pilih lokasi, tekan <i>Daftar sekarang</i>, lalu isi formulir. Gratis. <a href="#jadwal">Lihat jadwal →</a></small></li>
+        <li><b>Siapkan berkas</b><small>KTP-el (KTP elektronik) asli, SIM lama asli, dan kartu BPJS Kesehatan (JKN) yang aktif. Cek data Anda di <a href="#status">Cek Status</a>.</small></li>
+        <li><b>Datang di hari layanan</b><small>Tunjukkan berkas ke petugas, lalu tes kesehatan &amp; psikologi di tempat. Tanpa ujian teori &amp; praktik.</small></li>
+        <li><b>Foto, bayar &amp; SIM jadi</b><small>Foto, bayar biaya resmi negara (PNBP) di loket resmi/BRIVA, SIM langsung dicetak.</small></li>
       </ol>
     </div>
   </section>
@@ -312,7 +314,7 @@
   <section id="teori" data-panel="teori" data-hanya="A" class="bagian">
     <div class="wrap sempit">
       <h2>Latihan ujian teori</h2>
-      <p class="sub">Ujian teori SIM memakai <b>E-AVIS</b> dan dapat dikerjakan lewat HP. Kenali tahapannya, lalu berlatih dengan soal dari <b>Buku Digital SIM Satpas Banyuwangi</b>.</p>
+      <p class="sub">Ujian teori SIM memakai <b>E-AVIS</b> (aplikasi ujian teori elektronik) dan dapat dikerjakan lewat HP. Kenali tahapannya, lalu berlatih dengan soal dari <b>Buku Digital SIM Satpas Banyuwangi</b>.</p>
       <div class="eavis">
         <div class="ev"><span class="ev-ikon">⚠️</span><b>1. Persepsi Bahaya</b><small>25 soal · 10 menit</small><p class="kecil">Mengenali potensi bahaya di jalan dan bereaksi dengan tepat.</p></div>
         <div class="ev"><span class="ev-ikon">💡</span><b>2. Wawasan</b><small>20 soal · 20 menit</small><p class="kecil">Menyesuaikan diri saat berkendara demi keselamatan dan ketertiban.</p></div>
@@ -358,9 +360,16 @@
   <section id="tanya" data-panel="tanya" class="bagian alt">
     <div class="wrap sempit">
       <h2>Tanya jawab</h2>
-      <details data-hanya="B"><summary>Apakah perpanjangan perlu ujian teori dan praktik?</summary><p>Tidak, selama SIM lama <b>masih berlaku</b>. Peserta cukup membawa KTP-el, SIM lama asli, dan bukti JKN aktif, lalu mengikuti tes kesehatan &amp; psikologi di lokasi. Golongan yang dilayani: SIM A dan SIM C.</p></details>
+      <details><summary>Bagaimana cara mendaftar?</summary><p>Buka menu <a href="#jadwal">Jadwal</a>, pilih lokasi yang pendaftarannya dibuka, tekan <b>Daftar sekarang</b>, lalu isi formulir dan kirim. Pendaftaran gratis. Sekitar 5 menit kemudian data Anda bisa dicek di <a href="#status">Cek Status</a>.</p></details>
+      <details><summary>Apa arti E-AVIS, PNBP, BRIVA, KTP-el, dan JKN?</summary><p><b>E-AVIS</b>: aplikasi ujian teori SIM elektronik, bisa dikerjakan lewat HP. <b>PNBP</b>: biaya resmi negara untuk penerbitan SIM. <b>BRIVA</b>: nomor pembayaran Bank BRI untuk membayar PNBP. <b>KTP-el</b>: KTP elektronik. <b>JKN</b>: kepesertaan BPJS Kesehatan.</p></details>
+      <details data-hanya="B"><summary>Apakah perpanjangan perlu ujian teori dan praktik?</summary><p>Tidak, selama SIM lama <b>masih berlaku</b>. Peserta cukup membawa KTP-el, SIM lama asli, dan kartu BPJS Kesehatan (JKN) yang aktif, lalu mengikuti tes kesehatan &amp; psikologi di lokasi. Golongan yang dilayani: SIM A dan SIM C.</p></details>
       <details><summary>Siapa yang boleh ikut SIM Komunitas?</summary><p>Warga yang berdomisili di Banyuwangi (sesuai KTP), berusia minimal 17 tahun untuk SIM C dan SIM A, dan termasuk komunitas sasaran: santri &amp; pengurus pondok pesantren, mahasiswa &amp; civitas kampus, siswa SMA sederajat yang cukup umur, atau masyarakat desa di lokasi layanan. <a href="unduhan/Ketentuan-Peserta-SIM-Komunitas-Banyuwangi.pdf" download>Unduh ketentuan lengkap (PDF)</a>.</p></details>
-      <details><summary>Berapa biayanya?</summary><p>Pendaftaran gratis. Yang dibayar hanya PNBP resmi (PP No. 76 Tahun 2020) di loket resmi/BRIVA: SIM C baru Rp100.000, SIM A baru Rp120.000, perpanjangan SIM C Rp75.000, perpanjangan SIM A Rp80.000. Biaya tes kesehatan dan psikologi mengikuti ketentuan petugas di lokasi. <b>Jangan membayar ke perorangan.</b></p></details>
+      <details><summary>Berapa biayanya?</summary><p>Pendaftaran gratis. Yang dibayar hanya <b>PNBP</b> (Penerimaan Negara Bukan Pajak, yaitu biaya resmi negara, PP No. 76 Tahun 2020) di loket resmi atau lewat BRIVA (nomor pembayaran Bank BRI): SIM C baru Rp100.000, SIM A baru Rp120.000, perpanjangan SIM C Rp75.000, perpanjangan SIM A Rp80.000. Biaya tes kesehatan dan psikologi mengikuti ketentuan petugas di lokasi. <b>Jangan membayar ke perorangan.</b></p></details>
+      <details data-hanya="A"><summary>Saya pelajar, umur saya belum 17 tahun. Boleh ikut?</summary><p>Belum boleh. Usia minimal <b>17 tahun</b> untuk SIM C dan SIM A, dihitung pada hari layanan. Masukkan tanggal lahir di <a href="#syarat">Cek Syarat</a> untuk memastikan. Bila belum cukup umur, ikuti jadwal berikutnya setelah berusia 17 tahun.</p></details>
+      <details><summary>Saya sudah 17 tahun tapi belum punya KTP-el. Bisa ikut?</summary><p>Belum bisa. <b>KTP-el wajib</b> dibawa saat layanan. Urus KTP-el terlebih dahulu di Dispendukcapil atau kecamatan, lalu ikuti jadwal SIM Komunitas berikutnya atau datang langsung ke Satpas Polresta Banyuwangi.</p></details>
+      <details><summary>Lokasi sekolah sudah tampil, tapi tanggalnya belum ada. Kapan diumumkan?</summary><p>Tanggal dan jam layanan di sekolah diumumkan melalui <b>pihak sekolah</b> dan tampil di menu <a href="#jadwal">Jadwal</a> halaman ini. Bila pendaftaran sudah dibuka, Anda boleh mendaftar lebih dulu.</p></details>
+      <details><summary>Saya sudah daftar tapi tidak bisa datang di hari layanan. Bagaimana?</summary><p>Silakan datang langsung ke <b>Satpas Polresta Banyuwangi</b> pada jam pelayanan dengan membawa berkas yang sama.</p></details>
+      <details><summary>Apakah SIM langsung jadi hari itu?</summary><p>Ya. Semua tahap dilakukan di lokasi. Bila lulus semua tahap<span data-hanya="A"> (SIM Baru: tes kesehatan, psikologi, ujian teori, dan ujian praktik)</span>, SIM dicetak di lokasi pada hari itu.</p></details>
       <details><summary>SIM saya sudah lewat masa berlaku. Bisa perpanjangan?</summary><p>Tidak. SIM yang sudah lewat masa berlaku harus diajukan sebagai <b>SIM Baru</b>, termasuk ujian teori dan praktik. Gunakan <a href="#syarat">Cek Syarat</a> untuk memastikan.</p></details>
       <details data-hanya="A"><summary>Saya belum lulus ujian teori. Bagaimana?</summary><p>Tetap kirim screenshot hasilnya. Petugas akan menjelaskan jadwal ujian ulang. Setelah ujian ulang, kirim lagi hasil terbaru dengan nomor WhatsApp yang sama; bukti lama otomatis diganti.</p></details>
       <details><summary>Data saya tidak ditemukan di Cek Status.</summary><p>Data baru tampil sekitar 5 menit setelah formulir dikirim. Pastikan NIK dan tanggal lahir sama persis dengan yang diisi di formulir. Bila masih tidak ada, hubungi WhatsApp Satpas.</p></details>

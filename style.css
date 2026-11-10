@@ -490,3 +490,7 @@ footer .ft-tautan { margin-bottom: 4px; }
   .popup.pop-bukti { width: calc(100vw - 24px); height: fit-content; max-height: calc(100dvh - 24px); margin: auto; inset: 0; border-radius: 20px; }
   .pop-bukti .pp-kepala { padding-top: 14px; }
 }
+
+/* Cara ikut (Beranda): langkah 1–5 sebelum "Pilih layanan" */
+.cara-ikut { margin: 8px 0 26px; }
+.alur small a { white-space: nowrap; }

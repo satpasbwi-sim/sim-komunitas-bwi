@@ -78,6 +78,13 @@
     var w = sec.querySelector('.wrap');
     if (w) w.insertBefore(h('a', { class: 'kembali', href: '#beranda' }, '← Beranda'), w.firstChild);
   });
+  // "Cara ikut" di Beranda: salinan daftar langkah dari bagian ALUR (satu sumber isi, tampil juga di Jadwal)
+  (function () {
+    var tujuan = $('#caraIkut'), judul = document.querySelector('.alur-judul');
+    if (!tujuan || !judul) return;
+    tujuan.appendChild(h('h2', { class: 'judul-layanan' }, judul.textContent));
+    judul.parentNode.querySelectorAll('.alur').forEach(function (ol) { tujuan.appendChild(ol.cloneNode(true)); });
+  })();
   function tampilPanel(gulir) {
     var id = (location.hash || '#beranda').slice(1);
     if (PANEL.indexOf(id) < 0) id = 'beranda';
@@ -169,12 +176,14 @@
   function isiTiket() {
     var j = jadwalTerkini.filter(function (x) { return x.status !== 'selesai' && x.tanggal; })[0];
     var menyusul = jadwalTerkini.filter(function (x) { return x.status === 'menyusul'; });
+    var dibuka = menyusul.filter(function (x) { return x.dibuka !== false; });
+    if (dibuka.length) menyusul = dibuka;
     var tiket = $('#tiket'), kuota = $('#tiketKuota');
     kuota.replaceChildren();
     if (!j && menyusul.length) {
       tiketTujuan = null; tiket.classList.add('kosong');
       $('#tiketNama').textContent = 'Berikutnya: ' + menyusul.map(function (x) { return x.nama; }).join(' & ');
-      $('#tiketTgl').textContent = 'Tanggal layanan diumumkan menyusul · pantau halaman ini';
+      $('#tiketTgl').textContent = (dibuka.length ? 'Pendaftaran dibuka · ' : 'Pendaftaran belum dibuka · ') + 'tanggal layanan diumumkan menyusul';
       return;
     }
     if (!j) {
@@ -260,12 +269,15 @@
   }
 
   // ---- pop-up Kirim Bukti Ujian Teori ---------------------------------------
-  // Muncul sekali per kunjungan (Versi A saja) setelah jadwal dimuat. Bila hari ini ada lokasi yang sedang
-  // berlangsung, tombolnya memakai QR lokasi itu; selain itu QR tetap SIMLING (bukti dicocokkan lewat nomor WA).
+  // Muncul otomatis sekali per kunjungan (Versi A saja) HANYA pada hari layanan (ada lokasi hari ini yang belum
+  // selesai), supaya pengunjung baru tidak langsung disodori kirim bukti. Di hari lain cukup lewat menu Kirim Bukti.
+  // Tombolnya memakai QR lokasi hari ini; dari menu di hari lain QR tetap SIMLING (bukti dicocokkan lewat nomor WA).
   var popBukti = $('#popBukti');
   function jadwalPopBukti() {
     if (VERSI !== 'A' || !popBukti || jadwalPopBukti.sudah) return;
     jadwalPopBukti.sudah = true;
+    var kini = hariIni();
+    if (!jadwalTerkini.some(function (j) { return j.tanggal === kini && j.status !== 'selesai'; })) return;
     try { if (sessionStorage.getItem('simkom_pop_bukti')) return; sessionStorage.setItem('simkom_pop_bukti', '1'); } catch (e) { /* mode privat */ }
     setTimeout(function () { if (!document.querySelector('dialog[open]')) bukaPopBukti(); }, 1500);
   }
@@ -300,13 +312,15 @@
     var chip = $('.kj-status', node);
     chip.classList.add('segera');
     chip.textContent = STATUS_TEKS.menyusul;
-    $('.kj-waktu', node).replaceChildren('Tanggal layanan diumumkan menyusul', h('small', null, 'Pantau halaman ini atau WhatsApp Satpas ' + K.WA_TAMPIL));
+    var sekolah = /sekolah/i.test(j.ket || '');
+    $('.kj-waktu', node).replaceChildren('Tanggal layanan diumumkan menyusul', h('small', null,
+      (sekolah ? 'Diumumkan melalui pihak sekolah dan di halaman ini' : 'Diumumkan di halaman ini') + ' · tanya: WhatsApp Satpas ' + K.WA_TAMPIL));
     if (j.dibuka === false) {
       // formulir untuk lokasi ini belum dibuka (lokasi diberi tutup: true di project Kuota v2)
       $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, '⏳ Pendaftaran belum dibuka. Tanggal layanan dan pembukaan pendaftaran akan diumumkan.'));
       return node;
     }
-    $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, '📣 Pendaftaran sudah dapat dilakukan lewat formulir. Hari & jam layanan akan diumumkan.'));
+    $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, '📣 Pendaftaran sudah dibuka: tekan Daftar sekarang dan isi formulir. Setelah tanggal ditetapkan, datanglah ke lokasi membawa KTP-el asli.'));
     $('.kj-aksi', node).appendChild(h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Daftar sekarang'));
     return node;
   }
@@ -427,7 +441,7 @@
     }
 
     var berkas = per === 'baru'
-      ? ['KTP asli, domisili Banyuwangi', 'Screenshot hasil ujian teori via HP (dikirim lewat tombol Kirim bukti teori)', 'HP dengan nomor WhatsApp yang dipakai saat mendaftar', 'Kondisi sehat untuk tes kesehatan & psikologi di lokasi', 'Kacamata bila biasa dipakai saat berkendara']
+      ? ['KTP asli, domisili Banyuwangi', 'Screenshot hasil ujian teori via HP (dikirim lewat menu 📤 Kirim Bukti)', 'HP dengan nomor WhatsApp yang dipakai saat mendaftar', 'Kondisi sehat untuk tes kesehatan & psikologi di lokasi', 'Kacamata bila biasa dipakai saat berkendara']
       : ['KTP asli, domisili Banyuwangi', 'SIM ' + gol + ' lama (asli)', 'HP dengan nomor WhatsApp yang dipakai saat mendaftar', 'Kondisi sehat untuk tes kesehatan & psikologi di lokasi'];
     var kunciCek = 'cek_' + per + gol, tercentang = ambil(kunciCek, {});
     var daftarCek = h('ul', { class: 'cek-list' }, berkas.map(function (b, i) {
@@ -451,7 +465,7 @@
       h('h3', null, '✅ Anda bisa ikut: ' + (per === 'baru' ? 'SIM ' + gol + ' Baru' : 'Perpanjangan SIM ' + gol)),
       h('p', null, lokasi ? 'Lokasi terdekat yang masih dibuka: ' + lokasi.nama + ', ' + tglPanjang(lokasi.tanggal) + '.' : 'Saat ini belum ada lokasi yang membuka pendaftaran. Pantau jadwal di halaman ini.'),
       h('p', null, h('b', null, 'Yang perlu disiapkan'), ' (centang bila sudah):'), daftarCek,
-      h('p', null, h('b', null, 'PNBP resmi: ' + rupiah(biaya)), ' — dibayar di loket resmi/BRIVA, bukan ke perorangan. Pendaftaran gratis.'),
+      h('p', null, h('b', null, 'Biaya resmi negara (PNBP): ' + rupiah(biaya)), ' — dibayar di loket resmi atau BRIVA (nomor pembayaran Bank BRI), bukan ke perorangan. Pendaftaran gratis.'),
       aksi));
     out.replaceChildren.apply(out, blok);
     out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
