@@ -31,6 +31,14 @@ window.SIMKOM = {
       tanggal: '2026-11-05', mulai: '08:00', selesai: '15:00', dibuka: true }
   ],
 
+  // Lokasi yang sudah pasti tetapi tanggalnya belum diumumkan: tampil di Jadwal sebagai "Tanggal menyusul"
+  // (pendaftaran lewat formulir sudah bisa). Otomatis tidak tampil lagi begitu sheet "Jadwal Layanan" memuat
+  // lokasi dengan kode atau nama yang sama (sudah bertanggal). Hapus barisnya bila lokasi batal.
+  JADWAL_MENYUSUL: [
+    { kode: 'SMAN1-GIRI', nama: 'SMAN 1 Giri Banyuwangi', ket: 'SIM Masuk Sekolah · Kec. Giri', ikon: '🏫' },
+    { kode: 'SMK17-GENTENG', nama: 'SMK 17 Genteng', ket: 'SIM Masuk Sekolah · Kec. Genteng', ikon: '🏫' }
+  ],
+
   // Tarif PNBP resmi (PP No. 76 Tahun 2020). Dibayar di loket resmi / BRIVA, bukan ke perorangan.
   PNBP: { baru: { C: 100000, A: 120000 }, perpanjangan: { C: 75000, A: 80000 } },
   USIA_MIN: { C: 17, A: 17 }

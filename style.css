@@ -472,3 +472,14 @@ html[data-versi="B"] footer { background: #1d4d3a; }
 .ft-kini { text-transform: none; letter-spacing: 0; background: #ffd24d; color: #1b1b1b; padding: 1px 7px; border-radius: 999px; margin-left: 4px; }
 html:not([data-versi="B"]) .ft-versi-a, html[data-versi="B"] .ft-versi-b { outline: 3px solid #ffd24d; outline-offset: 3px; }
 footer .ft-tautan { margin-bottom: 4px; }
+
+/* Pop-up Kirim Bukti Ujian Teori: kotak kecil di tengah (juga di HP, tidak layar penuh seperti popup praktik) */
+.popup.pop-bukti { width: min(520px, calc(100vw - 24px)); }
+.pop-bukti .pp-isi > p { margin: 0 0 12px; }
+.pop-bukti .pb-langkah { margin: 0 0 14px; padding-left: 20px; }
+.pop-bukti .pb-aksi { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.pop-bukti .pb-aksi .tombol { text-decoration: none; }
+@media (max-width: 560px) {
+  .popup.pop-bukti { width: calc(100vw - 24px); height: fit-content; max-height: calc(100dvh - 24px); margin: auto; inset: 0; border-radius: 20px; }
+  .pop-bukti .pp-kepala { padding-top: 14px; }
+}

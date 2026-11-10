@@ -418,6 +418,28 @@
   <div class="pp-isi" id="ppIsi"></div>
 </dialog>
 
+<!-- Pop-up Kirim Bukti Ujian Teori: muncul sekali per kunjungan di Versi A (Versi Perpanjangan tidak ada ujian teori). -->
+<dialog class="popup pop-bukti" id="popBukti" aria-labelledby="pbJudul" data-hanya="A">
+  <div class="pp-kepala">
+    <div><span class="pp-kode">SIM Baru</span><h2 id="pbJudul">📤 Kirim Bukti Ujian Teori</h2><p class="kecil">Lulus maupun belum lulus</p></div>
+    <button type="button" class="pp-tutup" data-tutup-bukti aria-label="Tutup">✕</button>
+  </div>
+  <div class="pp-isi">
+    <p>Sudah ikut <b>ujian teori SIM</b> di lokasi SIM Komunitas? Kirim screenshot hasilnya, <b>lulus maupun belum lulus</b>, supaya petugas bisa langsung mencocokkan data Anda.</p>
+    <p class="kj-segera" id="pbLokasi" hidden></p>
+    <ol class="kecil pb-langkah">
+      <li>Tekan <b>Kirim bukti sekarang</b>.</li>
+      <li>Tulis nomor WhatsApp yang dipakai saat mendaftar.</li>
+      <li>Pilih screenshot hasil ujian teori, tekan <b>Kirim</b>, lalu tunjukkan layar hijau ke petugas.</li>
+    </ol>
+    <div class="pb-aksi">
+      <a class="tombol" id="pbKirim" href="https://satpasbwi-sim.github.io/bukusimbwi/bukti/?lok=SIMLING" target="_blank" rel="noopener">📤 Kirim bukti sekarang</a>
+      <button type="button" class="tombol garis" data-tutup-bukti>Nanti saja</button>
+    </div>
+    <p class="kecil redup">Belum ujian? <a href="#teori" data-tutup-bukti>Coba Latihan Teori</a> dulu. Belum lulus? Tetap kirim; setelah ujian ulang, kirim lagi dengan nomor WhatsApp yang sama.</p>
+  </div>
+</dialog>
+
 <div class="offline" id="bannerOffline" role="status" hidden>📴 Anda sedang offline. Jadwal, ketentuan, dan latihan soal tetap bisa dibuka; cek status dan usulan perlu internet.</div>
 <div class="toast" id="toastVersi" role="status" hidden><span>Versi baru portal tersedia.</span><button type="button" class="tombol kecil" id="muatUlang">Muat ulang</button></div>
 

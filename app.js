@@ -108,9 +108,10 @@
   // 1. JADWAL & KUOTA
   // =========================================================================
   var jadwalTerkini = [];
-  var STATUS_TEKS = { buka: 'Pendaftaran dibuka', segera: 'Segera dibuka', penuh: 'Kuota penuh', tutup: 'Pendaftaran ditutup', selesai: 'Selesai' };
+  var STATUS_TEKS = { buka: 'Pendaftaran dibuka', segera: 'Segera dibuka', penuh: 'Kuota penuh', tutup: 'Pendaftaran ditutup', selesai: 'Selesai', menyusul: 'Tanggal menyusul' };
 
   function statusLokal(j) {
+    if (!j.tanggal) return 'menyusul';   // lokasi dari JADWAL_MENYUSUL (tanggal belum diumumkan)
     if (wib() > j.tanggal + 'T' + (j.selesai || '23:59')) return 'selesai';
     return j.status || (j.dibuka === false ? 'tutup' : 'buka');
   }
@@ -133,15 +134,26 @@
     });
   }
 
+  /** Lokasi "tanggal menyusul" dari config yang belum ada di jadwal resmi (dicocokkan lewat kode atau nama). */
+  function tambahMenyusul(daftar) {
+    var sama = function (a, b) { return String(a || '').trim().toLowerCase() === String(b || '').trim().toLowerCase(); };
+    return daftar.concat((K.JADWAL_MENYUSUL || []).filter(function (m) {
+      return !daftar.some(function (j) { return sama(j.kode, m.kode) || sama(j.nama, m.nama); });
+    }).map(function (m) { return Object.assign({ tanggal: '' }, m); }));
+  }
+
   function tampilkanJadwal(daftar, info) {
     var kini = hariIni();
-    jadwalTerkini = daftar.map(function (j) { var c = Object.assign({}, j); c.status = statusLokal(j); return c; })
-      .sort(function (a, b) { return (a.status === 'selesai') - (b.status === 'selesai') || (a.tanggal < b.tanggal ? -1 : 1); });
+    jadwalTerkini = tambahMenyusul(daftar).map(function (j) { var c = Object.assign({}, j); c.status = statusLokal(j); return c; })
+      .sort(function (a, b) {
+        return (a.status === 'selesai') - (b.status === 'selesai') || (!a.tanggal) - (!b.tanggal) || (a.tanggal < b.tanggal ? -1 : 1);
+      });
     var wadah = $('#daftarJadwal');
     wadah.replaceChildren();
     jadwalTerkini.forEach(function (j) { wadah.appendChild(kartuJadwal(j, kini)); });
     $('#jadwalInfo').textContent = info;
     $('#jadwalHabis').hidden = jadwalTerkini.some(function (j) { return j.status !== 'selesai'; });
+    jadwalPopBukti();
     var baru = jadwalTerkini.filter(function (j) { return j.baru && j.status !== 'selesai'; });
     document.querySelectorAll('[data-pengumuman]').forEach(function (w) {
       w.hidden = !baru.length;
@@ -155,9 +167,16 @@
   // ---- tiket "Layanan berikutnya" di sampul --------------------------------
   var tiketTujuan = null;
   function isiTiket() {
-    var j = jadwalTerkini.filter(function (x) { return x.status !== 'selesai'; })[0];
+    var j = jadwalTerkini.filter(function (x) { return x.status !== 'selesai' && x.tanggal; })[0];
+    var menyusul = jadwalTerkini.filter(function (x) { return x.status === 'menyusul'; });
     var tiket = $('#tiket'), kuota = $('#tiketKuota');
     kuota.replaceChildren();
+    if (!j && menyusul.length) {
+      tiketTujuan = null; tiket.classList.add('kosong');
+      $('#tiketNama').textContent = 'Berikutnya: ' + menyusul.map(function (x) { return x.nama; }).join(' & ');
+      $('#tiketTgl').textContent = 'Tanggal layanan diumumkan menyusul · pantau halaman ini';
+      return;
+    }
     if (!j) {
       tiketTujuan = null; tiket.classList.add('kosong');
       $('#tiketNama').textContent = 'Jadwal berikutnya segera diumumkan';
@@ -190,6 +209,7 @@
 
   function kartuJadwal(j, kini) {
     var node = $('#tplJadwal').content.firstElementChild.cloneNode(true);
+    if (!j.tanggal) return kartuMenyusul(j, node);
     var beda = selisihHari(kini, j.tanggal);
     if (j.status === 'selesai') node.classList.add('lewat');
     $('.kj-ikon', node).textContent = j.ikon || '📍';
@@ -236,6 +256,43 @@
       aksi.appendChild(h('a', { class: 'tombol kecil garis', href: tautanKalender(j), target: '_blank', rel: 'noopener' }, '🗓️ Ingatkan saya'));
       aksi.appendChild(h('button', { class: 'tombol kecil garis', type: 'button', onclick: function () { bagikan(j); } }, '↗ Bagikan'));
     }
+    return node;
+  }
+
+  // ---- pop-up Kirim Bukti Ujian Teori ---------------------------------------
+  // Muncul sekali per kunjungan (Versi A saja) setelah jadwal dimuat. Bila hari ini ada lokasi yang sedang
+  // berlangsung, tombolnya memakai QR lokasi itu; selain itu QR tetap SIMLING (bukti dicocokkan lewat nomor WA).
+  var popBukti = $('#popBukti');
+  function jadwalPopBukti() {
+    if (VERSI !== 'A' || !popBukti || jadwalPopBukti.sudah) return;
+    jadwalPopBukti.sudah = true;
+    try { if (sessionStorage.getItem('simkom_pop_bukti')) return; sessionStorage.setItem('simkom_pop_bukti', '1'); } catch (e) { /* mode privat */ }
+    setTimeout(function () {
+      if (document.querySelector('dialog[open]')) return;
+      var kini = hariIni(), lok = jadwalTerkini.filter(function (j) { return j.tanggal === kini && j.status !== 'selesai'; })[0];
+      $('#pbKirim').href = K.BUKTI_URL + (lok ? encodeURIComponent(lok.kode) + '&tgl=' + lok.tanggal : 'SIMLING');
+      $('#pbLokasi').hidden = !lok;
+      if (lok) $('#pbLokasi').textContent = '📍 Hari ini: ' + lok.nama + ' (' + (lok.mulai || '08:00') + '–' + (lok.selesai || '15:00') + ' WIB)';
+      if (popBukti.showModal) popBukti.showModal(); else popBukti.setAttribute('open', '');
+    }, 1500);
+  }
+  if (popBukti) {
+    popBukti.querySelectorAll('[data-tutup-bukti]').forEach(function (b) { b.addEventListener('click', function () { popBukti.close(); }); });
+    $('#pbKirim').addEventListener('click', function () { popBukti.close(); });
+    popBukti.addEventListener('click', function (e) { if (e.target === popBukti) popBukti.close(); });
+  }
+
+  /** Kartu lokasi yang tanggalnya belum diumumkan: tanpa kuota & hitung mundur, pendaftaran lewat formulir. */
+  function kartuMenyusul(j, node) {
+    $('.kj-ikon', node).textContent = j.ikon || '📍';
+    $('h3', node).replaceChildren(h('span', null, j.nama, h('span', { class: 'chip baru-label' }, 'BARU')));
+    $('.kj-ket', node).textContent = j.ket || '';
+    var chip = $('.kj-status', node);
+    chip.classList.add('segera');
+    chip.textContent = STATUS_TEKS.menyusul;
+    $('.kj-waktu', node).replaceChildren('Tanggal layanan diumumkan menyusul', h('small', null, 'Pantau halaman ini atau WhatsApp Satpas ' + K.WA_TAMPIL));
+    $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, '📣 Pendaftaran sudah dapat dilakukan lewat formulir. Hari & jam layanan akan diumumkan.'));
+    $('.kj-aksi', node).appendChild(h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Daftar sekarang'));
     return node;
   }
 
