@@ -596,7 +596,7 @@
     var isianLain = $('#isianJenisLain');
     var aturJenisLain = function () {
       var lain = nilaiRadio(fu, 'jenis') === 'Lainnya';
-      isianLain.style.display = lain ? '' : 'none';
+      isianLain.style.display = lain ? 'block' : 'none';
       if (!lain) isianLain.classList.remove('salah');
     };
     fu.addEventListener('change', function (ev) {

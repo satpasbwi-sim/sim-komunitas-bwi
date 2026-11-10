@@ -283,6 +283,7 @@ footer p { margin: 4px 0; }
 /* pesan salah tepat di bawah isian (bukan hanya di bawah tombol kirim) */
 .isian.salah[data-pesan]::after { content: "⚠ " attr(data-pesan); display: block; margin-top: 5px; color: var(--merah); font-weight: 600; font-size: .86rem; }
 .setuju.salah span { color: var(--merah); font-weight: 600; }
+#isianJenisLain { display: none; } /* tampil lewat app.js bila jenis "Lainnya" dipilih */
 .isian .petunjuk { display: block; font-weight: 500; color: var(--redup); font-size: .82rem; margin-top: 2px; }
 .usul-warga { margin: -4px 0 16px; padding: 10px 14px; border-radius: 12px; background: var(--kartu); border: 1px solid var(--garis); font-size: .93rem; }
 @media (max-width: 860px) { .usulan-samping { order: -1; } } /* HP: syarat tempat dibaca sebelum mengisi formulir */
