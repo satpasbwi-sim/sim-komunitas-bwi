@@ -267,14 +267,24 @@
     if (VERSI !== 'A' || !popBukti || jadwalPopBukti.sudah) return;
     jadwalPopBukti.sudah = true;
     try { if (sessionStorage.getItem('simkom_pop_bukti')) return; sessionStorage.setItem('simkom_pop_bukti', '1'); } catch (e) { /* mode privat */ }
-    setTimeout(function () {
-      if (document.querySelector('dialog[open]')) return;
-      var kini = hariIni(), lok = jadwalTerkini.filter(function (j) { return j.tanggal === kini && j.status !== 'selesai'; })[0];
-      $('#pbKirim').href = K.BUKTI_URL + (lok ? encodeURIComponent(lok.kode) + '&tgl=' + lok.tanggal : 'SIMLING');
-      $('#pbLokasi').hidden = !lok;
-      if (lok) $('#pbLokasi').textContent = '📍 Hari ini: ' + lok.nama + ' (' + (lok.mulai || '08:00') + '–' + (lok.selesai || '15:00') + ' WIB)';
-      if (popBukti.showModal) popBukti.showModal(); else popBukti.setAttribute('open', '');
-    }, 1500);
+    setTimeout(function () { if (!document.querySelector('dialog[open]')) bukaPopBukti(); }, 1500);
+  }
+  function bukaPopBukti() {
+    if (!popBukti || popBukti.open) return;
+    var kini = hariIni(), lok = jadwalTerkini.filter(function (j) { return j.tanggal === kini && j.status !== 'selesai'; })[0];
+    $('#pbKirim').href = K.BUKTI_URL + (lok ? encodeURIComponent(lok.kode) + '&tgl=' + lok.tanggal : 'SIMLING');
+    $('#pbLokasi').hidden = !lok;
+    if (lok) $('#pbLokasi').textContent = '📍 Hari ini: ' + lok.nama + ' (' + (lok.mulai || '08:00') + '–' + (lok.selesai || '15:00') + ' WIB)';
+    if (popBukti.showModal) popBukti.showModal(); else popBukti.setAttribute('open', '');
+  }
+  // tombol tetap "Kirim bukti ujian teori" (Beranda, menu, Jadwal, Latihan Teori) & tautan langsung …/#bukti
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-buka-bukti]');
+    if (t) { e.preventDefault(); bukaPopBukti(); }
+  });
+  if (location.hash === '#bukti') {
+    try { history.replaceState(null, '', '#beranda'); } catch (e) { /* browser lama */ }
+    setTimeout(bukaPopBukti, 600);
   }
   if (popBukti) {
     popBukti.querySelectorAll('[data-tutup-bukti]').forEach(function (b) { b.addEventListener('click', function () { popBukti.close(); }); });

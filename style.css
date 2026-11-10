@@ -483,3 +483,4 @@ footer .ft-tautan { margin-bottom: 4px; }
   .popup.pop-bukti { width: calc(100vw - 24px); height: fit-content; max-height: calc(100dvh - 24px); margin: auto; inset: 0; border-radius: 20px; }
   .pop-bukti .pp-kepala { padding-top: 14px; }
 }
+.ajak-bukti { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 14px; font-size: .9rem; }
