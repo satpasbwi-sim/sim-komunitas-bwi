@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1f3864">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://script.google.com https://script.googleusercontent.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>Kirim Bukti Ujian Teori – SIM Komunitas</title>
+<link rel="icon" href="../img/ikon-192.png">
+<!--
+  SIM Komunitas — Kirim Bukti Ujian Teori (halaman peserta).
+  Dibuka dari menu "Kirim Bukti" portal / QR poster: bukti/?lok=KODE[&tgl=yyyy-MM-dd].
+  Dipindah dari Buku Digital (bukusimbwi/bukti/, tetap aktif untuk QR lama) ke portal SIM Komunitas, 11 Nov 2026. Data diproses Apps Script
+  sim-komunitas/bukti-teori/Kode.gs (doPost) di folder kerja. Halaman ini sengaja tidak memakai alamat
+  Google agar tetap bisa dibuka di HP yang login dengan beberapa akun Google.
+-->
+<style>
+  :root { --biru: #1f3864; --emas: #c9a227; --hijau: #1e7b34; --merah: #b3261e; --abu: #5f6368; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #eef2f8; color: #1b1b1b; }
+  header { background: var(--biru); color: #fff; padding: 18px 16px 14px; border-bottom: 4px solid var(--emas); }
+  header h1 { margin: 0; font-size: 20px; }
+  header p { margin: 4px 0 0; font-size: 14px; opacity: .9; }
+  main { max-width: 480px; margin: 0 auto; padding: 16px; }
+  .kartu { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .kartu h2 { margin: 0 0 10px; font-size: 16px; color: var(--biru); }
+  label { display: block; font-size: 14px; margin-bottom: 6px; }
+  input[type=tel], input[type=text] { width: 100%; font-size: 18px; padding: 12px; border: 1px solid #b8c0cc; border-radius: 8px; }
+  button { width: 100%; font-size: 17px; font-weight: 600; padding: 14px; border: 0; border-radius: 10px; margin-top: 10px; cursor: pointer; font-family: inherit; }
+  .utama { background: var(--biru); color: #fff; }
+  .kedua { background: #e3e8f0; color: var(--biru); }
+  button:disabled { opacity: .5; }
+  .catatan { font-size: 13px; color: var(--abu); margin: 8px 0 0; }
+  .salah { color: var(--merah); font-size: 14px; margin-top: 8px; }
+  .nama { font-size: 18px; font-weight: 700; margin: 4px 0; }
+  img#pratinjau { width: 100%; border-radius: 8px; margin-top: 10px; display: none; border: 1px solid #d0d5dd; }
+  .pilih { display: block; text-align: center; background: #e3e8f0; color: var(--biru); font-weight: 600; padding: 14px; border-radius: 10px; font-size: 17px; cursor: pointer; }
+  .pilih input { display: none; }
+  #selesai { display: none; position: fixed; inset: 0; background: var(--hijau); color: #fff; text-align: center; padding: 48px 20px; overflow-y: auto; }
+  #selesai .centang { font-size: 72px; line-height: 1; }
+  #selesai .no { font-size: 64px; font-weight: 800; margin: 12px 0; }
+  #selesai p { font-size: 18px; margin: 6px 0; }
+  .tutup { text-align: center; padding: 40px 16px; }
+  .memuat { text-align: center; padding: 40px 16px; color: var(--abu); }
+  footer { text-align: center; font-size: 13px; color: var(--abu); padding: 4px 16px 24px; }
+  footer a { color: var(--biru); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Kirim Bukti Ujian Teori</h1>
+  <p id="sub">SIM Komunitas · Satlantas Polresta Banyuwangi</p>
+</header>
+<main id="isi"><div class="kartu memuat">Memeriksa QR…</div></main>
+<footer><a href="../">Portal SIM Komunitas Banyuwangi</a></footer>
+
+<div id="selesai">
+  <div class="centang">✓</div>
+  <p style="font-size:24px;font-weight:700">Terkirim</p>
+  <div class="no" id="noUrut"></div>
+  <p id="namaSelesai"></p>
+  <p><b>Tunjukkan layar ini ke petugas.</b></p>
+  <p id="catatanSelesai" style="font-size:15px;opacity:.9"></p>
+</div>
+
+<script>
+// alamat penerapan Apps Script "Kirim Bukti Ujian Teori v1" (sama dengan URL_APLIKASI di Kode.gs)
+var API = 'https://script.google.com/macros/s/AKfycbxR6c8YMVfYs5rO-PtNKo2uUShSAUbHuUaRT2hOXW56g4eSgclUJI32cj3jwH9WocFQQA/exec';
+var INFO = null;
+var keadaan = { wa: '', bukanSaya: false, nama: '', data: '', tipe: '' };
+var isi = document.getElementById('isi');
+
+function el(html) { var d = document.createElement('div'); d.innerHTML = html; return d.firstElementChild; }
+function aman(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+// text/plain agar browser tidak mengirim preflight (Apps Script tidak menjawab OPTIONS)
+function panggil(aksi, data) {
+  data.aksi = aksi;
+  return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) })
+    .catch(function () { throw new Error('Tidak dapat terhubung. Periksa sinyal internet lalu coba lagi.'); })
+    .then(function (r) {
+      return r.json().catch(function () { throw new Error('Layanan sedang gangguan. Coba lagi beberapa saat lagi.'); });
+    })
+    .then(function (h) { if (!h.ok) throw new Error(h.pesan); return h.hasil; });
+}
+
+function tutup(judul, pesan) {
+  isi.innerHTML = '<div class="kartu tutup"><h2>' + aman(judul) + '</h2><p>' + aman(pesan) + '</p></div>';
+}
+
+function mulai() {
+  var q = new URLSearchParams(location.search);
+  isi.innerHTML = '<div class="kartu memuat">Memeriksa QR…</div>';
+  panggil('cek', { kode: q.get('lok') || '', tgl: q.get('tgl') || '' }).then(function (h) {
+    if (!h.ok) { tutup('QR tidak dapat dipakai', h.alasan); return; }
+    INFO = h;
+    document.getElementById('sub').textContent = 'SIM Komunitas · ' + INFO.nama + ' · ' + INFO.tglPanjang;
+    langkahWa();
+  }).catch(function (e) {
+    isi.innerHTML = '';
+    var k = el('<div class="kartu tutup"><h2>Halaman belum bisa dimuat</h2><p></p>' +
+      '<button class="utama">Coba lagi</button></div>');
+    k.querySelector('p').textContent = e.message;
+    k.querySelector('button').onclick = mulai;
+    isi.appendChild(k);
+  });
+}
+
+function langkahWa() {
+  isi.innerHTML = '';
+  var k = el('<div class="kartu"><h2>1. Nomor WhatsApp pendaftaran</h2>' +
+    '<label for="wa">Tulis nomor WhatsApp yang Anda pakai saat mendaftar SIM Komunitas.</label>' +
+    '<input id="wa" type="tel" inputmode="tel" autocomplete="tel" placeholder="Contoh: 081234567890">' +
+    '<div class="salah" id="salahWa"></div>' +
+    '<button class="utama" id="lanjut">Lanjut</button></div>');
+  isi.appendChild(k);
+  var wa = k.querySelector('#wa'), btn = k.querySelector('#lanjut');
+  wa.value = keadaan.wa;
+  btn.onclick = function () {
+    var n = wa.value.replace(/\D/g, '');
+    if (n.length < 9) { k.querySelector('#salahWa').textContent = 'Nomor terlalu pendek. Contoh: 081234567890'; return; }
+    btn.disabled = true; btn.textContent = 'Mencari…';
+    keadaan.wa = wa.value;
+    panggil('cari', { wa: wa.value, kode: INFO.kode, tgl: INFO.tgl })
+      .then(langkahKonfirmasi)
+      .catch(function (e) { btn.disabled = false; btn.textContent = 'Lanjut'; k.querySelector('#salahWa').textContent = e.message; });
+  };
+}
+
+function langkahKonfirmasi(h) {
+  isi.innerHTML = '';
+  if (h.cocok) {
+    var k = el('<div class="kartu"><h2>2. Apakah ini Anda?</h2>' +
+      '<div class="nama">' + aman(h.nama) + '</div><div>' + aman(h.sim) + ' Baru</div>' +
+      '<button class="utama" id="ya">Ya, benar</button><button class="kedua" id="bukan">Bukan saya</button></div>');
+    isi.appendChild(k);
+    k.querySelector('#ya').onclick = function () { keadaan.bukanSaya = false; langkahGambar(); };
+    k.querySelector('#bukan').onclick = function () { keadaan.bukanSaya = true; langkahNama(); };
+  } else {
+    keadaan.bukanSaya = true;
+    langkahNama('Nomor ini tidak ditemukan di daftar pendaftar. Tidak apa-apa, bukti tetap diterima dan akan dicek petugas.');
+  }
+}
+
+function langkahNama(pesan) {
+  isi.innerHTML = '';
+  var k = el('<div class="kartu"><h2>2. Nama lengkap</h2>' +
+    (pesan ? '<p class="catatan" style="margin-top:0">' + aman(pesan) + '</p>' : '') +
+    '<label for="nama">Tulis nama lengkap sesuai KTP.</label>' +
+    '<input id="nama" type="text" autocomplete="name" maxlength="80">' +
+    '<div class="salah" id="salahNama"></div>' +
+    '<button class="utama" id="lanjut">Lanjut</button><button class="kedua" id="ulang">Ganti nomor WhatsApp</button></div>');
+  isi.appendChild(k);
+  k.querySelector('#nama').value = keadaan.nama;
+  k.querySelector('#lanjut').onclick = function () {
+    var n = k.querySelector('#nama').value.trim();
+    if (n.length < 3) { k.querySelector('#salahNama').textContent = 'Tulis nama lengkap Anda.'; return; }
+    keadaan.nama = n; langkahGambar();
+  };
+  k.querySelector('#ulang').onclick = langkahWa;
+}
+
+function perkecil(file) {
+  return new Promise(function (ok, gagal) {
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      var s = Math.min(1, 1600 / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+      g.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      ok(c.toDataURL('image/jpeg', 0.8));
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); gagal(new Error('File ini bukan gambar. Pilih screenshot hasil ujian.')); };
+    img.src = url;
+  });
+}
+
+function langkahGambar() {
+  isi.innerHTML = '';
+  var k = el('<div class="kartu"><h2>3. Screenshot hasil ujian teori</h2>' +
+    '<p class="catatan" style="margin-top:0">Pilih screenshot hasil ujian teori dari galeri HP Anda.</p>' +
+    '<label class="pilih">Pilih gambar<input id="berkas" type="file" accept="image/*"></label>' +
+    '<img id="pratinjau" alt="Pratinjau screenshot">' +
+    '<div class="salah" id="salahGambar"></div>' +
+    '<button class="utama" id="kirim" disabled>Kirim</button>' +
+    '<button class="kedua" id="kembali">Kembali</button></div>');
+  isi.appendChild(k);
+  var btn = k.querySelector('#kirim'), salah = k.querySelector('#salahGambar'), prat = k.querySelector('#pratinjau');
+  k.querySelector('#kembali').onclick = langkahWa;
+  k.querySelector('#berkas').onchange = function (ev) {
+    var f = ev.target.files[0];
+    salah.textContent = ''; btn.disabled = true; keadaan.data = '';
+    if (!f) return;
+    if (!/^image\//.test(f.type)) { salah.textContent = 'File harus berupa gambar.'; return; }
+    if (f.size > 5 * 1024 * 1024 * 4) { salah.textContent = 'Gambar terlalu besar.'; return; }
+    perkecil(f).then(function (d) {
+      prat.src = d; prat.style.display = 'block';
+      keadaan.data = d.split(',')[1]; keadaan.tipe = 'image/jpeg';
+      if (keadaan.data.length * 0.75 > 5 * 1024 * 1024) { salah.textContent = 'Ukuran gambar maksimal 5 MB.'; return; }
+      btn.disabled = false;
+    }).catch(function (e) { salah.textContent = e.message; });
+  };
+  btn.onclick = function () {
+    btn.disabled = true; btn.textContent = 'Mengirim…';
+    panggil('kirim', { kode: INFO.kode, tgl: INFO.tgl, wa: keadaan.wa, bukanSaya: keadaan.bukanSaya,
+      nama: keadaan.nama, tipe: keadaan.tipe, data: keadaan.data })
+      .then(selesai)
+      .catch(function (e) { btn.disabled = false; btn.textContent = 'Kirim'; salah.textContent = 'Gagal mengirim: ' + e.message; });
+  };
+}
+
+function selesai(h) {
+  document.getElementById('noUrut').textContent = 'No. ' + h.no;
+  document.getElementById('namaSelesai').textContent = h.nama;
+  document.getElementById('catatanSelesai').textContent = (h.ulang ? 'Bukti sebelumnya sudah diganti dengan yang baru. ' : '') +
+    (h.cocok ? '' : 'Data Anda akan dicocokkan petugas secara manual.');
+  document.getElementById('selesai').style.display = 'block';
+}
+
+mulai();
+</script>
+</body>
+</html>

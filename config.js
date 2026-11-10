@@ -11,7 +11,7 @@ window.SIMKOM = {
   FORM_URL: 'https://docs.google.com/forms/d/1j1uq_Icfur-kvcN8V1mTYfZWPPHFWyh3rSmIWg_EQyM/viewform',
 
   // Halaman kirim bukti ujian teori (sudah ada di Buku Digital). Kode lokasi ditambahkan otomatis.
-  BUKTI_URL: 'https://satpasbwi-sim.github.io/bukusimbwi/bukti/?lok=',
+  BUKTI_URL: 'https://satpasbwi-sim.github.io/sim-komunitas-bwi/bukti/?lok=',
 
   // Buku Digital SIM Satpas Banyuwangi: bank soal & halaman persiapan ujian teori E-AVIS.
   BUKU_URL: 'https://satpasbwi-sim.github.io/bukusimbwi/',

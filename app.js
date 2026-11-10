@@ -247,7 +247,7 @@
         : h('a', { class: 'tombol kecil', href: K.FORM_URL, target: '_blank', rel: 'noopener' }, '📝 Daftar sekarang'));
     }
     if (j.status !== 'selesai' && beda <= 1 && VERSI === 'A' && j.layanan !== 'perpanjangan') {
-      aksi.appendChild(h('a', { class: 'tombol kecil garis', href: K.BUKTI_URL + encodeURIComponent(j.kode) + '&tgl=' + j.tanggal, target: '_blank', rel: 'noopener' }, '📤 Kirim bukti teori'));
+      aksi.appendChild(h('a', { class: 'tombol kecil garis', href: K.BUKTI_URL + encodeURIComponent(j.kode) + '&tgl=' + j.tanggal }, '📤 Kirim bukti teori'));
     }
     if (j.status !== 'selesai' && /^https:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps|(www\.)?google\.[a-z.]+\/maps)/.test(j.maps || '')) {
       aksi.appendChild(h('a', { class: 'tombol kecil garis', href: j.maps, target: '_blank', rel: 'noopener' }, '🧭 Petunjuk arah'));
@@ -509,7 +509,7 @@
       if (st === 'lulus') tahap.push(h('li', { class: 'selesai' }, h('b', null, 'Ujian teori: Lulus' + (r.nilaiTeori ? ' (nilai ' + r.nilaiTeori + ')' : '')), h('small', null, 'Bukti sudah dicek petugas.')));
       else if (st.indexOf('tidak') === 0) tahap.push(h('li', { class: 'gagal' }, h('b', null, 'Ujian teori: Tidak lulus' + (r.nilaiTeori ? ' (nilai ' + r.nilaiTeori + ')' : '')), h('small', null, 'Ikuti ujian ulang, lalu kirim lagi screenshot terbaru dengan nomor WhatsApp yang sama.')));
       else tahap.push(h('li', { class: 'kini' }, h('b', null, 'Ujian teori: menunggu bukti'), h('small', null, 'Kerjakan ujian teori via HP, lalu kirim screenshot hasilnya.'),
-        kodeLok ? h('a', { class: 'tombol kecil garis', href: K.BUKTI_URL + encodeURIComponent(kodeLok), target: '_blank', rel: 'noopener' }, '📤 Kirim bukti teori') : null));
+        kodeLok ? h('a', { class: 'tombol kecil garis', href: K.BUKTI_URL + encodeURIComponent(kodeLok) }, '📤 Kirim bukti teori') : null));
     }
     tahap.push(h('li', { class: 'kini' }, h('b', null, 'Datang ke lokasi'),
       h('small', null, r.lokasi + (jl.mulai ? ' · pukul ' + jl.mulai + '–' + (jl.selesai || '15:00') + ' WIB' : ''))));
