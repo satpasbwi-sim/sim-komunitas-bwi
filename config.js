@@ -35,8 +35,10 @@ window.SIMKOM = {
   // (pendaftaran lewat formulir sudah bisa). Otomatis tidak tampil lagi begitu sheet "Jadwal Layanan" memuat
   // lokasi dengan kode atau nama yang sama (sudah bertanggal). Hapus barisnya bila lokasi batal.
   // dibuka: false = pendaftaran belum dibuka (tanpa tombol Daftar); samakan dengan tutup: true di project Kuota v2.
+  // ditutup: true (bersama dibuka: false) = pendaftaran sudah ditutup; teks kartu menjadi "Pendaftaran sudah ditutup".
   JADWAL_MENYUSUL: [
-    { kode: 'SMAN1-GIRI', nama: 'SMAN 1 Giri Banyuwangi', ket: 'SIM Masuk Sekolah · Kec. Giri', ikon: '🏫' },
+    // SMAN 1 Giri: pendaftaran ditutup 14 Nov 2026 (tutup: true di project Kuota v2) -> hapus dibuka: false bila dibuka lagi
+    { kode: 'SMAN1-GIRI', nama: 'SMAN 1 Giri Banyuwangi', ket: 'SIM Masuk Sekolah · Kec. Giri', ikon: '🏫', dibuka: false, ditutup: true },
     { kode: 'SMK17-GENTENG', nama: 'SMK 17 Genteng', ket: 'SIM Masuk Sekolah · Kec. Genteng', ikon: '🏫', dibuka: false }
   ],
 

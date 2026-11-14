@@ -183,7 +183,9 @@
     if (!j && menyusul.length) {
       tiketTujuan = null; tiket.classList.add('kosong');
       $('#tiketNama').textContent = 'Berikutnya: ' + menyusul.map(function (x) { return x.nama; }).join(' & ');
-      $('#tiketTgl').textContent = (dibuka.length ? 'Pendaftaran dibuka · ' : 'Pendaftaran belum dibuka · ') + 'tanggal layanan diumumkan menyusul';
+      var ditutup = menyusul.filter(function (x) { return x.ditutup; }).length;
+      var tutupTeks = ditutup === menyusul.length ? 'ditutup' : (ditutup ? 'ditutup / belum dibuka' : 'belum dibuka');
+      $('#tiketTgl').textContent = (dibuka.length ? 'Pendaftaran dibuka · ' : 'Pendaftaran ' + tutupTeks + ' · ') + 'tanggal layanan diumumkan menyusul';
       return;
     }
     if (!j) {
@@ -317,7 +319,10 @@
       (sekolah ? 'Diumumkan melalui pihak sekolah dan di halaman ini' : 'Diumumkan di halaman ini') + ' · tanya: WhatsApp Satpas ' + K.WA_TAMPIL));
     if (j.dibuka === false) {
       // formulir untuk lokasi ini belum dibuka (lokasi diberi tutup: true di project Kuota v2)
-      $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, '⏳ Pendaftaran belum dibuka. Tanggal layanan dan pembukaan pendaftaran akan diumumkan.'));
+      // ditutup: true = pendaftaran sudah pernah dibuka lalu ditutup (bukan "belum dibuka")
+      $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, j.ditutup
+        ? '🔒 Pendaftaran sudah ditutup. Yang sudah mendaftar cukup menunggu pengumuman tanggal layanan, lalu datang membawa KTP-el asli. Cek data Anda di menu Cek Status.'
+        : '⏳ Pendaftaran belum dibuka. Tanggal layanan dan pembukaan pendaftaran akan diumumkan.'));
       return node;
     }
     $('.kj-kuota', node).appendChild(h('p', { class: 'kj-segera' }, '📣 Pendaftaran sudah dibuka: tekan Daftar sekarang dan isi formulir. Setelah tanggal ditetapkan, datanglah ke lokasi membawa KTP-el asli.'));
